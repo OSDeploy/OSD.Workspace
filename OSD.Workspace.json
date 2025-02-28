@@ -13,8 +13,8 @@
     },
     "Module": {
         "Info": "https://www.osdeploy.com/",
-        "Docs": "https://github.com/OSDeploy/OSDWorkspace/tree/main/docs",
-        "Issues": "https://github.com/OSDeploy/OSDWorkspace/issues",
-        "Project": "https://github.com/OSDeploy/OSDWorkspace"
+        "Docs": "https://github.com/OSDeploy/OSD.Workspace/tree/main/docs",
+        "Issues": "https://github.com/OSDeploy/OSD.Workspace/issues",
+        "Project": "https://github.com/OSDeploy/OSD.Workspace"
     }
 }

@@ -9,7 +9,7 @@ Function Get-ModuleResource {
         [Parameter(Mandatory = $False, Position = 0)]
         [ValidateNotNull()]
         [ValidateScript( { If (Test-Path -Path $_ -PathType 'Leaf') { $True } Else { Throw "Cannot find file $_" } })]
-        [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "OSDWorkspace.json")
+        [System.String] $Path = (Join-Path -Path $MyInvocation.MyCommand.Module.ModuleBase -ChildPath "OSD.Workspace.json")
     )
 
     try {
