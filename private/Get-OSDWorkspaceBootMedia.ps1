@@ -14,9 +14,9 @@ function Get-OSDWorkspaceBootMedia {
         $BootMediaItems = @()
         $BootMediaItems = Get-ChildItem -Path (Get-OSDWorkspaceBootMediaPath) -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'Media\sources\boot.wim') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'bin\bootmedia.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'bin\os.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'bin\pe.xml') }
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\gv-bootmedia.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-WindowsImage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\winpe-WindowsImage.xml') }
 
         if ($BootMediaItems.Count -eq 0) {
             Write-Warning "$((Get-Date).ToString('yyMMdd-HHmmss')) OSDWorkspace BootMedia were not found"
@@ -34,12 +34,12 @@ function Get-OSDWorkspaceBootMedia {
             #   Import OS XML
             #=================================================
             $OSXML = @()
-            $OSXML = Import-Clixml -Path "$BootMediaItemPath\bin\os.xml"
+            $OSXML = Import-Clixml -Path "$BootMediaItemPath\core\os-WindowsImage.xml"
             #=================================================
             #   Import BootMedia XML
             #=================================================
             $BootMediaXML = @()
-            $BootMediaXML = Import-Clixml -Path "$BootMediaItemPath\bin\bootmedia.xml"
+            $BootMediaXML = Import-Clixml -Path "$BootMediaItemPath\core\gv-bootmedia.xml"
             #=================================================
             #   WindowsImageOS
             #=================================================
@@ -65,48 +65,48 @@ function Get-OSDWorkspaceBootMedia {
             #=================================================
             #   Import WinRE XML
             #=================================================
-            $WindowsImageWinRE = @()
-            $WindowsImageWinRE = Import-Clixml -Path "$BootMediaItemPath\bin\pe.xml"
+            $WinPEWindowsImage = @()
+            $WinPEWindowsImage = Import-Clixml -Path "$BootMediaItemPath\core\winpe-WindowsImage.xml"
             #=================================================
             #   WindowsImageWinRE
             #=================================================
-            $WinREVersion = $($WindowsImageWinRE.Version)
+            $WinREVersion = $($WinPEWindowsImage.Version)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREVersion: $WinREVersion"
 
-            $WinREMajorVersion = $($WindowsImageWinRE.MajorVersion)
+            $WinREMajorVersion = $($WinPEWindowsImage.MajorVersion)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREMajorVersion: $WinREMajorVersion"
 
-            $WinREMinorVersion = $($WindowsImageWinRE.MinorVersion)
+            $WinREMinorVersion = $($WinPEWindowsImage.MinorVersion)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREMinorVersion: $WinREMinorVersion"
 
-            $WinREBuild = $($WindowsImageWinRE.Build)
+            $WinREBuild = $($WinPEWindowsImage.Build)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREBuild: $WinREBuild"
 
-            $WinRESPLevel = $($WindowsImageWinRE.SPLevel)
+            $WinRESPLevel = $($WinPEWindowsImage.SPLevel)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinRESPLevel: $WinRESPLevel"
             #=================================================
             #   Language
             #=================================================
-            $WinRELanguages = $($WindowsImageWinRE.Languages)
+            $WinRELanguages = $($WinPEWindowsImage.Languages)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Languages: $WinRELanguages"
             #=================================================
             #   Create Object
             #=================================================
             $ObjectProperties = [ordered]@{
                 Id                 = Split-Path -Leaf $BootMediaItemPath
-                ModifiedTime       = [datetime]$WindowsImageWinRE.ModifiedTime
+                ModifiedTime       = [datetime]$WinPEWindowsImage.ModifiedTime
                 Name               = $BootMediaXML.Name
-                Version            = [version]$WindowsImageWinRE.Version
+                Version            = [version]$WinPEWindowsImage.Version
                 Architecture       = $OSArchitecture
                 WinpeshlContent    = $BootMediaXML.WinpeshlContent
                 StartnetContent    = $BootMediaXML.StartnetContent
-                Languages          = $WindowsImageWinRE.Languages
+                Languages          = $WinPEWindowsImage.Languages
                 SetInputLocale     = $BootMediaXML.SetInputLocale
                 SetAllIntl         = $BootMediaXML.SetAllIntl
                 TimeZone           = $BootMediaXML.TimeZone
                 AddAzCopy          = $BootMediaXML.AddAzCopy
                 AddMicrosoftDaRT   = $BootMediaXML.AddMicrosoftDaRT
-                AddPowerShell      = $BootMediaXML.AddPowerShell
+                AddPwsh            = $BootMediaXML.AddPwsh
                 AddWirelessConnect = $BootMediaXML.AddWirelessConnect
                 AddZip             = $BootMediaXML.AddZip
                 BootDriver         = $BootMediaXML.BootDriver
@@ -115,18 +115,20 @@ function Get-OSDWorkspaceBootMedia {
                 OSEditionId        = $OSXML.EditionId
                 OSImageName        = $OSXML.ImageName
                 OSVersion          = [version]$OSXML.Version
-                CreatedTime        = [datetime]$WindowsImageWinRE.CreatedTime
-                InstallationType   = $WindowsImageWinRE.InstallationType
+                CreatedTime        = [datetime]$WinPEWindowsImage.CreatedTime
+                InstallationType   = $WinPEWindowsImage.InstallationType
                 Path               = $BootMediaItemPath
-                ImagePath          = $BootMediaItemPath + '\winre.wim'
-                ImageIndex         = $WindowsImageWinRE.ImageIndex
-                ImageName          = $WindowsImageWinRE.ImageName
-                ImageSize          = $WindowsImageWinRE.ImageSize
-                DirectoryCount     = $WindowsImageWinRE.DirectoryCount
-                FileCount          = $WindowsImageWinRE.FileCount
+                ImagePath          = $BootMediaItemPath + '\Media\sources\boot.wim'
+                ImageIndex         = $WinPEWindowsImage.ImageIndex
+                ImageName          = $WinPEWindowsImage.ImageName
+                ImageSize          = $WinPEWindowsImage.ImageSize
+                DirectoryCount     = $WinPEWindowsImage.DirectoryCount
+                FileCount          = $WinPEWindowsImage.FileCount
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            Write-Verbose ''
+            if (!(Test-Path -Path "$BootMediaItemPath\BootMedia.json")) {
+                $ObjectProperties | ConvertTo-Json | Out-File -FilePath "$BootMediaItemPath\BootMedia.json" -Encoding utf8 -Force
+            }
         }
 
         if ($FrameworkBootMedia) {

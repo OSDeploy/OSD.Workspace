@@ -32,7 +32,7 @@ New-OSDWorkspaceBootMedia -Name <String> [-Languages <String[]>] [-SetAllIntl <S
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 
@@ -50,7 +50,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -65,7 +65,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -80,7 +80,7 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -92,7 +92,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Default
 Aliases:
-Accepted values: amd64, arm64
+Accepted values: amd64, arm64, amd64, arm64
 
 Required: False
 Position: Named
@@ -105,7 +105,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: ADK
 Aliases:
-Accepted values: amd64, arm64
+Accepted values: amd64, arm64, amd64, arm64
 
 Required: True
 Position: Named
@@ -200,7 +200,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -226,7 +226,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### None
-
 ## OUTPUTS
 
 ### System.Object
