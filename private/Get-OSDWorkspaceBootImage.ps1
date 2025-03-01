@@ -8,14 +8,15 @@ function Get-OSDWorkspaceBootImage {
 
     begin {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         $Error.Clear()
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
         $BootImageItems = @()
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageItems"
         $BootImageItems = Get-ChildItem -Path (Get-OSDWorkspaceBootImagePath) -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'winre.wim') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'bin\os.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'bin\pe.xml') }
+            Where-Object { Test-Path $(Join-Path $_.FullName 'sources\boot.wim') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-WindowsImage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\winpe-WindowsImage.json') }
 
         if ($BootImageItems.Count -eq 0) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace BootImages were not found"
@@ -24,7 +25,7 @@ function Get-OSDWorkspaceBootImage {
         }
     }
     process {
-        $FrameworkBootImage = foreach ($BootImageItem in $BootImageItems) {
+        $OSDWorkspaceBootImage = foreach ($BootImageItem in $BootImageItems) {
             #=================================================
             #   Get-FullName
             #=================================================
@@ -33,7 +34,7 @@ function Get-OSDWorkspaceBootImage {
             #   Import OS XML
             #=================================================
             $OSXML = @()
-            $OSXML = Import-Clixml -Path "$BootImageItemPath\bin\os.xml"
+            $OSXML = Import-Clixml -Path "$BootImageItemPath\core\os-WindowsImage.xml"
             #=================================================
             #   WindowsImageOS
             #=================================================
@@ -60,7 +61,7 @@ function Get-OSDWorkspaceBootImage {
             #   Import WinRE XML
             #=================================================
             $WindowsImageWinRE = @()
-            $WindowsImageWinRE = Import-Clixml -Path "$BootImageItemPath\bin\pe.xml"
+            $WindowsImageWinRE = Import-Clixml -Path "$BootImageItemPath\core\winpe-WindowsImage.xml"
             #=================================================
             #   WindowsImageWinRE
             #=================================================
@@ -103,21 +104,23 @@ function Get-OSDWorkspaceBootImage {
                 OSVersion        = [version]$OSXML.Version
                 OSCreatedTime    = [datetime]$OSXML.CreatedTime
                 Path             = $BootImageItemPath
-                ImagePath        = $BootImageItemPath + '\winre.wim'
+                ImagePath        = $BootImageItemPath + '\sources\boot.wim'
                 ImageIndex       = $WindowsImageWinRE.ImageIndex
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            Write-Verbose ''
+            if (!(Test-Path -Path "$BootImageItemPath\BootImage.json")) {
+                $ObjectProperties | ConvertTo-Json | Out-File -FilePath "$BootImageItemPath\BootImage.json" -Encoding utf8 -Force
+            }
         }
 
-        if ($FrameworkBootImage) {
+        if ($OSDWorkspaceBootImage) {
             if ($Architecture -eq 'amd64') {
-                $FrameworkBootImage = $FrameworkBootImage | Where-Object { $_.Architecture -eq 'amd64' }
+                $OSDWorkspaceBootImage = $OSDWorkspaceBootImage | Where-Object { $_.Architecture -eq 'amd64' }
             }
             if ($Architecture -eq 'arm64') {
-                $FrameworkBootImage = $FrameworkBootImage | Where-Object { $_.Architecture -eq 'arm64' }
+                $OSDWorkspaceBootImage = $OSDWorkspaceBootImage | Where-Object { $_.Architecture -eq 'arm64' }
             }
-            return $FrameworkBootImage | Sort-Object -Property Id
+            return $OSDWorkspaceBootImage | Sort-Object -Property Id
         }
         else {
             return $null

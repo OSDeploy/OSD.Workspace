@@ -7,8 +7,9 @@ function Export-PSDriveWindowsImageIndex {
 
     begin {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         $Error.Clear()
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        #=================================================
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] must be run with Administrator privileges"
@@ -21,6 +22,7 @@ function Export-PSDriveWindowsImageIndex {
     }
 
     process {
+        #=================================================
         foreach ($Item in $WindowsMediaImage) {
             $Guid = [Guid]::NewGuid().ToString()
             $FileName = (Split-Path $Item.ImagePath -Leaf).ToLower()
@@ -32,26 +34,32 @@ function Export-PSDriveWindowsImageIndex {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationImagePath: $DestinationImagePath"
 
             try {
-                New-Item -Path $DestinationPath -ItemType Directory -Force -ErrorAction Stop | Out-Null
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export WindowsImage"
-                Export-WindowsImage -SourceImagePath $Item.ImagePath -SourceIndex $Item.ImageIndex -DestinationImagePath $DestinationImagePath -ErrorAction Stop | Out-Null
+                # Export the Operating System install.wim
+                $NewItem = New-Item -Path $DestinationPath -ItemType Directory -Force -ErrorAction Stop
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export WindowsImage to $DestinationImagePath"
+                $ExportWindowsImage = Export-WindowsImage -SourceImagePath $Item.ImagePath -SourceIndex $Item.ImageIndex -DestinationImagePath $DestinationImagePath -ErrorAction Stop
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building information"
+                # Export the Operating System information
                 $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
-                $Image | Export-Clixml -Path "$DestinationPath\os.xml"
-                $Image | ConvertTo-Json | Out-File "$DestinationPath\os.json" -Encoding utf8
+
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-WindowsImage.xml"
+                $Image | Export-Clixml -Path "$DestinationPath\os-WindowsImage.xml"
+                
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-WindowsImage.json"
+                $Image | ConvertTo-Json | Out-File "$DestinationPath\os-WindowsImage.json" -Encoding utf8
             }
             catch {
                 throw $_
             }
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Output: Get-Item -Path $DestinationImagePath"
-            Get-Item -Path $DestinationImagePath
+            return $(Get-Item -Path $DestinationImagePath)
         }
+        #=================================================
     }
     
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Done."
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
         #=================================================
     }
 }

@@ -156,6 +156,6 @@ function Import-OSDWorkspaceBootDriverCM {
         Pop-Location
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] $($MyInvocation.MyCommand) Done"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] $($MyInvocation.MyCommand) End"
     #=================================================
 }

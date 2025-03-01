@@ -82,8 +82,8 @@ Library-GitHub/*/*
 # OSDFramework Content
 **/PortableGit*/*
 
-# BootImage osfiles
-**/osfiles/*
+# BootImage os-files
+**/os-files/*
 
 # BootImage Registry Hives
 SOFTWARE
@@ -209,7 +209,6 @@ SYSTEM
     #=================================================
     #region OSDWorkspacePath
     # Path will always default to C:\OSDWorkspace
-
     $ParentPath = $env:SystemDrive
     $ChildPath = 'OSDWorkspace'
     $OSDWorkspacePath = Join-Path -Path $ParentPath -ChildPath $ChildPath
@@ -327,6 +326,10 @@ SYSTEM
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Cache"
         New-Item -Path "$OSDWorkspacePath" -Name 'Cache' -ItemType 'Directory' -Force | Out-Null
+
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library"
+        New-Item -Path "$OSDWorkspacePath" -Name 'Library' -ItemType 'Directory' -Force | Out-Null
+        $null = git init "$OSDWorkspacePath\Library"
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootDriver"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootDriver' -ItemType 'Directory' -Force | Out-Null
