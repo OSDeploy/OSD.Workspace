@@ -1,53 +1,45 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version:
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md
 schema: 2.0.0
 ---
 
 # New-OSDWorkspaceUSB
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new OSDWorkspace USB.
 
 ## SYNTAX
 
 ```
-New-OSDWorkspaceUSB [[-BootLabel] <String>] [[-DataLabel] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+New-OSDWorkspaceUSB [[-BootLabel] <String>] [[-DataLabel] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+This function creates a new OSDWorkspace USB by selecting a boot media and performing necessary checks and operations.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-OSDWorkspaceUSB
 ```
 
-{{ Add example description here }}
+Creates a new OSDWorkspace USB with default labels for boot and data partitions.
+
+### EXAMPLE 2
+```
+New-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
+```
+
+Creates a new OSDWorkspace USB with the boot label 'MYBOOT' and data label 'MYDATA'.
 
 ## PARAMETERS
 
 ### -BootLabel
-{{ Fill BootLabel Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataLabel
-{{ Fill DataLabel Description }}
+Label for the boot partition.
+Default is 'WINPE'.
 
 ```yaml
 Type: String
@@ -56,22 +48,23 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: None
+Default value: WINPE
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -DataLabel
+Label for the data partition.
+Default is 'USB Data'.
 
 ```yaml
-Type: ActionPreference
+Type: String
 Parameter Sets: (All)
-Aliases: proga
+Aliases:
 
 Required: False
-Position: Named
-Default value: None
+Position: 2
+Default value: USB Data
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -81,11 +74,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
+### None.
+### You cannot pipe input to this cmdlet.
 ## OUTPUTS
 
-### System.Object
+### None.
+### This function does not return any output.
 ## NOTES
+David Segura
 
 ## RELATED LINKS
