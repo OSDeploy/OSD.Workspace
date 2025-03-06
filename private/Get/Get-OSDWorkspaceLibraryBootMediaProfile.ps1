@@ -1,4 +1,29 @@
 function Get-OSDWorkspaceLibraryBootMediaProfile {
+    <#
+    .SYNOPSIS
+        Returns available OSDWorkspace Library BootMediaProfile(s).
+
+    .DESCRIPTION
+        This function returns available OSDWorkspace Library and Library-GitHub BootMediaProfile(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootMediaProfile Path(s).
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.Array
+
+        This function returns the available boot media profiles in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootMediaProfile
+        Returns the boot media profiles in the OSDWorkspace Library.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param ()
     #=================================================

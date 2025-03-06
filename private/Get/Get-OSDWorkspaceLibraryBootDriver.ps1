@@ -1,10 +1,33 @@
 function Get-OSDWorkspaceLibraryBootDriver {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Library BootDriver.
+        Returns available OSDWorkspace Library BootDriver(s).
 
     .DESCRIPTION
-        Returns the OSDWorkspace Library BootDriver.
+        This function returns available OSDWorkspace Library and Library-GitHub BootDriver(s).
+        Utilizes the Get-OSDWorkspaceBootImage and Get-OSDWorkspaceGitHubPath functions to retrieve the BootDriver Path(s)
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.Array
+
+        This function returns the available boot drivers in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootDriver
+        Returns the boot drivers in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootDriver -Architecture amd64
+        Returns the boot drivers in the OSDWorkspace Library filtered by architecture.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootDriver -BootImage ADK
+        Returns the boot drivers in the OSDWorkspace Library filtered by boot image.
 
     .NOTES
         David Segura
@@ -42,14 +65,14 @@ function Get-OSDWorkspaceLibraryBootDriver {
             Select-Object Name, @{Name = 'Architecture'; Expression = { $_.Parent } }, FullName, LastWriteTime
     }
 
-    # Ensure the Drver Repository uses the proper Architecture folder structure
+    # Ensure the Driver Repository uses the proper Architecture folder structure
     $LibraryItems = $LibraryItems | Where-Object { ($_.Architecture -match 'amd64') -or ($_.Architecture -match 'arm64') } | Sort-Object -Property Architecture, FullName
 
     if ($Architecture) {
         $LibraryItems = $LibraryItems | Where-Object { $_.Architecture -match $Architecture }
     }
 
-    if (($BootImage -eq 'ADK') -or ($Bootmage -eq 'WinPE')) {
+    if (($BootImage -eq 'ADK') -or ($BootImage -eq 'WinPE')) {
         $LibraryItems = $LibraryItems | Where-Object { $_.Name -notmatch 'Wireless' }
     }
     $LibraryItems

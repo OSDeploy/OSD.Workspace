@@ -1,4 +1,43 @@
 function Select-OSDWorkspaceLibraryBootDriver {
+        <#
+    .SYNOPSIS
+        Selects an OSDWorkspace Library BootDriver.
+
+    .DESCRIPTION
+        This function displays available OSDWorkspace Library BootDrivers in an Out-GridView and returns the selected BootDriver(s) object.
+        Utilizes the Get-OSDWorkspaceLibraryBootDriver function to retrieve the BootDrivers.
+
+    .PARAMETER Architecture
+        Filters the drivers by architecture (amd64, arm64).
+
+    .PARAMETER BootImage
+        Filters the drivers by boot image (ADK, WinPE, WinRE) by excluding Wireless drivers for ADK and WinPE.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        PSObject
+
+        This function returns the selected BootDriver object.
+
+    .EXAMPLE
+        Select-OSDWorkspaceLibraryBootDriver
+        Will display all available BootDrivers and return the selected BootDriver object.
+
+    .EXAMPLE
+        Select-OSDWorkspaceLibraryBootDriver -Architecture 'amd64'
+        Will display all available BootDrivers for the architecture 'amd64' and return the selected BootDriver object.
+
+    .EXAMPLE
+        Select-OSDWorkspaceLibraryBootDriver -BootImage 'ADK'
+        Will display all available BootDrivers for the boot image 'ADK' and return the selected BootDriver object.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false, Position = 0)]

@@ -1,4 +1,29 @@
 function Select-OSDWorkspaceLibraryBootMediaProfile {
+        <#
+    .SYNOPSIS
+        Selects an OSDWorkspace Library BootMedia Profile.
+
+    .DESCRIPTION
+        This function displays available OSDWorkspace Library BootMedia Profiles in an Out-GridView and returns the selected BootMedia Profile object.
+        Utilizes the Get-OSDWorkspaceLibraryBootMediaProfile function to retrieve the BootMedia Profiles.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        PSObject
+
+        This function returns the selected BootMedia Profile object.
+
+    .EXAMPLE
+        Select-OSDWorkspaceLibraryBootMediaProfile
+        Will display all available BootMedia Profiles and return the selected BootMedia Profile object.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param ()
     #=================================================

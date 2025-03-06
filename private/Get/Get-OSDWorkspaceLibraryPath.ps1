@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceLibraryPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Library Path. Default is C:\OSDWorkspace\Library.
+        Returns the OSDWorkspace Library Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace Library Path. Default is C:\OSDWorkspace\Library.
+        This function returns the OSDWorkspace Library Path. Default is C:\OSDWorkspace\Library.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the OSDWorkspace Library Path as a string.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryPath
+        Returns the OSDWorkspace Library Path.
 
     .NOTES
         David Segura

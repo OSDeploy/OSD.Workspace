@@ -1,4 +1,38 @@
 function New-OSDWorkspaceUSB {
+    <#
+    .SYNOPSIS
+        Creates a new OSDWorkspace USB.
+
+    .DESCRIPTION
+        This function creates a new OSDWorkspace USB by selecting a boot media and performing necessary checks and operations.
+
+    .PARAMETER BootLabel
+        Label for the boot partition. Default is 'WINPE'.
+
+    .PARAMETER DataLabel
+        Label for the data partition. Default is 'USB Data'.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        None.
+
+        This function does not return any output.
+
+    .EXAMPLE
+        New-OSDWorkspaceUSB
+        Creates a new OSDWorkspace USB with default labels for boot and data partitions.
+
+    .EXAMPLE
+        New-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
+        Creates a new OSDWorkspace USB with the boot label 'MYBOOT' and data label 'MYDATA'.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param (
         [ValidateLength(0,11)]
