@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceCachePath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Cache Path. Default is C:\OSDWorkspace\Cache.
+        Returns the OSDWorkspace Cache Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace Cache Path. Default is C:\OSDWorkspace\Cache.
+        This function returns the OSDWorkspace Cache Path. The default path is C:\OSDWorkspace\Cache.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the path to the OSDWorkspace Cache.
+
+    .EXAMPLE
+        Get-OSDWorkspaceCachePath
+        Returns the default OSDWorkspace Cache Path.
 
     .NOTES
         David Segura

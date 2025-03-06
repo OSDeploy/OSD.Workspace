@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceBootMediaPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootMedia Path. Default is C:\OSDWorkspace\BootMedia.
+        Returns the OSDWorkspace BootMedia Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace BootMedia Path. Default is C:\OSDWorkspace\BootMedia.
+        This function returns the OSDWorkspace BootMedia Path. The default path is C:\OSDWorkspace\BootMedia.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the path to the OSDWorkspace BootMedia.
+
+    .EXAMPLE
+        Get-OSDWorkspaceBootMediaPath
+        Returns the default OSDWorkspace BootMedia Path.
 
     .NOTES
         David Segura
