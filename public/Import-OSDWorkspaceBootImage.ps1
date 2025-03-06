@@ -62,6 +62,7 @@ function Import-OSDWorkspaceBootImage {
         #=================================================
         #region Process foreach WindowsImage
         foreach ($WindowsImageFile in $OSWindowsImageFile) {
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] foreach"
             # Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Processing WindowsImage"
             # Set the BuildDateTime
             $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
@@ -97,14 +98,12 @@ function Import-OSDWorkspaceBootImage {
             New-Item -Path "$DestinationDirectory\sources" -ItemType Directory -Force -ErrorAction Stop | Out-Null
             New-Item -Path "$DestinationDirectory\temp" -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
+            $ImportId = @{id = $DestinationName }
+            $ImportId | ConvertTo-Json | Out-File "$DestinationDirectory\core\id.json" -Encoding utf8
+
             # Copy the OS details
             Copy-Item -Path "$SourceDirectory\os-WindowsImage.xml" -Destination "$DestinationDirectory\core"
             Copy-Item -Path "$SourceDirectory\os-WindowsImage.json" -Destination "$DestinationDirectory\core"
-
-            # Copy the WinPE details
-            #Copy-Item -Path "$SourceDirectory\winpe.wim" -Destination $DestinationDirectory
-            #Copy-Item -Path "$SourceDirectory\winpe-WindowsImage.xml" -Destination "$DestinationDirectory\core"
-            #Copy-Item -Path "$SourceDirectory\winpe-WindowsImage.json" -Destination "$DestinationDirectory\core"
 
             # Mount the Windows Image and store the details
             $MountedWindows = Mount-MyWindowsImage -ImagePath $SourceImagePath -Index 1 -ErrorAction Stop -ReadOnly
@@ -115,8 +114,8 @@ function Import-OSDWorkspaceBootImage {
             Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationDirectory\sources\boot.wim"
 
             $WinreImage = Get-WindowsImage -ImagePath "$DestinationDirectory\sources\boot.wim" -Index 1
-            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\core\winpe-WindowsImage.json" -Encoding utf8
-            $WinreImage | Export-Clixml -Path "$DestinationDirectory\core\winpe-WindowsImage.xml"
+            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\core\re-WindowsImage.json" -Encoding utf8
+            $WinreImage | Export-Clixml -Path "$DestinationDirectory\core\re-WindowsImage.xml"
 
             # Backup OSFiles
             $RobocopyLog = "$DestinationDirectory\temp\robocopy.log"
@@ -201,9 +200,9 @@ function Import-OSDWorkspaceBootImage {
             #region Dismount the Windows Image
             Dismount-WindowsImage -Path $MountDirectory -Discard
 
-            $null = Get-OSDWorkspaceBootImage
+            Get-OSDWorkspaceBootImage
 
-            Get-Item -Path $DestinationDirectory
+            # Get-Item -Path $DestinationDirectory
             #endregion
             #=================================================
         }

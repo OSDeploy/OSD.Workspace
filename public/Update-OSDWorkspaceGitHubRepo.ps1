@@ -67,19 +67,19 @@ function Update-OSDWorkspaceGitHubRepo {
 
             if ($Force -eq $true) {
                 $Destination = $Repository.FullName
-                Write-Verbose "Push-Location `"$Destination`""
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$Destination`""
                 Push-Location "$Destination"
 
-                Write-Verbose 'git fetch --verbose --progress --depth 1 origin'
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git fetch --verbose --progress --depth 1 origin"
                 git fetch --verbose --progress --depth 1 origin
 
-                Write-Verbose 'git reset --hard origin'
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --hard origin"
                 git reset --hard origin
 
-                #Write-Verbose 'git reset --mixed'
+                #Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --mixed"
                 #git reset --mixed
 
-                Write-Verbose 'git clean -f -d'
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git clean -d --force"
                 git clean -d --force
 
                 Pop-Location

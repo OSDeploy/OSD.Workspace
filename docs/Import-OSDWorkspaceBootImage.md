@@ -25,12 +25,12 @@ The BootImage will be imported to the OSDWorkspace BootImage directory with a na
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-Import-OSDWorkspaceBootImage
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+{{ Add example description here }}
 
 ## PARAMETERS
 
@@ -39,8 +39,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
-### You cannot pipe input to this cmdlet.
+### None
+
 ## OUTPUTS
 
 ### None.

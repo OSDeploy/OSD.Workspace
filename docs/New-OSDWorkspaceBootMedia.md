@@ -32,40 +32,12 @@ The BootMedia is created in the OSDWorkspace BootMedia directory.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64'
-```
-
-Creates a new OSDWorkspace 'amd64' BootMedia with the name 'MyBootMedia'.
-
-### EXAMPLE 2
-```
-New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'arm64'
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia'.
-
-### EXAMPLE 3
-```
-New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64' -AdkWinPE
-```
-
-Creates a new OSDWorkspace 'amd64' BootMedia using the Windows ADK winpe.wim with the name 'MyBootMedia'.
-
-### EXAMPLE 4
-```
-New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelect
-```
-
-Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia' and prompts to select the Windows ADK version to use.
-
-### EXAMPLE 5
-```
-New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64' -Languages 'en-US', 'fr-FR'
-```
-
-Creates a new OSDWorkspace BootMedia with the name 'MyBootMedia', architecture 'amd64' and languages 'en-US' and 'fr-FR'.
+{{ Add example description here }}
 
 ## PARAMETERS
 
@@ -79,7 +51,7 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,7 +67,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: En-US
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -111,7 +83,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: En-US
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -124,6 +96,7 @@ Default is en-US.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: amd64, arm64
 
 Required: False
 Position: Named
@@ -140,6 +113,7 @@ Default is the current TimeZone.
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: amd64, arm64
 
 Required: False
 Position: Named
@@ -243,8 +217,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
-### You cannot pipe input to this cmdlet.
+### None
+
 ## OUTPUTS
 
 ### None.

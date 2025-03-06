@@ -45,7 +45,7 @@ function Select-OSDWorkspaceBootMedia {
     $BootMedia = Get-OSDWorkspaceBootMedia
 
     if ($Architecture) {
-        $BootMedia = $BootMedia | Where-Object { $_.Architecture -eq $Architecture } | Sort-Object -Property ModifiedTime -Descending
+        $BootMedia = $BootMedia | Where-Object { $_.Architecture -eq $Architecture }
     }
 
     if ($BootMedia) {

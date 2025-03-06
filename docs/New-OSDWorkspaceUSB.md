@@ -21,19 +21,12 @@ This function creates a new OSDWorkspace USB by selecting a boot media and perfo
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-New-OSDWorkspaceUSB
-```
-
-Creates a new OSDWorkspace USB with default labels for boot and data partitions.
-
-### EXAMPLE 2
-```
-New-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-Creates a new OSDWorkspace USB with the boot label 'MYBOOT' and data label 'MYDATA'.
+{{ Add example description here }}
 
 ## PARAMETERS
 
@@ -63,8 +56,23 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: USB Data
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -74,8 +82,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
-### You cannot pipe input to this cmdlet.
+### None
+
 ## OUTPUTS
 
 ### None.

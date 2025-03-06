@@ -52,7 +52,7 @@ function Export-PSDriveWindowsImageIndex {
                 throw $_
             }
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Output: Get-Item -Path $DestinationImagePath"
-            return $(Get-Item -Path $DestinationImagePath)
+            $(Get-Item -Path $DestinationImagePath)
         }
         #=================================================
     }

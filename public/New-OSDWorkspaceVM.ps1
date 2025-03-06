@@ -140,7 +140,7 @@ function New-OSDWorkspaceVM {
     # Set the Boot ISO
     # $DvdDrivePath = Join-Path $($SelectBootMedia.Path) 'BootMedia_NoPrompt.iso'
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia ISO to use with this Virtual Machine (Cancel to exit)"
-    $SelectDvdDrive = Get-ChildItem $($SelectBootMedia.Path) *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a BootMedia ISO to use with this Virtual Machine' -OutputMode Single
+    $SelectDvdDrive = Get-ChildItem "$($SelectBootMedia.Path)\BootISO" *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a BootMedia ISO to use with this Virtual Machine' -OutputMode Single
     if ($null -eq $SelectDvdDrive) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No BootMedia ISO was found"
         return
