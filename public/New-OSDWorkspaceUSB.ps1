@@ -2,10 +2,10 @@ function New-OSDWorkspaceUSB {
     [CmdletBinding()]
     param (
         [ValidateLength(0,11)]
-        [string]$BootLabel = 'WINPE',
+        [string]$BootLabel = 'BootMedia',
 
         [ValidateLength(0,32)]
-        [string]$DataLabel = 'USB Data'
+        [string]$DataLabel = 'USB-Data'
     )
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
@@ -39,13 +39,13 @@ function New-OSDWorkspaceUSB {
     #=================================================
     # Select a BootMedia Media folder
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)"
-    $BootMediaObject = Get-ChildItem $($SelectBootMedia.Path) -Directory | Where-Object { ($_.Name -eq 'Media') -or ($_.Name -eq 'MediaEx') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)' -OutputMode Single
+    $BootMediaObject = Get-ChildItem $($SelectBootMedia.Path) -Directory | Where-Object { ($_.Name -eq 'BootMedia') -or ($_.Name -eq 'BootMediaEx') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)' -OutputMode Single
     if ($null -eq $BootMediaObject) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No BootMedia path was found"
         return
     }
     $BootMediaArch = $SelectBootMedia.Architecture.ToUpper()
-    $BootMediaLabel = "WinPE-$($BootMediaArch)"
+    #$BootLabel = "WinPE-$($BootMediaArch)"
     #=================================================
     # Disable Autorun
     Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer' -Name NoDriveTypeAutorun -Type DWord -Value 0xFF -ErrorAction SilentlyContinue
@@ -100,10 +100,10 @@ function New-OSDWorkspaceUSB {
         Set-Disk -Number $GetUSBDisk.Number -PartitionStyle MBR -ErrorAction Stop
     }
     if ($GetUSBDisk.SizeGB -le 2000) {
-        $BootPartition = $GetUSBDisk | New-Partition -Size 4GB -IsActive -AssignDriveLetter | Format-Volume -FileSystem FAT32 -NewFileSystemLabel $BootMediaLabel -ErrorAction Stop
+        $BootPartition = $GetUSBDisk | New-Partition -Size 4GB -IsActive -AssignDriveLetter | Format-Volume -FileSystem FAT32 -NewFileSystemLabel $BootLabel -ErrorAction Stop
         # $PEBOOTA = $GetUSBDisk | New-Partition -Size 4GB -IsActive -AssignDriveLetter | Format-Volume -FileSystem FAT32 -NewFileSystemLabel 'WinPE-AMD64' -ErrorAction Stop
         # $PEBOOTB = $GetUSBDisk | New-Partition -Size 4GB -IsActive -AssignDriveLetter | Format-Volume -FileSystem FAT32 -NewFileSystemLabel 'WinPE-ARM64' -ErrorAction Stop
-        $DataPartition = $GetUSBDisk | New-Partition -UseMaximumSize -AssignDriveLetter | Format-Volume -FileSystem NTFS -NewFileSystemLabel 'USB-Data' -ErrorAction Stop
+        $DataPartition = $GetUSBDisk | New-Partition -UseMaximumSize -AssignDriveLetter | Format-Volume -FileSystem NTFS -NewFileSystemLabel $DataLabel -ErrorAction Stop
     }
     #=================================================
     #	-ge 2TB
@@ -130,7 +130,7 @@ function New-OSDWorkspaceUSB {
     #	Update WinPE Volume
     #=================================================
     if ((Test-Path -Path "$($BootMediaObject.FullName)") -and (Test-Path -Path "$WinpeDestinationPath")) {
-        Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Copying $($BootMediaObject.FullName) to BootPartition partition at $BootMediaLabel"
+        Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Copying $($BootMediaObject.FullName) to BootPartition partition at $BootLabel"
         robocopy "$($BootMediaObject.FullName)" "$WinpeDestinationPath" *.* /e /ndl /njh /njs /np /r:0 /w:0 /b /zb
     }
     #=================================================
@@ -144,7 +144,7 @@ function New-OSDWorkspaceUSB {
     #=================================================
     #	Complete
     #=================================================
-
+    $SelectBootMedia | ConvertTo-Json | Out-File -FilePath "$($WinpeDestinationPath)\BootMedia.json" -Force
     #=================================================
     #	Return
     #=================================================

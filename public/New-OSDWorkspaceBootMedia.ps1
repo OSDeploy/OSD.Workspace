@@ -74,141 +74,29 @@ function New-OSDWorkspaceBootMedia {
         Break
     }
     #=================================================
-    #region InfWinpeJpg
-$InfWinpeJpg = @'
-[Version]
-Signature   = "$WINDOWS NT$"
-Class       = System
-ClassGuid   = {4D36E97d-E325-11CE-BFC1-08002BE10318}
-Provider    = OSDeploy
-DriverVer   = 07/20/2021,2021.07.20.0
-
-[DefaultInstall] 
-AddReg      = AddReg 
-
-[AddReg]
-;rootkey,[subkey],[value],[flags],[data]
-;0x00000    REG_SZ
-;0x00001    REG_BINARY
-;0x10000    REG_MULTI_SZ
-;0x20000    REG_EXPAND_SZ
-;0x10001    REG_DWORD
-;0x20001    REG_NONE
-HKLM,"Software\Microsoft\Windows NT\CurrentVersion\WinPE",CustomBackground,0x10000,"X:\Windows\System32\winpe.jpg"
-'@
-    #endregion
-    #=================================================
-    #region RegConsole
-$RegConsole = @'
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\Default\Console]
-"ColorTable00"=dword:000c0c0c
-"ColorTable01"=dword:00da3700
-"ColorTable02"=dword:000ea113
-"ColorTable03"=dword:00dd963a
-"ColorTable04"=dword:001f0fc5
-"ColorTable05"=dword:00981788
-"ColorTable06"=dword:00009cc1
-"ColorTable07"=dword:00cccccc
-"ColorTable08"=dword:00767676
-"ColorTable09"=dword:00ff783b
-"ColorTable10"=dword:000cc616
-"ColorTable11"=dword:00d6d661
-"ColorTable12"=dword:005648e7
-"ColorTable13"=dword:009e00b4
-"ColorTable14"=dword:00a5f1f9
-"ColorTable15"=dword:00f2f2f2
-"CtrlKeyShortcutsDisabled"=dword:00000000
-"CursorColor"=dword:ffffffff
-"CursorSize"=dword:00000019
-"DefaultBackground"=dword:ffffffff
-"DefaultForeground"=dword:ffffffff
-"EnableColorSelection"=dword:00000000
-"ExtendedEditKey"=dword:00000001
-"ExtendedEditKeyCustom"=dword:00000000
-"FaceName"="Consolas"
-"FilterOnPaste"=dword:00000001
-"FontFamily"=dword:00000036
-"FontSize"=dword:00140000
-"FontWeight"=dword:00000000
-"ForceV2"=dword:00000000
-"FullScreen"=dword:00000000
-"HistoryBufferSize"=dword:00000032
-"HistoryNoDup"=dword:00000000
-"InsertMode"=dword:00000001
-"LineSelection"=dword:00000001
-"LineWrap"=dword:00000001
-"LoadConIme"=dword:00000001
-"NumberOfHistoryBuffers"=dword:00000004
-"PopupColors"=dword:000000f5
-"QuickEdit"=dword:00000001
-"ScreenBufferSize"=dword:23290078
-"ScreenColors"=dword:00000007
-"ScrollScale"=dword:00000001
-"TerminalScrolling"=dword:00000000
-"TrimLeadingZeros"=dword:00000000
-"WindowAlpha"=dword:000000ff
-"WindowSize"=dword:001e0078
-"WordDelimiters"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\Default\Console\%SystemRoot%_System32_cmd.exe]
-"FaceName"="Consolas"
-"FilterOnPaste"=dword:00000000
-"FontSize"=dword:00100000
-"FontWeight"=dword:00000190
-"LineSelection"=dword:00000000
-"LineWrap"=dword:00000000
-"WindowAlpha"=dword:00000000
-"WindowPosition"=dword:00000000
-"WindowSize"=dword:00110054
-
-[HKEY_LOCAL_MACHINE\Default\Console\%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe]
-"ColorTable05"=dword:00562401
-"ColorTable06"=dword:00f0edee
-"FaceName"="Consolas"
-"FilterOnPaste"=dword:00000000
-"FontFamily"=dword:00000036
-"FontSize"=dword:00140009
-"FontWeight"=dword:00000190
-"LineSelection"=dword:00000001
-"LineWrap"=dword:00000000
-"PopupColors"=dword:000000f3
-"QuickEdit"=dword:00000001
-"ScreenBufferSize"=dword:03e800d1
-"ScreenColors"=dword:00000056
-"WindowAlpha"=dword:00000000
-"WindowPosition"=dword:00000000
-"WindowSize"=dword:0020006c
-'@
-    #endregion
-    #=================================================
-    #region InfEnvironment
-$InfEnvironment = @'
-[Version]
-Signature   = "$WINDOWS NT$"
-Class       = System
-ClassGuid   = {4D36E97d-E325-11CE-BFC1-08002BE10318}
-Provider    = OSDeploy
-DriverVer   = 03/08/2021,2021.03.08.0
-
-[DefaultInstall] 
-AddReg      = AddReg 
-
-[AddReg]
-;rootkey,[subkey],[value],[flags],[data]
-;0x00000    REG_SZ
-;0x00001    REG_BINARY
-;0x10000    REG_MULTI_SZ
-;0x20000    REG_EXPAND_SZ
-;0x10001    REG_DWORD
-;0x20001    REG_NONE
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",APPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Roaming"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEDRIVE,0x00000,"X:"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEPATH,0x00000,"Windows\System32\Config\SystemProfile"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Local"
-'@
-    #endregion
+    $WinpeOCPackages = @(
+        'WMI'
+        'NetFx'
+        'Scripting'
+        'HTA'
+        'PowerShell'
+        'SecureStartup'
+        'DismCmdlets'
+        'Dot3Svc'
+        'EnhancedStorage'
+        'FMAPI'
+        'GamingPeripherals'
+        'HSP-Driver'
+        'PPPoE'
+        'PlatformId'
+        'PmemCmdlets'
+        'RNDIS'
+        'SecureBootCmdlets'
+        'StorageWMI'
+        'WDS-Tools'
+        'x64-Support'
+        'MDAC'
+    )
     #=================================================
     # Start Main
     $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
@@ -422,7 +310,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $BootMediaIsoName = 'BootMedia.iso'
     $BootMediaIsoNameEX = 'BootMediaEX.iso'
     $BootMediaRootPath = Join-Path $(Get-OSDWorkspaceBootMediaPath) $BootMediaName
-    $BootMediaCorePath = "$BootMediaRootPath\core"
+    $global:BootMediaCorePath = "$BootMediaRootPath\core"
     $BootMediaTempPath = "$BootMediaRootPath\temp"
     #endregion
     #=================================================
@@ -566,7 +454,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         Languages          = [System.String[]]$Languages
         MediaPath          = Join-Path $BootMediaRootPath 'BootMedia'
         MediaPathEX        = $null
-        MountPath          = $MountPath
+        MountPath          = $null
         Name               = [System.String]$Name
         OSDCachePath       = $OSDWorkspaceCachePath
         PEVersion          = $GetWindowsImage.Version
@@ -589,7 +477,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $BuildStartTime = Get-Date
     #=================================================
     #region Start Main
-    $BootMediaLogs = "$BootMediaTempPath\logs"
+    $global:BootMediaLogs = "$BootMediaTempPath\logs"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootMediaCorePath: $BootMediaCorePath"
 
     if (-not (Test-Path $BootMediaRootPath)) {
@@ -679,11 +567,11 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     #endregion
     #=================================================
     #region Build Sources
-    $buildMediaSourcesPath = Join-Path $MediaPath 'sources'
-    if (-not (Test-Path "$buildMediaSourcesPath")) {
-        New-Item -Path "$buildMediaSourcesPath" -ItemType Directory -Force -ErrorAction Stop | Out-Null
+    $global:BuildMediaSourcesPath = Join-Path $MediaPath 'sources'
+    if (-not (Test-Path "$BuildMediaSourcesPath")) {
+        New-Item -Path "$BuildMediaSourcesPath" -ItemType Directory -Force -ErrorAction Stop | Out-Null
     }
-    $buildMediaSourcesBootwimPath = Join-Path $buildMediaSourcesPath 'boot.wim'
+    $buildMediaSourcesBootwimPath = Join-Path $BuildMediaSourcesPath 'boot.wim'
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Hydrate $buildMediaSourcesBootwimPath"
     Copy-Item -Path $WindowsAdkPaths.WimSourcePath -Destination $buildMediaSourcesBootwimPath -Force -ErrorAction Stop | Out-Null
 
@@ -692,20 +580,20 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         Stop-Transcript
         Break
     }
-    attrib -s -h -r $buildMediaSourcesPath
+    attrib -s -h -r $BuildMediaSourcesPath
     attrib -s -h -r $buildMediaSourcesBootwimPath
 
     if ($MediaPathEX) {
-        $buildMediaSourcesPathEX = Join-Path $MediaPathEX 'sources'
-        if (-not (Test-Path "$buildMediaSourcesPathEX")) {
-            New-Item -Path "$buildMediaSourcesPathEX" -ItemType Directory -Force -ErrorAction Stop | Out-Null
+        $global:BuildMediaSourcesPathEX = Join-Path $MediaPathEX 'sources'
+        if (-not (Test-Path "$BuildMediaSourcesPathEX")) {
+            New-Item -Path "$BuildMediaSourcesPathEX" -ItemType Directory -Force -ErrorAction Stop | Out-Null
         }
-        attrib -s -h -r $buildMediaSourcesPathEX
+        attrib -s -h -r $BuildMediaSourcesPathEX
     }
     #endregion
     #=================================================
     #region BootImage Mount
-    $WindowsImage = Mount-MyWindowsImage $buildMediaSourcesBootwimPath
+    $global:WindowsImage = Mount-MyWindowsImage $buildMediaSourcesBootwimPath
     $MountPath = $WindowsImage.Path
     $global:BootMedia.MountPath = $MountPath
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
@@ -735,57 +623,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     #endregion
     #=================================================
     if ($AdkSkipOCs -eq $false) {
-        #region Apply ADK Packages
         $WinPEOCs = $WindowsAdkPaths.WinPEOCs
-
-        if ($Architecture -eq 'amd64') {
-            $WinpeOCPackages = @(
-                'WMI'
-                'NetFx'
-                'Scripting'
-                'HTA'
-                'PowerShell'
-                'SecureStartup'
-                'DismCmdlets'
-                'Dot3Svc'
-                'EnhancedStorage'
-                'FMAPI'
-                'GamingPeripherals'
-                'HSP-Driver'
-                'PPPoE'
-                'PlatformId'
-                'PmemCmdlets'
-                'RNDIS'
-                'SecureBootCmdlets'
-                'StorageWMI'
-                'WDS-Tools'
-            )
-        }
-        if ($Architecture -eq 'arm64') {
-            $WinpeOCPackages = @(
-                'WMI'
-                'NetFx'
-                'Scripting'
-                'HTA'
-                'PowerShell'
-                'SecureStartup'
-                'DismCmdlets'
-                'Dot3Svc'
-                'EnhancedStorage'
-                'FMAPI'
-                'GamingPeripherals'
-                'PPPoE'
-                'PlatformId'
-                'PmemCmdlets'
-                'RNDIS'
-                'SecureBootCmdlets'
-                'StorageWMI'
-                'WDS-Tools'
-                'x64-Support'
-                'MDAC'
-            )
-        }
-        #endregion
         #=================================================
         #region OSDeploy Install Default en-us Language
         Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding ADK Packages for Language en-us"
@@ -951,674 +789,32 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         #endregion
     }
     #=================================================
-    #region Apply DISM Settings
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Set-TimeZone to $TimeZone"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))Set-TimeZone.log"
-    dism.exe /quiet /image:"$MountPath" /Set-TimeZone:"$TimeZone" /LogPath:"$CurrentLog"
-
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Log current Get-Intl configuration"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Get-Intl.log"
-    dism.exe /quiet /image:"$MountPath" /Get-Intl /LogPath:"$CurrentLog"
-
-    if ($SetAllIntl) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Set-AllIntl to $SetAllIntl"
-        $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Set-AllIntl.log"
-        dism.exe /quiet /image:"$MountPath" /Set-AllIntl:$SetAllIntl /LogPath:"$CurrentLog"
-    }
-
-    if ($SetInputLocale) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Set-InputLocale to $SetInputLocale"
-        $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Set-InputLocale.log"
-        dism.exe /quiet /image:"$MountPath" /Set-InputLocale:$SetInputLocale /LogPath:"$CurrentLog"
-    }
-    #endregion
+    Step-BootImageDismSettings
+    Step-BootImageAddWallpaper
+    Step-BootImagePowerShellUpdate
+    Step-BootImageAddWirelessConnect
+    Step-BootImageAddMicrosoftDart
+    Step-BootImageAddAzCopy
+    Step-BootImageAddZip
+    Step-BootImageAddPwsh
+    Step-BootImageWindowsImageSave
+    Step-BootImageRemoveWinpeshl
+    Step-BootImageConsoleSettings
+    Step-BootImageLibraryBootDriver
+    Step-BootImageLibraryBootImageFile
+    Step-BootImageLibraryBootImageScript
+    Step-BootImageLibraryBootStartnet
+    Step-BootImageExportWindowsDriverPE
+    Step-BootImageExportWindowsPackagePE
+    Step-BootImageRegCurrentVersionExport
+    Step-BootImageDismGetIntl
+    Step-BootImageGetContentStartnet
+    Step-BootImageGetContentWinpeshl
+    Step-BootImageWindowsImageDismount
+    Step-BootImageWindowsImageExport
     #=================================================
-    # WinRE Wallpaper for use in WinPE
-    if ($WimSourceType -eq 'WinRE') {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding default WinRE Wallpaper $MountPath\Windows\System32\winpe.jpg"
-
-        $Wallpaper = '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5vooor+sD+KwooooAKKKKACiiigD/2Q=='
-        [byte[]]$Bytes = [convert]::FromBase64String($Wallpaper)
-
-        [System.IO.File]::WriteAllBytes("$env:TEMP\winpe.jpg", $Bytes)
-        $null = robocopy.exe "$env:TEMP" "$MountPath\Windows\System32" winpe.jpg /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
-
-
-        # Inject the WinRE Wallpaper Driver
-        $InfFile = "$env:Temp\Set-WinREWallpaper.inf"
-        $null = New-Item -Path $InfFile -Force
-        Set-Content -Path $InfFile -Value $InfWinpeJpg -Encoding Unicode -Force
-        $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
-    }
-    #=================================================
-    # WinRE Add WirelessConnect.exe
-    # https://oliverkieselbach.com/
-    # https://github.com/okieselbach/Helpers
-    # https://msendpointmgr.com/2018/03/06/build-a-winpe-with-wireless-support/
-    $global:BootMedia.AddWirelessConnect = $false
-
-    if ($WimSourceType -eq 'WinRE') {
-        $CacheWirelessConnect = Join-Path $OSDWorkspaceCachePath "BootImage-WirelessConnect"
-        $WirelessConnectExe = "$CacheWirelessConnect\WirelessConnect.exe"
-        if (-not (Test-Path -Path $CacheWirelessConnect)) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating WirelessConnect cache at $CacheWirelessConnect"
-            New-Item -Path $CacheWirelessConnect -ItemType Directory -Force | Out-Null
-        }
-        if (-not (Test-Path -Path $WirelessConnectExe)) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Adding cache content at $CacheWirelessConnect"
-            Save-WebFile -SourceUrl 'https://github.com/okieselbach/Helpers/raw/master/WirelessConnect/WirelessConnect/bin/Release/WirelessConnect.exe' -DestinationDirectory $CacheWirelessConnect | Out-Null
-        }
-        if (Test-Path $WirelessConnectExe) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Using cache content at $WirelessConnectExe"
-            Copy-Item -Path $WirelessConnectExe -Destination "$MountPath\Windows\System32\WirelessConnect.exe" -Force | Out-Null
-            $global:BootMedia.AddWirelessConnect = $true
-        }
-    }
-    #=================================================
-    #region Add Microsoft DaRT
-    $global:BootMedia.AddMicrosoftDaRT = $false
-
-    $CacheMicrosoftDaRT = Join-Path $OSDWorkspaceCachePath 'BootImage-MicrosoftDaRT'
-
-    # MicrosoftDartCab
-    $MicrosoftDartCab = "$env:ProgramFiles\Microsoft DaRT\v10\Toolsx64.cab"
-    if (Test-Path $MicrosoftDartCab) {
-        if (-not (Test-Path "$CacheMicrosoftDaRT\Toolsx64.cab")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Adding cache content at $CacheMicrosoftDaRT"
-            if (-not (Test-Path $CacheMicrosoftDaRT)) {
-                New-Item -Path $CacheMicrosoftDaRT -ItemType Directory -Force | Out-Null
-            }
-            Copy-Item -Path $MicrosoftDartCab -Destination "$CacheMicrosoftDaRT\Toolsx64.cab" -Force | Out-Null
-        }
-    }
-
-    $MicrosoftDartCab = "$CacheMicrosoftDaRT\Toolsx64.cab"
-    if (Test-Path $MicrosoftDartCab) {
-        if ($BootMediaName -match 'public') {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Not adding Microsoft DaRT for Public BootMedia"
-        }
-        else {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Using cache content at $MicrosoftDartCab"
-            expand.exe "$MicrosoftDartCab" -F:*.* "$MountPath" | Out-Null
-            $global:BootMedia.AddMicrosoftDaRT = $true
-        }
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Install Microsoft Desktop Optimization Pack to add Microsoft DaRT to BootImage"
-    }
-
-    # MicrosoftDartConfig
-    $MicrosoftDartConfig = "$env:ProgramFiles\Microsoft Deployment Toolkit\Templates\DartConfig8.dat"
-    if (Test-Path $MicrosoftDartConfig) {
-        if (-not (Test-Path "$CacheMicrosoftDaRT\DartConfig.dat")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT Config: Adding cache content at $CacheMicrosoftDaRT"
-            if (-not (Test-Path $CacheMicrosoftDaRT)) {
-                New-Item -Path $CacheMicrosoftDaRT -ItemType Directory -Force | Out-Null
-            }
-            Copy-Item -Path $MicrosoftDartConfig -Destination "$CacheMicrosoftDaRT\DartConfig.dat" -Force | Out-Null
-        }
-    }
-
-    $MicrosoftDartConfig = "$CacheMicrosoftDaRT\DartConfig.dat"
-    if (Test-Path "$MicrosoftDartConfig") {
-        Copy-Item -Path "$MicrosoftDartConfig" -Destination "$MountPath\Windows\System32\DartConfig.dat" -Force
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Install Microsoft Deployment Toolkit to add Microsoft DaRT Config to BootImage"
-    }
-    #endregion
-    #=================================================
-    #region Add AzCopy10
-    # Get started with AzCopy
-    # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf
-    $global:BootMedia.AddAzCopy = $false
-
-    $CacheAzCopy = Join-Path $OSDWorkspaceCachePath "BootImage-AzCopy"
-    if (-not (Test-Path -Path $CacheAzCopy)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] AzCopy: Adding cache content at $CacheAzCopy"
-        New-Item -Path $CacheAzCopy -ItemType Directory -Force | Out-Null
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] AzCopy: Using cache content at $CacheAzCopy"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To update AzCopy, delete the $CacheAzCopy directory."
-    }
-
-    # amd64
-    if (-not (Test-Path "$CacheAzCopy\amd64")) {
-        $Uri = $Global:PSModuleOSDWorkspace.azcopy.amd64
-        $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
-        if ($DownloadUri) {
-            $FileName = Split-Path $DownloadUri -Leaf
-            if (-not (Test-Path "$CacheAzCopy\$FileName")) {
-                $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CacheAzCopy
-                Start-Sleep -Seconds 2
-                Expand-Archive -Path $($DownloadResult.FullName) -DestinationPath "$CacheAzCopy\amd64" -Force
-            }
-        }
-    }
-
-    # arm64
-    if (-not (Test-Path "$CacheAzCopy\arm64")) {
-        $Uri = $Global:PSModuleOSDWorkspace.azcopy.arm64
-        $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
-        if ($DownloadUri) {
-            $FileName = Split-Path $DownloadUri -Leaf
-            if (-not (Test-Path "$CacheAzCopy\$FileName")) {
-                $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CacheAzCopy
-                Start-Sleep -Seconds 2
-                Expand-Archive -Path $($DownloadResult.FullName) -DestinationPath "$CacheAzCopy\arm64" -Force
-            }
-        }
-    }
-
-    Get-ChildItem -Path "$CacheAzCopy\$Architecture" -Recurse -Include 'AzCopy.exe' -ErrorAction SilentlyContinue | ForEach-Object {
-        Copy-Item $_.FullName -Destination "$MountPath\Windows\System32" -Force
-        $global:BootMedia.AddAzCopy = $true
-    }
-    #endregion
-    #=================================================
-    #region	Add 7zip
-    # Thanks Gary Blok
-    $global:BootMedia.AddZip = $false
-    $Cache7zip = Join-Path $OSDWorkspaceCachePath "BootImage-7zip"
-    if (-not (Test-Path -Path $Cache7zip)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Adding cache content at $Cache7zip"
-        New-Item -Path $Cache7zip -ItemType Directory -Force | Out-Null
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Using cache content at $Cache7zip"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To update 7zip, delete the $Cache7zip directory."
-    }
-
-    if (-not (Test-Path -Path "$Cache7zip\7zr.exe")) {
-        $DownloadStandalone = $Global:PSModuleOSDWorkspace.sevenzip.standalone
-        Save-WebFile -SourceUrl $DownloadStandalone -DestinationDirectory $Cache7zip
-    }
-
-    if (-not (Test-Path -Path "$Cache7zip\7za")) {
-        $DownloadExtra = $Global:PSModuleOSDWorkspace.sevenzip.extra
-        $DownloadExtraResult = Save-WebFile -SourceUrl $DownloadExtra -DestinationDirectory $Cache7zip
-        $null = & "$Cache7zip\7zr.exe" x "$($DownloadExtraResult.FullName)" -o"$Cache7zip\7za" -y
-    }
-
-    if ($Architecture -eq 'amd64') {
-        Copy-Item -Path "$Cache7zip\7za\x64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BootMedia.AddZip = $true
-    }
-    if ($Architecture -eq 'arm64') {
-        Copy-Item -Path "$Cache7zip\7za\arm64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BootMedia.AddZip = $true
-    }
-    #endregion
-    #=================================================
-    #region PowerShell 5.1
-    #TODO Get this to work offline
-    $CachePowerShellModules = Join-Path $OSDWorkspaceCachePath "BootImage-PowerShell\Modules"
-    $PSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
-
-    $ModuleNames = @('PackageManagement', 'PowerShellGet', 'Microsoft.PowerShell.PSResourceGet')
-    $ModuleNames | ForEach-Object {
-        $ModuleName = $_
-        if (-not (Test-Path -Path "$CachePowerShellModules\$ModuleName")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Updating PowerShell Module cache at $CachePowerShellModules\$ModuleName"
-            Save-Module -Name $ModuleName -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
-        }
-        if (Test-Path -Path "$CachePowerShellModules\$ModuleName") {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding PowerShell Module at $PSModulesPath\$ModuleName"
-            Copy-Item -Path "$CachePowerShellModules\$ModuleName" -Destination $PSModulesPath -Recurse -Force
-        }
-    }
-
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell: Add Environment Variables"
-    $InfFile = "$env:Temp\Set-WinPEEnvironment.inf"
-    New-Item -Path $InfFile -Force | Out-Null
-    Set-Content -Path $InfFile -Value $InfEnvironment -Encoding Unicode -Force
-    $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
-
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
-    Set-WindowsImageExecutionPolicy -Path $MountPath -ExecutionPolicy Bypass | Out-Null
-    #endregion
-    #=================================================
-    #region Add PowerShell 7
-    <#
-    $CachePowerShell7 = Join-Path $OSDWorkspaceCachePath "BootImage-PowerShell"
-    if (-not (Test-Path -Path $CachePowerShell7)) {
-        Write-Host -ForegroundColor DarkMagenta "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell 7: Adding cache content at $CachePowerShell7"
-        New-Item -Path $CachePowerShell7 -ItemType Directory -Force | Out-Null
-    }
-    else {
-        Write-Host -ForegroundColor DarkMagenta "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell 7: Using cache content at $CachePowerShell7"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To update PowerShell 7, delete the $CachePowerShell7 directory."
-    }
-
-    # Download amd64
-    $DownloadUri = $Global:PSModuleOSDWorkspace.pwsh.amd64
-    $DownloadFile = Split-Path $DownloadUri -Leaf
-    if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
-        $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7
-        Start-Sleep -Seconds 2
-    }
-    # Install amd64
-    if ($Architecture -eq 'amd64') {
-        if (Test-Path "$CachePowerShell7\$DownloadFile") {
-            Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BootMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
-        }
-    }
-
-    # Download arm64
-    $DownloadUri = $Global:PSModuleOSDWorkspace.pwsh.arm64
-    $DownloadFile = Split-Path $DownloadUri -Leaf
-    if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
-        $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7
-        Start-Sleep -Seconds 2
-        if ($Architecture -eq 'arm64') {
-            Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-        }
-    }
-    # Install arm64
-    if ($Architecture -eq 'arm64') {
-        if (Test-Path "$CachePowerShell7\$DownloadFile") {
-            Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BootMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
-        }
-    }
-
-    # Add PowerShell 7 PATH to WinPE ... Thanks Johan Arwidmark
-    Invoke-Exe reg load HKLM\Mount "$MountPath\Windows\System32\Config\SYSTEM"
-    Start-Sleep -Seconds 3
-    $RegistryKey = 'HKLM:\Mount\ControlSet001\Control\Session Manager\Environment'
-    $CurrentPath = (Get-Item -path $RegistryKey ).GetValue('Path', '', 'DoNotExpandEnvironmentNames')
-    $NewPath = $CurrentPath + ';%ProgramFiles%\PowerShell\7\'
-    $Result = New-ItemProperty -Path $RegistryKey -Name 'Path' -PropertyType ExpandString -Value $NewPath -Force 
-
-    $CurrentPSModulePath = (Get-Item -path $RegistryKey ).GetValue('PSModulePath', '', 'DoNotExpandEnvironmentNames')
-    $NewPSModulePath = $CurrentPSModulePath + ';%ProgramFiles%\PowerShell\;%ProgramFiles%\PowerShell\7\;%SystemRoot%\system32\config\systemprofile\Documents\PowerShell\Modules\'
-    $Result = New-ItemProperty -Path $RegistryKey -Name 'PSModulePath' -PropertyType ExpandString -Value $NewPSModulePath -Force
-
-    Get-Variable Result | Remove-Variable
-    Get-Variable RegistryKey | Remove-Variable
-    [gc]::collect()
-    Start-Sleep -Seconds 3
-    Invoke-Exe reg unload HKLM\Mount | Out-Null
-    #>
-    #endregion
-    #=================================================
-    #region OSDeploy Save-WindowsImage
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Save Windows Image"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Save-WindowsImage.log"
-    $WindowsImage | Save-WindowsImage -LogPath $CurrentLog | Out-Null
-    #Save-WindowsImage -Path $MountPath -LogPath $CurrentLog | Out-Null
-    #endregion
-    #=================================================
-    #region OSDeploy Remove winpeshl.ini
-    $Winpeshl = "$MountPath\Windows\System32\winpeshl.ini"
-    if (Test-Path $Winpeshl) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing WinRE $Winpeshl"
-        Remove-Item -Path $Winpeshl -Force
-    }
-    #endregion
-    #=================================================
-    #region OSDeploy Registry Fixes
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Modifying WinPE CMD and PowerShell Console settings"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This increases the buffer and sets the window metrics and default fonts"
-
-    $RegConsole | Out-File "$env:TEMP\RegistryConsole.reg" -Encoding ascii -Width 2000 -Force
-    reg.exe LOAD HKLM\Default "$MountPath\Windows\System32\Config\DEFAULT"
-    reg.exe IMPORT "$env:TEMP\RegistryConsole.reg"
-    # reg add "HKLM\Default\Control Panel\Colors" /t REG_SZ /v Background /d "0 99 177" /f
-
-    <#
-    # Scaling
-    reg add "HKLM\Default\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /t REG_SZ /v "X:\Windows\System32\WirelessConnect.exe" /d "~ HIGHDPIAWARE" /f
-    reg add "HKLM\Default\Control Panel\Desktop" /t REG_DWORD /v LogPixels /d 96 /f
-    reg add "HKLM\Default\Control Panel\Desktop" /v Win8DpiScaling /t REG_DWORD /d 0x00000001 /f
-    reg add "HKLM\Default\Control Panel\Desktop" /v DpiScalingVer /t REG_DWORD /d 0x00001018 /f
-    #>
-
-    # Unload Registry
-    Start-Sleep -Seconds 3
-    reg.exe UNLOAD HKLM\Default
-    #endregion
-    #=================================================
-    #region BootDriver
-    if ($BootDriver) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootDriver: Add-WindowsDriver"
-        foreach ($DriverPath in $BootDriver) {
-            if (Test-Path $DriverPath) {
-                # $ArchName = ( $DriverPath.FullName -split '\\' | Select-Object -last 3 ) -join '\'
-                # Write-Host -ForegroundColor DarkGray $ArchName
-                Write-Host -ForegroundColor DarkGray "$DriverPath"
-                $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Add-WindowsDriver.log"
-        
-                try {
-                    # Dism
-                    #dism.exe /image:$MountPath /Add-Driver /Driver:"$($DriverPath.FullName)" /Recurse /ForceUnsigned
-                    #Start-Process dism.exe -ArgumentList "/Image:""$MountPath""", '/Add-Package', "/PackagePath:""$PackageFile""", '/IgnoreCheck' -NoNewWindow -Wait
-
-                    # PowerShell
-                    $null = $WindowsImage | Add-WindowsDriver -Driver $DriverPath -ForceUnsigned -Recurse -LogPath "$CurrentLog" -ErrorAction Stop
-                }
-                catch {
-                    Write-Error -Message 'Driver failed to install. Root cause may be found in the following Dism Log'
-                    Write-Error -Message "$CurrentLog"
-                }
-            }
-            else {
-                Write-Warning "BootDriver $DriverPath (not found)"
-            }
-        }
-    }
-    #endregion
-    #=================================================
-    #region BootImageFile
-    if ($BootImageFile) {
-        foreach ($Item in $BootImageFile) {
-            if (Test-Path $Item) {
-                if ($Item -match '.zip') {
-                    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Expanding BootImage Files from $Item"
-                    Expand-Archive -Path $Item -Destination $MountPath
-                }
-                else {
-                    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying BootImage Files from $Item"
-                    $null = robocopy.exe "$Item" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
-                }
-            }
-            else {
-                Write-Warning "BootImage File $Item (not found)"
-            }
-        }
-    }
-    #endregion
-    #=================================================
-    #region BootImageScript
-    if ($BootImageScript) {
-        foreach ($Item in $BootImageScript) {
-            if (Test-Path $Item) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImage-Script: $Item"
-                & "$Item"
-            }
-            else {
-                Write-Warning "BootImage Script $Item (not found)"
-            }
-        }
-    }
-    #endregion
-    #=================================================
-    #region BootStartnet
-    if ($BootStartnet) {
-        foreach ($Item in $BootStartnet) {
-            if (Test-Path $Item) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Startnet.cmd: $Item"
-                Copy-Item -Path $Item -Destination "$MountPath\Windows\System32\Startnet.cmd" -Force -Verbose
-            }
-            else {
-                Write-Warning "BootImage Startnet $Item (not found)"
-            }
-        }
-    }
-    #endregion
-    #=================================================
-    #region AddPackagePath
-    <#
-    if ($PackagePath) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Apply PackagePath"
-
-        $Params = @{
-            ErrorAction = 'Stop'
-            LogLevel    = 'WarningsInfo'
-            LogPath     = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-CumulativeUpdate.log"
-            PackagePath = $CumulativeUpdate
-            Path        = $MountPath
-            Verbose     = $true
-        }
-
-        Write-Host -ForegroundColor Yellow 'Add-WindowsPackage -PackagePath' $Params.PackagePath
-        Write-Host -ForegroundColor DarkGray '-Path' $Params.Path
-        Write-Host -ForegroundColor DarkGray '-LogPath' $Params.LogPath
-
-        try {
-            Add-WindowsPackage @Params
-        }
-        catch {
-            Write-Warning $PSItem.Exception.Message
-        }
-        finally {
-            $Error.Clear()
-        }
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Updated WinPE Information"
-        $WinPEUpdatedInfo = Get-RegCurrentVersion -Path $MountPath
-        $WinPEUpdatedInfo
-
-        if ($RegKeyCurrentVersion.UBR -eq $WinPEUpdatedInfo.UBR) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] There were no changes to the UBR after applying the Cumulative Update"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] You should verify that the Cumulative Update is for this version of WinPE"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Boot Files will not be updated"
-            Write-Host
-            Start-Sleep -Seconds 15
-        }
-        else {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update Boot Files"
-
-            #bootmgr.efi
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgr.efi"
-            Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\bootmgr.efi"
-            Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgr.efi" -Destination "$MediaPath\bootmgr.efi" -Force
-
-            #bootmgfw.efi
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgfw.efi"
-            Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\EFI\Boot\bootx64.efi"
-            Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgfw.efi" -Destination "$MediaPath\EFI\Boot\bootx64.efi" -Force
-
-            #bootmgfw.efi Microsoft Guidance: https://learn.microsoft.com/en-us/windows/deployment/update/media-dynamic-update#update-winpe
-            #Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgfw.efi"
-            #Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\bootmgfw.efi"
-            #Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgfw.efi" -Destination "$MediaPath\bootmgfw.efi" -Force
-        }
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Dism Component Cleanup"
-
-        $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-DismComponentCleanup.log"
-        #$CommandLine = "Dism /Cleanup-Image /StartComponentCleanup /Image:`"$MountPath`" /LogPath:`"$CurrentLog`""
-        Write-Host -ForegroundColor Yellow "dism.exe /image:`"$MountPath`""
-        Write-Host -ForegroundColor DarkGray '/Cleanup-Image /StartComponentCleanup'
-        Write-Host -ForegroundColor DarkGray "/LogPath:`"$CurrentLog`""
-
-        dism.exe /image:"$MountPath" /Cleanup-Image /StartComponentCleanup /LogPath:"$CurrentLog"
-    }
-    #>
-    #endregion
-    #=================================================
-    #region AddImageUpdates
-    <#
-    if ($BootMediaUpdates) {
-        foreach ($Item in $BootMediaUpdates) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Applying BootMedia Updates $($Item.FullName)"
-
-            $Params = @{
-                ErrorAction = 'Stop'
-                LogLevel    = 'WarningsInfo'
-                LogPath     = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-$($Item.Name).log"
-                PackagePath = $($Item.FullName)
-                Path        = $MountPath
-                Verbose     = $true
-            }
-
-            Write-Host -ForegroundColor Yellow 'Add-WindowsPackage -PackagePath' $Params.PackagePath
-            Write-Host -ForegroundColor DarkGray '-Path' $Params.Path
-            Write-Host -ForegroundColor DarkGray '-LogPath' $Params.LogPath
-
-            try {
-                Add-WindowsPackage @Params
-            }
-            catch {
-                Write-Warning $PSItem.Exception.Message
-            }
-            finally {
-                $Error.Clear()
-            }
-        }
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Updated WinPE Information"
-        $WinPEUpdatedInfo = Get-RegCurrentVersion -Path $MountPath
-        $WinPEUpdatedInfo
-
-        if ($RegKeyCurrentVersion.UBR -eq $WinPEUpdatedInfo.UBR) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] There were no changes to the UBR after applying the Cumulative Update"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] You should verify that the Cumulative Update is for this version of WinPE"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Boot Files will not be updated"
-            Write-Host
-            Start-Sleep -Seconds 15
-        }
-        else {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update Boot Files"
-
-            #bootmgr.efi
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgr.efi"
-            Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\bootmgr.efi"
-            Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgr.efi" -Destination "$MediaPath\bootmgr.efi" -Force
-
-            #bootmgfw.efi
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgfw.efi"
-            Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\EFI\Boot\bootx64.efi"
-            Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgfw.efi" -Destination "$MediaPath\EFI\Boot\bootx64.efi" -Force
-
-            #bootmgfw.efi Microsoft Guidance: https://learn.microsoft.com/en-us/windows/deployment/update/media-dynamic-update#update-winpe
-            #Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Source: $MountPath\Windows\boot\efi\bootmgfw.efi"
-            #Write-Host -ForegroundColor Yellow "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination: $MediaPath\bootmgfw.efi"
-            #Copy-Item -Path "$MountPath\Windows\boot\efi\bootmgfw.efi" -Destination "$MediaPath\bootmgfw.efi" -Force
-        }
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Dism Component Cleanup"
-
-        $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-DismComponentCleanup.log"
-        #$CommandLine = "Dism /Cleanup-Image /StartComponentCleanup /Image:`"$MountPath`" /LogPath:`"$CurrentLog`""
-        Write-Host -ForegroundColor Yellow "dism.exe /image:`"$MountPath`""
-        Write-Host -ForegroundColor DarkGray '/Cleanup-Image /StartComponentCleanup'
-        Write-Host -ForegroundColor DarkGray "/LogPath:`"$CurrentLog`""
-
-        dism.exe /image:"$MountPath" /Cleanup-Image /StartComponentCleanup /LogPath:"$CurrentLog"
-    }
-    #>
-    #endregion
-    #=================================================
-    #region Export Get-WindowsDrivers
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-WindowsDriver $BootMediaCorePath\pe-WindowsDriver.json"
-    $WindowsDriver = $WindowsImage | Get-WindowsDriver
-    if ($WindowsDriver) {
-        $WindowsDriver | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsDriver.xml" -Force
-        $WindowsDriver | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-WindowsDriver.json" -Encoding utf8 -Force
-        $WindowsDriver | Sort-Object ProviderName, CatalogFile, Version | Select-Object ProviderName, CatalogFile, Version, Date, ClassName, BootCritical, Driver, @{ Name = 'FileRepository'; Expression = { ($_.OriginalFileName.split('\')[-2]) } } | Format-Table -AutoSize
-    }
-    #endregion
-    #=================================================
-    #region Export Get-WindowsPackage
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-WindowsPackage $BootMediaCorePath\pe-WindowsPackage.json"
-    $WindowsPackage = $WindowsImage | Get-WindowsPackage
-    if ($WindowsPackage) {
-        $WindowsPackage | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsPackage.xml" -Force
-        $WindowsPackage | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-WindowsPackage.json" -Encoding utf8 -Force
-        $WindowsPackage | Sort-Object -Property PackageName | Format-Table -AutoSize
-    }
-    #endregion
-    #=================================================
-    #region Export Get-RegCurrentVersion
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-RegCurrentVersion $BootMediaCorePath\pe-RegCurrentVersion.json"
-    $RegKeyCurrentVersion = Get-RegCurrentVersion -Path $MountPath
-    $RegKeyCurrentVersion | Out-File "$BootMediaCorePath\pe-RegCurrentVersion.txt"
-    $RegKeyCurrentVersion | Export-Clixml -Path "$BootMediaCorePath\pe-RegCurrentVersion.xml"
-    $RegKeyCurrentVersion | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-RegCurrentVersion.json" -Encoding utf8 -Force
-    $RegKeyCurrentVersion | Out-Host
-    #endregion
-    #=================================================
-    #region DISM Get-Intl Configuration
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DISM Get-Intl Configuration"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Get-Intl.log"
-    dism.exe /image:"$MountPath" /Get-Intl /LogPath:"$CurrentLog"
-    #endregion
-    #=================================================
-    #region Get Startnet.cmd Content
-    if (Test-Path "$MountPath\Windows\System32\startnet.cmd") {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Startnet.cmd Content"
-        [System.String]$StartnetContent = Get-Content -Path "$MountPath\Windows\System32\startnet.cmd" -Raw
-        $global:BootMedia.StartnetContent = $StartnetContent
-        $global:BootMedia.StartnetContent | Out-Host
-    }
-    #endregion
-    #=================================================
-    #region Get winpeshl.ini Content
-    if (Test-Path "$MountPath\Windows\System32\winpeshl.ini") {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] winpeshl.ini Content"
-        [System.String]$WinpeshlContent = Get-Content -Path "$MountPath\Windows\System32\winpeshl.ini" -Raw
-        $global:BootMedia.WinpeshlContent = $WinpeshlContent
-        $global:BootMedia.WinpeshlContent | Out-Host
-    }
-    #endregion
-    #=================================================
-    #region Dismount Windows Image and Save
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Dismount-WindowsImage Save"
-    $WindowsImage | Dismount-MyWindowsImage -Save
-    #endregion
-    #=================================================
-    #region Export WIM to reduce the size
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export-WindowsImage"
-    $buildMediaSourcesPathBootWim = Join-Path $buildMediaSourcesPath 'boot.wim'
-    $buildMediaSourcesPathExportWim = Join-Path $buildMediaSourcesPath 'export.wim'
-    if (Test-Path $buildMediaSourcesPathExportWim) {
-        Remove-Item -Path $buildMediaSourcesPathExportWim -Force -ErrorAction Stop | Out-Null
-    }
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Export-WindowsImage.log"
-    if ($WimSourceType -eq 'WinPE') {
-        Export-WindowsImage -SourceImagePath $buildMediaSourcesPathBootWim -SourceIndex 1 -DestinationImagePath $buildMediaSourcesPathExportWim -LogPath $CurrentLog | Out-Null
-    }
-    else {
-        # Export-WindowsImage -SourceImagePath $buildMediaSourcesPathBootWim -SourceIndex 1 -DestinationImagePath $buildMediaSourcesPathExportWim -DestinationName 'Microsoft Windows PE (x64)' -LogPath $CurrentLog | Out-Null
-        Export-WindowsImage -SourceImagePath $buildMediaSourcesPathBootWim -SourceIndex 1 -DestinationImagePath $buildMediaSourcesPathExportWim -LogPath $CurrentLog | Out-Null
-    }
-    Remove-Item -Path $buildMediaSourcesPathBootWim -Force -ErrorAction Stop | Out-Null
-    Rename-Item -Path $buildMediaSourcesPathExportWim -NewName 'boot.wim' -Force -ErrorAction Stop | Out-Null
-
-    Get-WindowsImage -ImagePath $buildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsImage.xml"
-    Get-WindowsImage -ImagePath $buildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-WindowsImage.json" -Encoding utf8
-
-    Copy-Item -Path $(Join-Path $buildMediaSourcesPath 'boot.wim') -Destination $(Join-Path $buildMediaSourcesPathEX 'boot.wim') -Force -ErrorAction Stop | Out-Null
-    #endregion
-    #=================================================
-    #region BootMediaFile
-    if ($BootMediaFile) {
-        foreach ($Item in $BootMediaFile) {
-            if ($Item -match '.zip') {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Expanding BootMedia Files from $Item"
-                Expand-Archive -Path $Item -Destination $MediaPath
-                if ($MediaPathEX) {
-                    Expand-Archive -Path $Item -Destination $MediaPathEX
-                }
-            }
-            else {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying BootMedia Files from $Item"
-                $null = robocopy.exe "$Item" "$MediaPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
-                if ($MediaPathEX) {
-                    $null = robocopy.exe "$Item" "$MediaPathEX" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
-                }
-            }
-        }
-    }
-    #endregion
-    #=================================================
-    #region BootMediaScript
-    if ($BootMediaScript) {
-        foreach ($Item in $BootMediaScript) {
-            if (Test-Path $Item -ErrorAction SilentlyContinue) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Call BootMedia Script [$Item]"
-                & "$Item"
-            }
-            else {
-                Write-Warning "BootMedia Script $Item (not found)"
-            }
-        }
-    }
-    #endregion
+    Step-BootMediaLibraryBootMediaFile
+    Step-BootMediaLibraryBootMediaScript
     #=================================================
     #region Build Bootable ISO
     $BootIsoPath = Join-Path $BootMediaRootPath 'BootISO'
