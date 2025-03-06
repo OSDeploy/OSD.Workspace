@@ -17,6 +17,8 @@
         'New-OSDWorkspaceVM'
         'Open-OSDWorkspace'
         'Update-OSDWorkspaceGitHubRepo'
+        'Get-OSDWorkspaceBootImage'
+        'Get-OSDWorkspaceBootMedia'
     )
     PrivateData          = @{
         PSData = @{

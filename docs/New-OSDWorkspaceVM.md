@@ -15,7 +15,7 @@ Creates a Hyper-V VM for use with OSDWorkspace
 ```
 New-OSDWorkspaceVM [[-CheckpointVM] <Boolean>] [[-Generation] <UInt16>] [[-MemoryStartupGB] <UInt16>]
  [[-NamePrefix] <String>] [[-ProcessorCount] <UInt16>] [[-DisplayResolution] <String>] [[-StartVM] <Boolean>]
- [[-SwitchName] <String>] [[-VHDSizeGB] <UInt16>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-SwitchName] <String>] [[-VHDSizeGB] <UInt16>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -161,21 +161,6 @@ Aliases:
 Required: False
 Position: 9
 Default value: 64
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

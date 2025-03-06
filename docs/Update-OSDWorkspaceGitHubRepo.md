@@ -13,7 +13,7 @@ Updates a GitHub Repository in C:\OSDWorkspace\Library-GitHub from the GitHub Or
 ## SYNTAX
 
 ```
-Update-OSDWorkspaceGitHubRepo [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Update-OSDWorkspaceGitHubRepo [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,21 +41,6 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

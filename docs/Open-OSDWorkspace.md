@@ -13,7 +13,7 @@ Opens the OSDWorkspace in VS Code or the specified Applications.
 ## SYNTAX
 
 ```
-Open-OSDWorkspace [[-Application] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Open-OSDWorkspace [[-Application] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,21 +41,6 @@ Aliases:
 Required: False
 Position: 1
 Default value: Code
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

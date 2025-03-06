@@ -329,7 +329,7 @@ SYSTEM
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library"
         New-Item -Path "$OSDWorkspacePath" -Name 'Library' -ItemType 'Directory' -Force | Out-Null
-        $null = git init "$OSDWorkspacePath\Library"
+        $null = git submodule init "$OSDWorkspacePath\Library"
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootDriver"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootDriver' -ItemType 'Directory' -Force | Out-Null
