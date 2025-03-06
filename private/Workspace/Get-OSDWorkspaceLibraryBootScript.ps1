@@ -1,4 +1,29 @@
 function Get-OSDWorkspaceLibraryBootScript {
+        <#
+    .SYNOPSIS
+        Returns available OSDWorkspace Library BootScript(s).
+
+    .DESCRIPTION
+        This function returns available OSDWorkspace Library and Library-GitHub BootScript(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootScript Path(s).
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.Array
+
+        This function returns the available boot scripts in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootScript
+        Returns the boot scripts in the OSDWorkspace Library.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param ()
     #=================================================

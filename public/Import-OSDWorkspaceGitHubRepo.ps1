@@ -4,7 +4,30 @@ function Import-OSDWorkspaceGitHubRepo {
         Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
 
     .DESCRIPTION
-        Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
+        This function clones a specified GitHub repository into the OSDWorkspace Library-GitHub directory.
+        Performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
+        If you have already cloned the repository, use the Update-OSDWorkspaceGitHubRepo cmdlet to update it.
+
+    .PARAMETER Url
+        The HTTPS URL of the GitHub repository to clone.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        None.
+
+        This function does not return any output.
+
+    .EXAMPLE
+        Import-OSDWorkspaceGitHubRepo -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
+        Clones the repository 'OSDWorkspace-MichaelEscamilla' into the OSDWorkspace Library-GitHub directory.
+        #TODO Update URL to the OSDWorkspace Template GitHub Repository
+
+    .LINK
+    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceGitHubRepo.md
 
     .NOTES
         David Segura

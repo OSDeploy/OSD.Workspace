@@ -1,14 +1,14 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version:
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md
 schema: 2.0.0
 ---
 
 # New-OSDWorkspaceBootMedia
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new OSDWorkspace BootMedia.
 
 ## SYNTAX
 
@@ -27,12 +27,13 @@ New-OSDWorkspaceBootMedia -Name <String> [-Languages <String[]>] [-SetAllIntl <S
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+This function creates a new OSDWorkspace BootMedia by copying the selected BootImage and adding the Windows ADK Optional Components.
+The BootMedia is created in the OSDWorkspace BootMedia directory.
 
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -40,105 +41,31 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AdkSelect
-{{ Fill AdkSelect Description }}
+### -Name
+Name to append to the BootMedia Id.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AdkSkipOCs
-{{ Fill AdkSkipOCs Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AdkWinPE
-{{ Fill AdkWinPE Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: ADK
 Aliases:
 
 Required: True
 Position: Named
 Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Architecture
-{{ Fill Architecture Description }}
-
-```yaml
-Type: String
-Parameter Sets: Default
-Aliases:
-Accepted values: amd64, arm64, amd64, arm64
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: String
-Parameter Sets: ADK
-Aliases:
-Accepted values: amd64, arm64, amd64, arm64
-
-Required: True
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Languages
-{{ Fill Languages Description }}
+Windows ADK Languages to add to the BootImage.
+Default is en-US.
 
 ```yaml
 Type: String[]
 Parameter Sets: (All)
 Aliases:
-Accepted values: *, ar-sa, bg-bg, cs-cz, da-dk, de-de, el-gr, en-gb, es-es, es-mx, et-ee, fi-fi, fr-ca, fr-fr, he-il, hr-hr, hu-hu, it-it, ja-jp, ko-kr, lt-lt, lv-lv, nb-no, nl-nl, pl-pl, pt-br, pt-pt, ro-ro, ru-ru, sk-sk, sl-si, sr-latn-rs, sv-se, th-th, tr-tr, uk-ua, zh-cn, zh-tw
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -146,7 +73,8 @@ Accept wildcard characters: False
 ```
 
 ### -SetAllIntl
-{{ Fill SetAllIntl Description }}
+Sets all International settings in WinPE to the specified language.
+Default is en-US.
 
 ```yaml
 Type: String
@@ -161,11 +89,93 @@ Accept wildcard characters: False
 ```
 
 ### -SetInputLocale
-{{ Fill SetInputLocale Description }}
+Sets the default InputLocale in WinPE to the specified Input Locale.
+Default is en-US.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
+Aliases:
+Accepted values: amd64, arm64
+
+Required: False
+Position: Named
+Default value: En-US
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timezone
+Set the WinPE TimeZone.
+Default is the current TimeZone.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: amd64, arm64
+
+Required: False
+Position: Named
+Default value: (tzutil /g)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AdkSelect
+Select the Windows ADK version to use if multiple versions are present in the cache.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AdkSkipOCs
+Skip adding the Windows ADK Optional Components.
+Useful for quick testing of the Library.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AdkWinPE
+Uses the Windows ADK winpe.wim instead of an imported BootImage.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: ADK
+Aliases:
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Architecture
+Architecture of the BootImage.
+This is automatically set when selected a existing BootImage.
+This is required when using the Windows ADK winpe.wim.
+
+```yaml
+Type: String
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -175,15 +185,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Timezone
-{{ Fill Timezone Description }}
-
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: ADK
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -191,7 +198,7 @@ Accept wildcard characters: False
 ```
 
 ### -UpdateUSB
-{{ Fill UpdateUSB Description }}
+Update a OSDWorkspace USB drive with the new BootMedia.
 
 ```yaml
 Type: SwitchParameter
@@ -211,9 +218,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### None
+
 ## OUTPUTS
 
-### System.Object
+### None.
+### This function does not return any output.
 ## NOTES
+David Segura
 
 ## RELATED LINKS
+
+[https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md](https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md)
+

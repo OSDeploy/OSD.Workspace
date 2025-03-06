@@ -1,4 +1,29 @@
 function Get-OSDWorkspaceLibraryBootStartnet {
+        <#
+    .SYNOPSIS
+        Returns available OSDWorkspace Library BootStartnet(s).
+
+    .DESCRIPTION
+        This function returns available OSDWorkspace Library and Library-GitHub BootStartnet(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootStartnet Path(s).
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.Array
+
+        This function returns the available boot startnet scripts in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootStartnet
+        Returns the boot startnet scripts in the OSDWorkspace Library.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param ()
     #=================================================

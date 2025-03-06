@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceGitHubRepo {
-    <#
+     <#
     .SYNOPSIS
         Returns the OSDWorkspace Library-GitHub Repositories.
 
     .DESCRIPTION
-        Returns the OSDWorkspace Library-GitHub Repositories.
+        This function returns the OSDWorkspace Library-GitHub Repositories.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.IO.FileSystemInfo
+
+        This function returns the repositories in the OSDWorkspace Library-GitHub.
+
+    .EXAMPLE
+        Get-OSDWorkspaceGitHubRepo
+        Returns the repositories in the OSDWorkspace Library-GitHub.
 
     .NOTES
         David Segura

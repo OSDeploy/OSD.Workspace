@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceGitHubPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Library-GitHub Path. Default is C:\OSDWorkspace\Library-GitHub.
+        Returns the OSDWorkspace Library-GitHub Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace Library-GitHub Path. Default is C:\OSDWorkspace\Library-GitHub.
+        This function returns the OSDWorkspace Library-GitHub Path. The default path is C:\OSDWorkspace\Library-GitHub.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the path to the OSDWorkspace Library-GitHub.
+
+    .EXAMPLE
+        Get-OSDWorkspaceGitHubPath
+        Returns the default OSDWorkspace Library-GitHub Path.
 
     .NOTES
         David Segura

@@ -1,10 +1,25 @@
 function Get-OSDWorkspaceLibraryBootFile {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Library BootFile.
+        Returns available OSDWorkspace Library BootFile(s).
 
     .DESCRIPTION
-        Returns the OSDWorkspace Library BootFile.
+        This function returns available OSDWorkspace Library and Library-GitHub BootFile(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootFile Path(s).
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.Array
+
+        This function returns the available boot files in the OSDWorkspace Library.
+
+    .EXAMPLE
+        Get-OSDWorkspaceLibraryBootFile
+        Returns the boot files in the OSDWorkspace Library.
 
     .NOTES
         David Segura

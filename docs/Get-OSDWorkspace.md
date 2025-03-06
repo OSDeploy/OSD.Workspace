@@ -1,14 +1,14 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version:
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Get-OSDWorkspace.md
 schema: 2.0.0
 ---
 
 # Get-OSDWorkspace
 
 ## SYNOPSIS
-Opens the OSDWorkspace in VS Code or the specified Applications.
+Displays information about the OSDWorkspace PowerShell Module.
 
 ## SYNTAX
 
@@ -17,16 +17,16 @@ Get-OSDWorkspace [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Opens the OSDWorkspace in VS Code or the specified Applications.
+Dislays information about the OSDWorkspace PowerShell Module including Upcoming Events, Links to Resources, and Newest Functions.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-OSDWorkspace
 ```
 
-{{ Add example description here }}
+Displays information about the OSDWorkspace PowerShell Module.
 
 ## PARAMETERS
 
@@ -35,9 +35,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None.
+### You cannot pipe input to this cmdlet.
 ## OUTPUTS
 
+### None.
+### This function does not return any output.
 ## NOTES
 David Segura
 
 ## RELATED LINKS
+
+[https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Get-OSDWorkspace.md](https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Get-OSDWorkspace.md)
+

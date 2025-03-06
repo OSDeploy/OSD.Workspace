@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceBootImagePath {
-    <#
+      <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootImage Path. Default is C:\OSDWorkspace\BootImage.
+        Returns the OSDWorkspace BootImage Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace BootImage Path. Default is C:\OSDWorkspace\BootImage.
+        This function returns the OSDWorkspace BootImage Path. The default path is C:\OSDWorkspace\BootImage.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the path to the OSDWorkspace BootImage.
+
+    .EXAMPLE
+        Get-OSDWorkspaceBootImagePath
+        Returns the default OSDWorkspace BootImage Path.
 
     .NOTES
         David Segura

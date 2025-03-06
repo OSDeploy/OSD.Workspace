@@ -1,4 +1,78 @@
 function New-OSDWorkspaceBootMedia {
+    <#
+    .SYNOPSIS
+        Creates a new OSDWorkspace BootMedia.
+
+    .DESCRIPTION
+        This function creates a new OSDWorkspace BootMedia by copying the selected BootImage and adding the Windows ADK Optional Components.
+        The BootMedia is created in the OSDWorkspace BootMedia directory.
+
+    .PARAMETER Name
+        Name to append to the BootMedia Id.
+
+    .PARAMETER Languages
+        Windows ADK Languages to add to the BootImage. Default is en-US.
+
+    .PARAMETER SetAllIntl
+        Sets all International settings in WinPE to the specified language. Default is en-US.
+
+    .PARAMETER SetInputLocale
+        Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
+
+    .PARAMETER Timezone
+        Set the WinPE TimeZone. Default is the current TimeZone.
+
+    .PARAMETER AdkSelect
+        Select the Windows ADK version to use if multiple versions are present in the cache.
+
+    .PARAMETER AdkSkipOCs
+        Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.
+
+    .PARAMETER AdkWinPE
+        Uses the Windows ADK winpe.wim instead of an imported BootImage.
+
+    .PARAMETER Architecture
+        Architecture of the BootImage. This is automatically set when selected a existing BootImage. This is required when using the Windows ADK winpe.wim.
+
+    .PARAMETER UpdateUSB
+        Update a OSDWorkspace USB drive with the new BootMedia.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        None.
+
+        This function does not return any output.
+
+    .EXAMPLE
+        New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64'
+        Creates a new OSDWorkspace 'amd64' BootMedia with the name 'MyBootMedia'.
+
+    .EXAMPLE
+        New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'arm64'
+        Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia'.
+
+    .EXAMPLE
+        New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64' -AdkWinPE
+        Creates a new OSDWorkspace 'amd64' BootMedia using the Windows ADK winpe.wim with the name 'MyBootMedia'.
+
+    .EXAMPLE
+        New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelect
+        Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia' and prompts to select the Windows ADK version to use.
+
+    .EXAMPLE
+        New-OSDWorkspaceBootMedia -Name 'MyBootMedia' -Architecture 'amd64' -Languages 'en-US', 'fr-FR'
+        Creates a new OSDWorkspace BootMedia with the name 'MyBootMedia', architecture 'amd64' and languages 'en-US' and 'fr-FR'.
+
+    .LINK
+    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md
+
+    .NOTES
+    David Segura
+    #>
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
         # Name to append to the BootMedia Id
@@ -62,6 +136,7 @@ function New-OSDWorkspaceBootMedia {
         $Architecture,
 
         [System.Management.Automation.SwitchParameter]
+        #Update a OSDWorkspace USB drive with the new BootMedia.
         $UpdateUSB
     )
     #=================================================

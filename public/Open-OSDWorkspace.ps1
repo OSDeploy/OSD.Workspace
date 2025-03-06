@@ -1,10 +1,38 @@
 function Open-OSDWorkspace {
     <#
     .SYNOPSIS
-        Opens the OSDWorkspace in VS Code or the specified Applications.
+        Opens the OSDWorkspace in VS Code or the specified Application.
 
     .DESCRIPTION
         Opens the OSDWorkspace in VS Code or the specified Applications.
+
+    .PARAMETER Application
+        The application to open the OSDWorkspace in. Valid values are 'code', 'Explorer', and 'Terminal'. Default is 'code'.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        None.
+
+        This function does not return any output.
+
+    .EXAMPLE
+        Open-OSDWorkspace
+        Opens the OSDWorkspace in Visual Studio Code.
+
+    .EXAMPLE
+        Open-OSDWorkspace -Application Explorer
+        Opens the OSDWorkspace in Windows Explorer.
+
+    .EXAMPLE    
+        Open-OSDWorkspace -Application Terminal
+        Opens the OSDWorkspace in Windows Terminal.
+
+    .LINK
+        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Open-OSDWorkspace.md
 
     .NOTES
         David Segura

@@ -1,10 +1,24 @@
 function Get-OSDWorkspaceCacheAdkPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Windows ADK Cache Path. Default is C:\OSDWorkspace\Cache\ADK.
+        Returns the OSDWorkspace Windows ADK Cache Path.
 
     .DESCRIPTION
-        Returns the OSDWorkspace Windows ADK Cache Path. Default is C:\OSDWorkspace\Cache\ADK.
+        This function returns the OSDWorkspace Windows ADK Cache Path. The default path is C:\OSDWorkspace\Cache\ADK.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        System.String
+
+        This function returns the path to the OSDWorkspace Windows ADK Cache.
+
+    .EXAMPLE
+        Get-OSDWorkspaceCacheAdkPath
+        Returns the default OSDWorkspace Windows ADK Cache Path.
 
     .NOTES
         David Segura

@@ -1,7 +1,7 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version:
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceGitHubRepo.md
 schema: 2.0.0
 ---
 
@@ -17,21 +17,24 @@ Import-OSDWorkspaceGitHubRepo [-Url] <Uri> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
+This function clones a specified GitHub repository into the OSDWorkspace Library-GitHub directory.
+Performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
+If you have already cloned the repository, use the Update-OSDWorkspaceGitHubRepo cmdlet to update it.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Import-OSDWorkspaceGitHubRepo -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
 ```
 
-{{ Add example description here }}
+Clones the repository 'OSDWorkspace-MichaelEscamilla' into the OSDWorkspace Library-GitHub directory.
+#TODO Update URL to the OSDWorkspace Template GitHub Repository
 
 ## PARAMETERS
 
 ### -Url
-GitHub Origin HTTPS URL in the format https://github.com/RepositoryOwner/RepositoryName.git
+The HTTPS URL of the GitHub repository to clone.
 
 ```yaml
 Type: Uri
@@ -50,9 +53,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None.
+### You cannot pipe input to this cmdlet.
 ## OUTPUTS
 
+### None.
+### This function does not return any output.
 ## NOTES
 David Segura
 
 ## RELATED LINKS
+
+[https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceGitHubRepo.md](https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceGitHubRepo.md)
+
