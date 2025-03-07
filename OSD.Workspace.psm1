@@ -98,5 +98,4 @@ if ($FoundErrors.Count -gt 0) {
 
 Export-ModuleMember -Function '*' -Alias '*' -Cmdlet '*'
 
-# Get module strings
-$Global:PSModuleOSDWorkspace = Get-ModuleResource
+Import-OSDWorkspaceSettings

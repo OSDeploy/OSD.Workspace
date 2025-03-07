@@ -19,12 +19,12 @@ function Step-BootImageAddZip {
     }
 
     if (-not (Test-Path -Path "$CacheZip\7zr.exe")) {
-        $DownloadStandalone = $Global:PSModuleOSDWorkspace.sevenzip.standalone
+        $DownloadStandalone = $global:OSDWorkspace.sevenzip.standalone
         Save-WebFile -SourceUrl $DownloadStandalone -DestinationDirectory $CacheZip
     }
 
     if (-not (Test-Path -Path "$CacheZip\7za")) {
-        $DownloadExtra = $Global:PSModuleOSDWorkspace.sevenzip.extra
+        $DownloadExtra = $global:OSDWorkspace.sevenzip.extra
         $DownloadExtraResult = Save-WebFile -SourceUrl $DownloadExtra -DestinationDirectory $CacheZip
         $null = & "$CacheZip\7zr.exe" x "$($DownloadExtraResult.FullName)" -o"$CacheZip\7za" -y
     }

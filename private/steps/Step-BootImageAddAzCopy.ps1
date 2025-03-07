@@ -22,7 +22,7 @@ function Step-BootImageAddAzCopy {
 
     # amd64
     if (-not (Test-Path "$CacheAzCopy\amd64")) {
-        $Uri = $Global:PSModuleOSDWorkspace.azcopy.amd64
+        $Uri = $global:OSDWorkspace.azcopy.amd64
         $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
         if ($DownloadUri) {
             $FileName = Split-Path $DownloadUri -Leaf
@@ -36,7 +36,7 @@ function Step-BootImageAddAzCopy {
 
     # arm64
     if (-not (Test-Path "$CacheAzCopy\arm64")) {
-        $Uri = $Global:PSModuleOSDWorkspace.azcopy.arm64
+        $Uri = $global:OSDWorkspace.azcopy.arm64
         $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
         if ($DownloadUri) {
             $FileName = Split-Path $DownloadUri -Leaf

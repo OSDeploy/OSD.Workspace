@@ -18,7 +18,7 @@ function Step-BootImageAddPwsh {
     }
 
     # Download amd64
-    $DownloadUri = $Global:PSModuleOSDWorkspace.pwsh.amd64
+    $DownloadUri = $global:OSDWorkspace.pwsh.amd64
     $DownloadFile = Split-Path $DownloadUri -Leaf
     if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
         $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7
@@ -33,7 +33,7 @@ function Step-BootImageAddPwsh {
     }
 
     # Download arm64
-    $DownloadUri = $Global:PSModuleOSDWorkspace.pwsh.arm64
+    $DownloadUri = $global:OSDWorkspace.pwsh.arm64
     $DownloadFile = Split-Path $DownloadUri -Leaf
     if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
         $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7

@@ -9,7 +9,7 @@ function Step-BootImageDismSettings {
         $SetInputLocale = $global:BootMedia.SetInputLocale
     )
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Set-TimeZone to $TimeZone"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))Set-TimeZone.log"
+    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Set-TimeZone.log"
     dism.exe /quiet /image:"$MountPath" /Set-TimeZone:"$TimeZone" /LogPath:"$CurrentLog"
 
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Log current Get-Intl configuration"

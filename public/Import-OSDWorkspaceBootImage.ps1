@@ -199,7 +199,13 @@ function Import-OSDWorkspaceBootImage {
             #=================================================
             #region Dismount the Windows Image
             Dismount-WindowsImage -Path $MountDirectory -Discard
+            
+            # Remove Read-Only from all files
+            Get-ChildItem -Path $DestinationDirectory -File -Recurse -Force | ForEach-Object {
+                Set-ItemProperty -Path $_.FullName -Name IsReadOnly -Value $false -Force -ErrorAction Ignore
+            }
 
+            # Update the Index
             Get-OSDWorkspaceBootImage
 
             # Get-Item -Path $DestinationDirectory
