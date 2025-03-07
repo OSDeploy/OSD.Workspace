@@ -318,33 +318,35 @@ SYSTEM
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] GitAtributes is being added at $OSDWorkspacePath\.gitignore"
         $gitattributes | Set-Content -Path (Join-Path -Path $OSDWorkspacePath -ChildPath '.gitattributes') -Encoding utf8
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\BootImage"
-        New-Item -Path "$OSDWorkspacePath" -Name 'BootImage' -ItemType 'Directory' -Force | Out-Null
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.cache"
+        New-Item -Path "$OSDWorkspacePath" -Name '.cache' -ItemType 'Directory' -Force | Out-Null
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\BootMedia"
-        New-Item -Path "$OSDWorkspacePath" -Name 'BootMedia' -ItemType 'Directory' -Force | Out-Null
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\imageos"
+        New-Item -Path "$OSDWorkspacePath\.import" -Name 'imageos' -ItemType 'Directory' -Force | Out-Null
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Cache"
-        New-Item -Path "$OSDWorkspacePath" -Name 'Cache' -ItemType 'Directory' -Force | Out-Null
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\imagere"
+        New-Item -Path "$OSDWorkspacePath\.import" -Name 'imagere' -ItemType 'Directory' -Force | Out-Null
+
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\docs\psmodules"
+        New-Item -Path "$OSDWorkspacePath\docs" -Name 'psmodules' -ItemType 'Directory' -Force | Out-Null
+
+        if (Get-Command -Name 'New-MarkdownHelp') {
+            Update-Help -Module Dism -Force | Out-Null
+            $MarkdownHelpPath = "$OSDWorkspacePath\docs\psmodules"
+            New-MarkdownHelp -Module Dism -OutputFolder $MarkdownHelpPath -Force | Out-Null
+            New-MarkdownHelp -Module OSD.Workspace -OutputFolder $MarkdownHelpPath -Force | Out-Null
+        }
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library"
         New-Item -Path "$OSDWorkspacePath" -Name 'Library' -ItemType 'Directory' -Force | Out-Null
         $null = git submodule init "$OSDWorkspacePath\Library"
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootDriver"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootDriver' -ItemType 'Directory' -Force | Out-Null
         New-Item -Path "$OSDWorkspacePath\Library\BootDriver" -Name 'amd64' -ItemType 'Directory' -Force | Out-Null
         New-Item -Path "$OSDWorkspacePath\Library\BootDriver" -Name 'arm64' -ItemType 'Directory' -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootImage-Script"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootImage-Script' -ItemType 'Directory' -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootMedia-Profile"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootMedia-Profile' -ItemType 'Directory' -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library\BootMedia-Script"
         New-Item -Path "$OSDWorkspacePath\Library" -Name 'BootMedia-Script' -ItemType 'Directory' -Force | Out-Null
-
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\Library-GitHub"
         New-Item -Path "$OSDWorkspacePath" -Name 'Library-GitHub' -ItemType 'Directory' -Force | Out-Null
     }

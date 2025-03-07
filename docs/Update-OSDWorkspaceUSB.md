@@ -1,11 +1,11 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceBootMedia.md
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceGitHubRepo.md
 schema: 2.0.0
 ---
 
-# New-OSDWorkspaceUSB
+# Update-OSDWorkspaceUSB
 
 ## SYNOPSIS
 Creates a new OSDWorkspace USB.
@@ -13,7 +13,7 @@ Creates a new OSDWorkspace USB.
 ## SYNTAX
 
 ```
-New-OSDWorkspaceUSB [[-BootLabel] <String>] [[-DataLabel] <String>] [<CommonParameters>]
+Update-OSDWorkspaceUSB [[-BootLabel] <String>] [[-DataLabel] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

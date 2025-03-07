@@ -1,4 +1,4 @@
-function Step-BootMediaBuildIso {
+function Step-BootMediaIso {
     [CmdletBinding()]
     param (
         [System.String]
@@ -16,15 +16,15 @@ function Step-BootMediaBuildIso {
         [System.String]
         $WindowsAdkRootPath = $global:BootMedia.AdkRootPath
     )
-    $BootIsoPath = Join-Path $BootMediaRootPath 'BootISO'
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating bootable ISO [$BootIsoPath]"
-    if (-not (Test-Path $BootIsoPath)) { New-Item -Path $BootIsoPath -ItemType Directory -Force | Out-Null }
+    $IsoPath = Join-Path $BootMediaRootPath 'ISO'
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating bootable ISO [$IsoPath]"
+    if (-not (Test-Path $IsoPath)) { New-Item -Path $IsoPath -ItemType Directory -Force | Out-Null }
     $Params = @{
         MediaPath      = $MediaPath
         IsoFileName    = $BootMediaIsoName
         IsoLabel       = $BootMediaIsoLabel
         WindowsAdkRoot = $WindowsAdkRootPath
-        IsoDirectory   = $BootIsoPath
+        IsoDirectory   = $IsoPath
     }
     New-WindowsAdkISO @Params | Out-Null
 
@@ -34,7 +34,7 @@ function Step-BootMediaBuildIso {
             IsoFileName    = $BootMediaIsoNameEX
             IsoLabel       = $BootMediaIsoLabel
             WindowsAdkRoot = $WindowsAdkRootPath
-            IsoDirectory   = $BootIsoPath
+            IsoDirectory   = $IsoPath
         }
         New-WindowsAdkISO @Params | Out-Null
     }

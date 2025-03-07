@@ -1,11 +1,11 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceBootImage.md
+online version: https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceImageOS.md
 schema: 2.0.0
 ---
 
-# Import-OSDWorkspaceBootImage
+# Import-OSDWorkspaceImageOS
 
 ## SYNOPSIS
 Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
@@ -13,7 +13,7 @@ Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWo
 ## SYNTAX
 
 ```
-Import-OSDWorkspaceBootImage [<CommonParameters>]
+Import-OSDWorkspaceImageOS [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,12 +25,12 @@ The BootImage will be imported to the OSDWorkspace BootImage directory with a na
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Import-OSDWorkspaceImageOS
 ```
 
-{{ Add example description here }}
+Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
 
 ## PARAMETERS
 
@@ -39,8 +39,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
+### None.
+### You cannot pipe input to this cmdlet.
 ## OUTPUTS
 
 ### None.
@@ -50,5 +50,5 @@ David Segura
 
 ## RELATED LINKS
 
-[https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceBootImage.md](https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceBootImage.md)
+[https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceImageOS.md](https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceImageOS.md)
 

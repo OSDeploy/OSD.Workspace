@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceCacheAdkPath {
+function Get-OSDWorkspaceMediaPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Windows ADK Cache Path.
+        Returns the OSDWorkspace Media Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace Windows ADK Cache Path. The default path is C:\OSDWorkspace\Cache\ADK.
+        This function returns the OSDWorkspace Media Path. The default path is C:\OSDWorkspace\Media.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceCacheAdkPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace Windows ADK Cache.
+        This function returns the path to the OSDWorkspace Media.
 
     .EXAMPLE
-        Get-OSDWorkspaceCacheAdkPath
-        Returns the default OSDWorkspace Windows ADK Cache Path.
+        Get-OSDWorkspaceMediaPath
+        Returns the default OSDWorkspace Media Path.
 
     .NOTES
         David Segura
@@ -27,10 +27,11 @@ function Get-OSDWorkspaceCacheAdkPath {
     param ()
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    $Error.Clear()
     #=================================================
-    $ChildPath = 'ADK'
+    $ChildPath = 'Media'
 
-    Join-Path -Path $(Get-OSDWorkspaceCachePath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

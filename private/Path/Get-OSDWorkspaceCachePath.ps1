@@ -4,7 +4,7 @@ function Get-OSDWorkspaceCachePath {
         Returns the OSDWorkspace Cache Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace Cache Path. The default path is C:\OSDWorkspace\Cache.
+        This function returns the OSDWorkspace Cache Path. The default path is C:\OSDWorkspace\.cache.
 
     .INPUTS
         None.
@@ -28,7 +28,7 @@ function Get-OSDWorkspaceCachePath {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'Cache'
+    $ChildPath = '.cache'
 
     Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================

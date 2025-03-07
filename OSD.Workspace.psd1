@@ -10,10 +10,8 @@
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
         'Get-OSDWorkspace'
-        'Get-OSDWorkspaceBootImage'
-        'Get-OSDWorkspaceBootMedia'
-        'Import-OSDWorkspaceBootImage'
         'Import-OSDWorkspaceGitHubRepo'
+        'Import-OSDWorkspaceImageOS'
         'Import-OSDWorkspaceSettings'
         'New-OSDWorkspaceBootMedia'
         'New-OSDWorkspaceUSB'

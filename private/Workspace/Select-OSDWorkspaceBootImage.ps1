@@ -5,7 +5,7 @@ function Select-OSDWorkspaceBootImage {
 
     .DESCRIPTION
         This function displays available OSDWorkspace BootImages in an Out-GridView and return the selected BootImage object.
-        Utilizes the Get-OSDWorkspaceBootImage function to retrieve the BootImages.
+        Utilizes the Get-OSDWorkspaceImageRE function to retrieve the BootImages.
 
     .PARAMETER Architecture
         Filter BootImages by architecture.
@@ -42,7 +42,7 @@ function Select-OSDWorkspaceBootImage {
     $Error.Clear()
     #=================================================
 
-    $BootImage = Get-OSDWorkspaceBootImage
+    $BootImage = Get-OSDWorkspaceImageRE
 
     if ($Architecture) {
         $BootImage = $BootImage | Where-Object { $_.Architecture -eq $Architecture }
