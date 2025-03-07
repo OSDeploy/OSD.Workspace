@@ -75,8 +75,8 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Segura'
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Quick Start'
-    Write-Host -ForegroundColor DarkGray 'Import-OSDWorkspaceBootImage'
-    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceBoootMedia'
+    Write-Host -ForegroundColor DarkGray 'Import-OSDWorkspaceImageRE'
+    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceBootMedia'
     Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceVM'
     Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceVMware'
     Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceUSB'
@@ -87,6 +87,23 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Newest Functions and Updates'
     Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceBootDriverCM'
     Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceBootDriverMDT'
+    Write-Host
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCachePath: $(Get-OSDWorkspaceCachePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCacheAdkPath: $(Get-OSDWorkspaceCacheAdkPath)"
+
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportPath: $(Get-OSDWorkspaceImportPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImageREPath: $(Get-OSDWorkspaceImageREPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImageOSPath: $(Get-OSDWorkspaceImageOSPath)"
+
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaPath: $(Get-OSDWorkspaceMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBootMediaPath: $(Get-OSDWorkspaceBootMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceOSMediaPath: $(Get-OSDWorkspaceOSMediaPath)"
+
+    $null = Get-OSDWorkspaceImageRE
+    $null = Get-OSDWorkspaceImageOS
+    $null = Get-OSDWorkspaceBootMedia
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

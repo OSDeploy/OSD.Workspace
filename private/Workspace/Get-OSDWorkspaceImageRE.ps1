@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceBootImage {
+function Get-OSDWorkspaceImageRE {
     [CmdletBinding()]
     param (
         [ValidateSet('amd64', 'arm64')]
@@ -11,22 +11,22 @@ function Get-OSDWorkspaceBootImage {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSWorkspaceBootImagePath = Get-OSDWorkspaceBootImagePath
+        $OSDWorkspaceBootImagePath = Get-OSDWorkspaceImageREPath
 
         $BootImageItems = @()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageItems"
-        $BootImageItems = Get-ChildItem -Path $OSWorkspaceBootImagePath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'sources\boot.wim') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-WindowsImage.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\re-WindowsImage.xml') }
+        $BootImageItems = Get-ChildItem -Path $OSDWorkspaceBootImagePath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
+            Where-Object { Test-Path $(Join-Path $_.FullName '.wim\winre.wim') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\os-WindowsImage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\re-WindowsImage.xml') }
 
-        $IndexXml = (Join-Path $OSWorkspaceBootImagePath 'index.xml')
-        $IndexJson = (Join-Path $OSWorkspaceBootImagePath 'index.json')
+        $IndexXml = (Join-Path $OSDWorkspaceBootImagePath 'index.xml')
+        $IndexJson = (Join-Path $OSDWorkspaceBootImagePath 'index.json')
 
         if ($BootImageItems.Count -eq 0) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace BootImages were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceBootImage to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceImageRE to resolve this issue"
 
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -46,17 +46,17 @@ function Get-OSDWorkspaceBootImage {
             #=================================================
             #   Import Details
             #=================================================
-            $InfoId = "$BootImageItemPath\core\id.json"
+            $InfoId = "$BootImageItemPath\.core\id.json"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$BootImageItemPath\core\os-WindowsImage.xml"
+            $InfoOS = "$BootImageItemPath\.core\os-WindowsImage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoRE = "$BootImageItemPath\core\re-WindowsImage.xml"
+            $InfoRE = "$BootImageItemPath\.core\re-WindowsImage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
@@ -99,8 +99,8 @@ function Get-OSDWorkspaceBootImage {
                 ImageIndex       = [uint32]$ClixmlRE.ImageIndex
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            $ObjectProperties | Export-Clixml -Path "$BootImageItemPath\core\BootImage.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootImageItemPath\core\BootImage.json" -Encoding utf8 -Force
+            $ObjectProperties | Export-Clixml -Path "$BootImageItemPath\.core\BootImage.xml" -Force
+            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootImageItemPath\.core\BootImage.json" -Encoding utf8 -Force
             $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootImageItemPath\properties.json" -Encoding utf8 -Force
         }
 

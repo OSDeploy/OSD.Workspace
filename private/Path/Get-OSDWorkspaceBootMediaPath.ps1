@@ -31,7 +31,7 @@ function Get-OSDWorkspaceBootMediaPath {
     #=================================================
     $ChildPath = 'BootMedia'
 
-    Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspaceMediaPath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

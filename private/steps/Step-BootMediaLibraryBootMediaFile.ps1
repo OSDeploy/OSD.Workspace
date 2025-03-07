@@ -19,9 +19,9 @@ function Step-BootMediaLibraryBootMediaFile {
             }
             else {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying BootMedia Files from $Item"
-                $null = robocopy.exe "$Item" "$MediaPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+                $null = robocopy.exe "$Item" "$MediaPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Step-BootMediaLibraryBootMediaFile.log
                 if ($MediaPathEX) {
-                    $null = robocopy.exe "$Item" "$MediaPathEX" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+                    $null = robocopy.exe "$Item" "$MediaPathEX" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Step-BootMediaLibraryBootMediaFile.log
                 }
             }
         }

@@ -323,8 +323,8 @@ function New-OSDWorkspaceBootMedia {
         }
 
         $Architecture = $GetWindowsImage.Architecture
-        $BootImageCorePath = $GetWindowsImage.Path + '\core'
-        $BootImageOSFilesPath = $GetWindowsImage.Path + '\core\os-files'
+        $BootImageCorePath = $GetWindowsImage.Path + '\.core'
+        $BootImageOSFilesPath = $GetWindowsImage.Path + '\.core\os-files'
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using BootImage at $($GetWindowsImage.ImagePath)"
         Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
@@ -369,7 +369,7 @@ function New-OSDWorkspaceBootMedia {
     $BootMediaIsoName = 'BootMedia.iso'
     $BootMediaIsoNameEX = 'BootMediaEX.iso'
     $BootMediaRootPath = Join-Path $(Get-OSDWorkspaceBootMediaPath) $BootMediaName
-    $global:BootMediaCorePath = "$BootMediaRootPath\core"
+    $global:BootMediaCorePath = "$BootMediaRootPath\.core"
     $BootMediaTempPath = "$env:Temp\$BootMediaName"
     #endregion
     #=================================================
@@ -554,8 +554,8 @@ function New-OSDWorkspaceBootMedia {
     if ($BootImageCorePath) {
         if (Test-Path $BootImageCorePath) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Hydrate $BootMediaCorePath"
-            $null = robocopy.exe "$BootImageCorePath" "$BootMediaCorePath" *.json /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
-            $null = robocopy.exe "$BootImageCorePath" "$BootMediaCorePath" *.xml /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+            $null = robocopy.exe "$BootImageCorePath" "$BootMediaCorePath" *.json /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\core.log
+            $null = robocopy.exe "$BootImageCorePath" "$BootMediaCorePath" *.xml /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\core.log
         }
     }
 
@@ -567,7 +567,7 @@ function New-OSDWorkspaceBootMedia {
     $MediaPath = $global:BootMedia.MediaPath
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MediaPath: $MediaPath"
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Hydrate $MediaPath"
-    $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPath" *.* /mir /b /ndl /np /r:0 /w:0 /xj /njs /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+    $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPath" *.* /mir /b /ndl /np /r:0 /w:0 /xj /njs /mt:128 /LOG+:$BootMediaLogs\media.log
 
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying $BootImageCorePath\os-boot\DVD\EFI\en-US\efisys.bin"
     Copy-Item -Path "$BootImageCorePath\os-boot\DVD\EFI\en-US\efisys.bin" -Destination "$MediaPath\EFI\Microsoft\Boot\efisys.bin" -Force -ErrorAction SilentlyContinue
@@ -590,7 +590,7 @@ function New-OSDWorkspaceBootMedia {
         $MediaPathEX = $global:BootMedia.MediaPathEX
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MediaPathEX: $MediaPathEX"
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Hydrate $MediaPathEX"
-        $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPathEX" *.* /mir /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+        $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPathEX" *.* /mir /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\mediaex.log
 
         Write-Host -ForegroundColor DarkGreen "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Mitigate CVE-2022-21894 Secure Boot Security Feature Bypass Vulnerability aka BlackLotus"
         Remove-Item -Path "$MediaPathEX\EFI\Microsoft\Boot\Fonts" -Recurse -Force
@@ -676,7 +676,7 @@ function New-OSDWorkspaceBootMedia {
     if ($BootImageOSFilesPath) {
         if (Test-Path $BootImageOSFilesPath) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding OS Files from $BootImageOSFilesPath"
-            $null = robocopy.exe "$BootImageOSFilesPath" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xf bcp47*.dll /xx /xj /mt:128 /LOG+:$BootMediaLogs\Robocopy.log
+            $null = robocopy.exe "$BootImageOSFilesPath" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xf bcp47*.dll /xx /xj /mt:128 /LOG+:$BootMediaLogs\os-files.log
         }
     }
     #endregion
@@ -862,7 +862,7 @@ function New-OSDWorkspaceBootMedia {
     Step-BootImageWindowsImageExport
     Step-BootMediaLibraryBootMediaFile
     Step-BootMediaLibraryBootMediaScript
-    Step-BootMediaBuildIso
+    Step-BootMediaIso
     Step-BootMediaUpdateUSB
     #=================================================
     #region Complete

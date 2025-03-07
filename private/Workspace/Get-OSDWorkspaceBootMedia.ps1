@@ -46,27 +46,27 @@ function Get-OSDWorkspaceBootMedia {
             #=================================================
             #   Import Details
             #=================================================
-            $InfoId = "$BootMediaItemPath\core\id.json"
+            $InfoId = "$BootMediaItemPath\.core\id.json"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$BootMediaItemPath\core\os-WindowsImage.xml"
+            $InfoOS = "$BootMediaItemPath\.core\os-WindowsImage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoPE = "$BootMediaItemPath\core\pe-WindowsImage.xml"
+            $InfoPE = "$BootMediaItemPath\.core\pe-WindowsImage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE
 
-            $InfoRE = "$BootMediaItemPath\core\re-WindowsImage.xml"
+            $InfoRE = "$BootMediaItemPath\.core\re-WindowsImage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
 
-            $InfoBM = "$BootMediaItemPath\core\gv-bootmedia.xml"
+            $InfoBM = "$BootMediaItemPath\.core\gv-bootmedia.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoBM: $InfoBM"
             $ClixmlBM = @()
             $ClixmlBM = Import-Clixml -Path $InfoBM
@@ -150,8 +150,8 @@ function Get-OSDWorkspaceBootMedia {
                 FileCount          = $ClixmlPE.FileCount
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\core\BootMedia.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\core\BootMedia.json" -Encoding utf8 -Force
+            $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\.core\BootMedia.xml" -Force
+            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\.core\BootMedia.json" -Encoding utf8 -Force
             $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\properties.json" -Encoding utf8 -Force
         }
 

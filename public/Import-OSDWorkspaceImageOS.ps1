@@ -1,4 +1,4 @@
-function Import-OSDWorkspaceBootImage {
+function Import-OSDWorkspaceImageOS {
     <#
     .SYNOPSIS
         Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
@@ -11,7 +11,7 @@ function Import-OSDWorkspaceBootImage {
         The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmmss Architecture".
 
     .EXAMPLE
-        Import-OSDWorkspaceBootImage
+        Import-OSDWorkspaceImageOS
         Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
 
     .INPUTS
@@ -25,7 +25,7 @@ function Import-OSDWorkspaceBootImage {
         This function does not return any output.
 
     .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceBootImage.md
+        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceImageOS.md
 
     .NOTES
         David Segura
@@ -45,14 +45,14 @@ function Import-OSDWorkspaceBootImage {
             return
         }
         #=================================================
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Gathering mounted WindowsImage information"
-        $OSWindowsImageFile = Export-PSDriveWindowsImageIndex
+        $WindowsMediaImages = @()
+        $WindowsMediaImages = Get-PSDriveWindowsImageIndex -GridView Multiple
         #=================================================
     }
     process {
         #=================================================
         #region InputObject
-        if ($null -eq $OSWindowsImageFile) {
+        if ($null -eq $WindowsMediaImages) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WindowsImage on Windows Installation Media was not found. Mount a Windows Installation ISO and try again."
             Write-Host "Windows 11 x64 Download: https://www.microsoft.com/en-us/software-download/windows11"
             Write-Host "Windows 11 arm64 Download https://www.microsoft.com/en-us/software-download/windows11arm64"
@@ -61,80 +61,108 @@ function Import-OSDWorkspaceBootImage {
         #endregion
         #=================================================
         #region Process foreach WindowsImage
-        foreach ($WindowsImageFile in $OSWindowsImageFile) {
+        foreach ($SourceWindowsImage in $WindowsMediaImages) {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] foreach"
-            # Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Processing WindowsImage"
+
             # Set the BuildDateTime
             $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildDateTime: $BuildDateTime]"
 
-            # Set the Source
-            $SourceDirectory = $WindowsImageFile.Directory
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SourceDirectory: $SourceDirectory"
-
-            $SourceImagePath = $WindowsImageFile.FullName
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SourceImagePath: $SourceImagePath"
-
-            # Get the Source Details
-            $SourceWindowsImage = Import-Clixml -Path "$SourceDirectory\os-WindowsImage.xml"
-
-            # Set Architecture to human readable
-            if ($SourceWindowsImage.Architecture -eq '0') { $Architecture = 'x86' }
-            if ($SourceWindowsImage.Architecture -eq '1') { $Architecture = 'MIPS' }
-            if ($SourceWindowsImage.Architecture -eq '2') { $Architecture = 'Alpha' }
-            if ($SourceWindowsImage.Architecture -eq '3') { $Architecture = 'PowerPC' }
-            if ($SourceWindowsImage.Architecture -eq '5') { $Architecture = 'ARM' }
-            if ($SourceWindowsImage.Architecture -eq '6') { $Architecture = 'ia64' }
-            if ($SourceWindowsImage.Architecture -eq '9') { $Architecture = 'amd64' }
-            if ($SourceWindowsImage.Architecture -eq '12') { $Architecture = 'arm64' }
+            # Set the Architecture
+            $Architecture = $SourceWindowsImage.Architecture
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture]"
 
-            # Set the Destination
+            # Set the Destination Name
             $DestinationName = "$BuildDateTime $Architecture"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationName: $DestinationName]"
             
-            $DestinationDirectory = Join-Path $(Get-OSDWorkspaceBootImagePath) "$DestinationName"
+            # Set the Destination Path
+            $DestinationDirectory = Join-Path $(Get-OSDWorkspaceImageOSPath) "$DestinationName"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
+            
+            # Set the ImageRE Path
+            $ImageREDirectory = Join-Path $(Get-OSDWorkspaceImageREPath) "$DestinationName"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageREDirectory: $ImageREDirectory"
 
-            New-Item -Path "$DestinationDirectory\core" -ItemType Directory -Force -ErrorAction Stop | Out-Null
-            New-Item -Path "$DestinationDirectory\sources" -ItemType Directory -Force -ErrorAction Stop | Out-Null
-            New-Item -Path "$DestinationDirectory\temp" -ItemType Directory -Force -ErrorAction Stop | Out-Null
+            $DestinationCore = "$DestinationDirectory\.core"
+            $DestinationTemp = "$DestinationDirectory\.temp"
+            $DestinationLogs = "$DestinationTemp\logs"
+            $DestinationWim = "$DestinationDirectory\.wim"
+            $DestinationMedia = "$DestinationDirectory\OSMedia"
+
+            New-Item -Path $DestinationCore -ItemType Directory -Force -ErrorAction Stop | Out-Null
+            New-Item -Path $DestinationLogs -ItemType Directory -Force -ErrorAction Stop | Out-Null
+            New-Item -Path $DestinationWim -ItemType Directory -Force -ErrorAction Stop | Out-Null
+            New-Item -Path $DestinationMedia -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationDirectory\core\id.json" -Encoding utf8
+            $ImportId | ConvertTo-Json | Out-File "$DestinationCore\id.json" -Encoding utf8
 
-            # Copy the OS details
-            Copy-Item -Path "$SourceDirectory\os-WindowsImage.xml" -Destination "$DestinationDirectory\core"
-            Copy-Item -Path "$SourceDirectory\os-WindowsImage.json" -Destination "$DestinationDirectory\core"
+            robocopy "$($SourceWindowsImage.MediaRoot)" "$DestinationMedia" *.* /e /xf install.wim install.esd | Out-Null
+            Get-ChildItem -Recurse -Path "$DestinationMedia\*" | Set-ItemProperty -Name IsReadOnly -Value $false -ErrorAction SilentlyContinue | Out-Null
+
+            $DestinationImagePath = "$DestinationMedia\sources\install.wim"
+            $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WindowsImage.log"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] CurrentLog: $CurrentLog"
+            Export-WindowsImage -SourceImagePath $($SourceWindowsImage.ImagePath) -SourceIndex $($SourceWindowsImage.ImageIndex) -DestinationImagePath $DestinationImagePath -LogPath "$CurrentLog" | Out-Null
+            
+            # Export the Operating System information
+            $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
+
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationCore\os-WindowsImage.xml"
+            $Image | Export-Clixml -Path "$DestinationCore\os-WindowsImage.xml"
+            
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationCore\os-WindowsImage.json"
+            $Image | ConvertTo-Json | Out-File "$DestinationCore\os-WindowsImage.json" -Encoding utf8
 
             # Mount the Windows Image and store the details
-            $MountedWindows = Mount-MyWindowsImage -ImagePath $SourceImagePath -Index 1 -ErrorAction Stop -ReadOnly
+            $MountedWindows = Mount-MyWindowsImage -ImagePath $DestinationImagePath -Index 1 -ErrorAction Stop -ReadOnly
             $MountDirectory = $MountedWindows.Path
 
             # Backup WinRE
-            Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\ReAgent.xml" -Destination "$DestinationDirectory\temp\os-reagent.xml"
-            Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationDirectory\sources\boot.wim"
+            Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\ReAgent.xml" -Destination "$DestinationDirectory\.temp\os-reagent.xml"
+            Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationWim\winre.wim"
 
-            $WinreImage = Get-WindowsImage -ImagePath "$DestinationDirectory\sources\boot.wim" -Index 1
-            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\core\re-WindowsImage.json" -Encoding utf8
-            $WinreImage | Export-Clixml -Path "$DestinationDirectory\core\re-WindowsImage.xml"
+            $WinreImage = Get-WindowsImage -ImagePath "$DestinationWim\winre.wim" -Index 1
+            $WinreImage | ConvertTo-Json | Out-File "$DestinationCore\re-WindowsImage.json" -Encoding utf8
+            $WinreImage | Export-Clixml -Path "$DestinationCore\re-WindowsImage.xml"
+
+            # Export WinSE and WinPE
+            $BootWim = "$($SourceWindowsImage.MediaRoot)sources\boot.wim"
+            if (Test-Path $BootWim) {
+                $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinSE.log"
+                Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 1 -DestinationImagePath "$DestinationWim\winse.wim" -LogPath "$CurrentLog" | Out-Null
+                $WinseImage = Get-WindowsImage -ImagePath "$DestinationWim\winse.wim" -Index 1
+                $WinseImage | ConvertTo-Json | Out-File "$DestinationCore\se-WindowsImage.json" -Encoding utf8
+                $WinseImage | Export-Clixml -Path "$DestinationCore\se-WindowsImage.xml"
+
+
+                $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinPE.log"
+                Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 2 -DestinationImagePath "$DestinationWim\winpe.wim" -LogPath "$CurrentLog" | Out-Null
+                $WinpeImage = Get-WindowsImage -ImagePath "$DestinationWim\winpe.wim" -Index 1
+                $WinpeImage | ConvertTo-Json | Out-File "$DestinationCore\pe-WindowsImage.json" -Encoding utf8
+                $WinpeImage | Export-Clixml -Path "$DestinationCore\pe-WindowsImage.xml"
+            }
 
             # Backup OSFiles
-            $RobocopyLog = "$DestinationDirectory\temp\robocopy.log"
             #=================================================
             #region RegistryHives
             $BackupOSFiles = @(
                 'SOFTWARE'
                 'SYSTEM'
             )
+            $RobocopyLog = "$DestinationLogs\os-registry.log"
             foreach ($Item in $BackupOSFiles) {
-                robocopy "$MountDirectory\Windows\System32\config" "$DestinationDirectory\temp" $Item /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
+                robocopy "$MountDirectory\Windows\System32\config" "$DestinationDirectory\.temp" $Item /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
-            $RenameItem = Rename-Item -Path "$DestinationDirectory\temp\SOFTWARE" -NewName 'os-software.hive' -Force -ErrorAction SilentlyContinue
-            $RenameItem = Rename-Item -Path "$DestinationDirectory\temp\SYSTEM" -NewName 'os-system.hive' -Force -ErrorAction SilentlyContinue
+            $RenameItem = Rename-Item -Path "$DestinationDirectory\.temp\SOFTWARE" -NewName 'os-software.hive' -Force -ErrorAction SilentlyContinue
+            $RenameItem = Rename-Item -Path "$DestinationDirectory\.temp\SYSTEM" -NewName 'os-system.hive' -Force -ErrorAction SilentlyContinue
             #endregion
             #=================================================
             #region Boot
+            $RobocopyLog = "$DestinationLogs\os-boot.log"
             if (Test-Path "$MountDirectory\Windows") {
-                robocopy "$MountDirectory\Windows\Boot" "$DestinationDirectory\core\os-boot" *.* /e /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
+                robocopy "$MountDirectory\Windows\Boot" "$DestinationCore\os-boot" *.* /e /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
             #endregion
             #=================================================
@@ -192,8 +220,9 @@ function Import-OSDWorkspaceBootImage {
                 'winver.*'
                 'WSDApi*.*' # 2Pint OSD Toolkit
             )
+            $RobocopyLog = "$DestinationLogs\os-files.log"
             foreach ($Item in $BackupOSFiles) {
-                robocopy "$MountDirectory\Windows\System32" "$DestinationDirectory\core\os-files\Windows\System32" $Item /s /xd rescache servicing /ndl /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
+                robocopy "$MountDirectory\Windows\System32" "$DestinationCore\os-files\Windows\System32" $Item /s /xd rescache servicing /ndl /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
             #endregion
             #=================================================
@@ -205,8 +234,14 @@ function Import-OSDWorkspaceBootImage {
                 Set-ItemProperty -Path $_.FullName -Name IsReadOnly -Value $false -Force -ErrorAction Ignore
             }
 
+            # Build the imagere directory
+            robocopy "$DestinationDirectory\.core" "$ImageREDirectory\.core" *.* /e /xf OSImage.* /tee /r:0 /w:0 | Out-Null
+            robocopy "$DestinationDirectory\.temp" "$ImageREDirectory\.temp" *.* /e /xd logs /tee /r:0 /w:0 | Out-Null
+            robocopy "$DestinationDirectory\.wim" "$ImageREDirectory\.wim" winre.wim /e /tee /r:0 /w:0 | Out-Null
+
             # Update the Index
-            Get-OSDWorkspaceBootImage
+            $null = Get-OSDWorkspaceImageOS
+            $null = Get-OSDWorkspaceImageRE
 
             # Get-Item -Path $DestinationDirectory
             #endregion
