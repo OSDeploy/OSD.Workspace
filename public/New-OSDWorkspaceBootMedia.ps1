@@ -149,29 +149,12 @@ function New-OSDWorkspaceBootMedia {
         Break
     }
     #=================================================
-    $WinpeOCPackages = @(
-        'WMI'
-        'NetFx'
-        'Scripting'
-        'HTA'
-        'PowerShell'
-        'SecureStartup'
-        'DismCmdlets'
-        'Dot3Svc'
-        'EnhancedStorage'
-        'FMAPI'
-        'GamingPeripherals'
-        'HSP-Driver'
-        'PPPoE'
-        'PlatformId'
-        'PmemCmdlets'
-        'RNDIS'
-        'SecureBootCmdlets'
-        'StorageWMI'
-        'WDS-Tools'
-        'x64-Support'
-        'MDAC'
-    )
+    # Import OSD.Workspace settings
+    if (-not $global:OSDWorkspace) {
+        Import-OSDWorkspaceSettings
+    }
+
+    $WindowsAdkWinpePackages = $global:OSDWorkspace.adkwinpepackages
     #=================================================
     # Start Main
     $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
@@ -344,20 +327,21 @@ function New-OSDWorkspaceBootMedia {
         $BootImageOSFilesPath = $GetWindowsImage.Path + '\core\os-files'
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using BootImage at $($GetWindowsImage.ImagePath)"
+        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
+        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageCorePath: $BootImageCorePath"
+        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageOSFilesPath: $BootImageOSFilesPath"
     }
+    Break
     #endregion
     #=================================================
     #region Get ADK Paths
-    if ($Architecture -eq 'amd64') {
-        $WindowsAdkPaths = Get-WindowsAdkPaths -Architecture amd64 -AdkRoot $WindowsAdkRootPath -WarningAction SilentlyContinue
-    }
-    elseif ($Architecture -eq 'arm64') {
-        $WindowsAdkPaths = Get-WindowsAdkPaths -Architecture arm64 -AdkRoot $WindowsAdkRootPath -WarningAction SilentlyContinue
-    }
-    else {
+    if ($Architecture -ne ('amd64' -or 'arm64')) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unknown architecture $Architecture"
         return
     }
+
+    $WindowsAdkPaths = Get-WindowsAdkPaths -Architecture $Architecture -AdkRoot $WindowsAdkRootPath -WarningAction SilentlyContinue
+
     if (-not $WindowsAdkPaths) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Something is wrong you should not be here"
         return
@@ -386,7 +370,7 @@ function New-OSDWorkspaceBootMedia {
     $BootMediaIsoNameEX = 'BootMediaEX.iso'
     $BootMediaRootPath = Join-Path $(Get-OSDWorkspaceBootMediaPath) $BootMediaName
     $global:BootMediaCorePath = "$BootMediaRootPath\core"
-    $BootMediaTempPath = "$BootMediaRootPath\temp"
+    $BootMediaTempPath = "$env:Temp\$BootMediaName"
     #endregion
     #=================================================
     #region Select-OSDWorkspaceBootMediaProfile
@@ -697,6 +681,7 @@ function New-OSDWorkspaceBootMedia {
     }
     #endregion
     #=================================================
+    #region Add ADK WinPE OCs
     if ($AdkSkipOCs -eq $false) {
         $WinPEOCs = $WindowsAdkPaths.WinPEOCs
         #=================================================
@@ -704,7 +689,7 @@ function New-OSDWorkspaceBootMedia {
         Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding ADK Packages for Language en-us"
         $Lang = 'en-us'
 
-        foreach ($Package in $WinpeOCPackages) {
+        foreach ($Package in $WindowsAdkWinpePackages) {
             $PackageFile = "$WinPEOCs\WinPE-$Package.cab"
             if (Test-Path $PackageFile) {
                 Write-Host -ForegroundColor Gray "$PackageFile"
@@ -763,7 +748,7 @@ function New-OSDWorkspaceBootMedia {
             Write-Host -ForegroundColor DarkGray "$PackageFile (not present)"
         }
 
-        foreach ($Package in $WinpeOCPackages) {
+        foreach ($Package in $WindowsAdkWinpePackages) {
             $PackageFile = "$WinPEOCs\$Lang\WinPE-$Package`_$Lang.cab"
             if (Test-Path $PackageFile) {
 
@@ -789,27 +774,20 @@ function New-OSDWorkspaceBootMedia {
         }
         #endregion
         #=================================================
-        #region OSDeploy Save-WindowsImage
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Saving Windows Image at $MountPath"
-        $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Save-WindowsImage.log"
-        $WindowsImage | Save-WindowsImage -LogPath $CurrentLog | Out-Null
-        #endregion
+        Step-BootImageWindowsImageSave
         #=================================================
-        #region OSDeploy Install Selected Language
+        #region OSDeploy Install Selected Languages
         if ($Languages -contains '*') {
             $Languages = Get-ChildItem $WinPEOCs -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'en-us' } | Select-Object -ExpandProperty Name
         }
-
         foreach ($Lang in $Languages) {
             if ($Lang -eq 'en-us') { Continue }
             Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Lang ADK Packages"
-
             $PackageFile = "$WinPEOCs\$Lang\lp.cab"
             if (Test-Path $PackageFile) {
                 Write-Host -ForegroundColor Gray "$PackageFile"
                 $PackageName = "Add-WindowsPackage-WinPE-lp_$Lang"
                 $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-$PackageName.log"
-    
                 try {
                     $WindowsImage | Add-WindowsPackage -PackagePath $PackageFile -LogPath "$CurrentLog" -ErrorAction Stop | Out-Null
                 }
@@ -825,14 +803,12 @@ function New-OSDWorkspaceBootMedia {
             else {
                 Write-Host -ForegroundColor DarkGray "$PackageFile (not present)"
             }
-
-            foreach ($Package in $WinpeOCPackages) {
+            foreach ($Package in $WindowsAdkWinpePackages) {
                 $PackageFile = "$WinPEOCs\$Lang\WinPE-$Package`_$Lang.cab"
                 if (Test-Path $PackageFile) {
                     Write-Host -ForegroundColor Gray "$PackageFile"
                     $PackageName = "Add-WindowsPackage-WinPE-$Package`_$Lang"
                     $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-$PackageName.log"
-                
                     try {
                         $WindowsImage | Add-WindowsPackage -PackagePath $PackageFile -LogPath "$CurrentLog" -ErrorAction Stop | Out-Null
                     }
@@ -849,20 +825,17 @@ function New-OSDWorkspaceBootMedia {
                     Write-Host -ForegroundColor DarkGray "$PackageFile (not present)"
                 }
             }
-
             # Generates a new Lang.ini file which is used to define the language packs inside the image
             if ( (Test-Path -Path "$MountPath\sources\lang.ini") ) {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Updating lang.ini"
                 $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Gen-LangINI.log"
                 dism.exe /image:"$MountPath" /Gen-LangINI /distribution:"$MountPath" /LogPath:"$CurrentLog"
             }
-        
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Save Windows Image"
-            $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Save-WindowsImage.log"
-            Save-WindowsImage -Path $MountPath -LogPath $CurrentLog | Out-Null
+            Step-BootImageWindowsImageSave
         }
         #endregion
     }
+    #endregion
     #=================================================
     Step-BootImageDismSettings
     Step-BootImageAddWallpaper
@@ -887,64 +860,10 @@ function New-OSDWorkspaceBootMedia {
     Step-BootImageGetContentWinpeshl
     Step-BootImageWindowsImageDismount
     Step-BootImageWindowsImageExport
-    #=================================================
     Step-BootMediaLibraryBootMediaFile
     Step-BootMediaLibraryBootMediaScript
-    #=================================================
-    #region Build Bootable ISO
-    $BootIsoPath = Join-Path $BootMediaRootPath 'BootISO'
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating bootable ISO [$BootIsoPath]"
-    if (-NOT(Test-Path $BootIsoPath)) { New-Item -Path $BootIsoPath -ItemType Directory -Force | Out-Null}
-    $Params = @{
-        MediaPath = $MediaPath
-        IsoFileName = $BootMediaIsoName
-        IsoLabel = $BootMediaIsoLabel
-        WindowsAdkRoot = $WindowsAdkRootPath
-        IsoDirectory = $BootIsoPath
-    }
-    New-WindowsAdkISO @Params | Out-Null
-
-    if ($MediaPathEX) {
-        $Params = @{
-            MediaPath      = $MediaPathEX
-            IsoFileName    = $BootMediaIsoNameEX
-            IsoLabel       = $BootMediaIsoLabel
-            WindowsAdkRoot = $WindowsAdkRootPath
-            IsoDirectory   = $BootIsoPath
-        }
-        New-WindowsAdkISO @Params | Out-Null
-    }
-    #endregion
-    #=================================================
-    #region Set BootMedia
-    #Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Set-OSDCloudTemplate -Name $BootMediaName"
-    <#
-    $WinPE = [PSCustomObject]@{
-        BuildDate = (Get-Date).ToString('yyyy.MM.dd.HHmmss')
-        Version = [Version](Get-Module -Name OSD -ListAvailable | Sort-Object Version -Descending | Select-Object -First 1).Version
-    }
-    $WinPE | ConvertTo-Json | Out-File "$BootMediaRootPath\core\winpe-WindowsImage.json" -Encoding ascii -Width 2000 -Force
-    #>
-    #Set-OSDCloudTemplate -Name $BootMediaName
-    #endregion
-    #=================================================
-    #region UpdateUSB
-    if ($UpdateUSB) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update USB WinPE Partition"
-        $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'WinPE' }
-        if ($WinpeVolumes) {
-            foreach ($volume in $WinpeVolumes) {
-                if (Test-Path -Path "$($volume.DriveLetter):\") {
-                    #Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ROBOCOPY $BootMediaRootPath\Media $($volume.DriveLetter):\"
-                    robocopy "$BootMediaRootPath\Media" "$($volume.DriveLetter):\" *.* /e /ndl /np /r:0 /w:0 /xd "$RECYCLE.BIN" 'System Volume Information' /xj
-                }
-            }
-        }
-        else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unable to find a USB Partition WinPE label to update"
-        }
-    }
-    #endregion
+    Step-BootMediaBuildIso
+    Step-BootMediaUpdateUSB
     #=================================================
     #region Complete
     # Add the final ADKPaths information to the bootmedia object
@@ -965,7 +884,7 @@ function New-OSDWorkspaceBootMedia {
     [Net.ServicePointManager]::SecurityProtocol = $currentVersionTls
     $ProgressPreference = $currentProgressPref
 
-
+    # Update BootMedia Index
     $null = Get-OSDWorkspaceBootMedia
 
     $buildEndTime = Get-Date

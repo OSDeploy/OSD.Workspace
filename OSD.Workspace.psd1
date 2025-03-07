@@ -10,15 +10,17 @@
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
         'Get-OSDWorkspace'
+        'Get-OSDWorkspaceBootImage'
+        'Get-OSDWorkspaceBootMedia'
         'Import-OSDWorkspaceBootImage'
         'Import-OSDWorkspaceGitHubRepo'
+        'Import-OSDWorkspaceSettings'
         'New-OSDWorkspaceBootMedia'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
         'Open-OSDWorkspace'
         'Update-OSDWorkspaceGitHubRepo'
-        'Get-OSDWorkspaceBootImage'
-        'Get-OSDWorkspaceBootMedia'
+        'Update-OSDWorkspaceUSB'
     )
     PrivateData          = @{
         PSData = @{

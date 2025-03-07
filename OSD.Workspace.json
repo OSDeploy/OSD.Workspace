@@ -1,20 +1,57 @@
 {
+    // Defines the ADK OC Packages that are added by New-OSDWorkspaceBootMedia
+    "adkwinpepackages": [
+        "WMI",
+        "NetFx",
+        "Scripting",
+        "HTA",
+        "PowerShell",
+        "SecureStartup",
+        "DismCmdlets",
+        "Dot3Svc",
+        "EnhancedStorage",
+        "FMAPI",
+        "GamingPeripherals",
+        "HSP-Driver",
+        "PPPoE",
+        "PlatformId",
+        "PmemCmdlets",
+        "RNDIS",
+        "SecureBootCmdlets",
+        "StorageWMI",
+        "WDS-Tools",
+        "x64-Support",
+        "MDAC"
+    ],
+    // Download URLs for Microsoft AzCopy10
     "azcopy": {
         "amd64": "https://aka.ms/downloadazcopy-v10-windows",
         "arm64": "https://aka.ms/downloadazcopy-v10-windows-arm64"
     },
-    "sevenzip": {
-        "standalone": "https://github.com/ip7z/7zip/releases/download/24.09/7zr.exe",
-        "extra": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-extra.7z"
+    // Defines the BootMedia used by New-OSDWorkspaceBootMedia
+    "bootmedia": {
+        "IsoName": "BootMedia.iso",
+        "Name": "BootMedia"
     },
+    // Defines the BootMediaEX used by New-OSDWorkspaceBootMedia
+    "bootmediaex": {
+        "IsoName": "BootMediaEX.iso",
+        "Name": "BootMediaEX"
+    },
+    "module": {
+        "Docs": "https://github.com/OSDeploy/OSD.Workspace/tree/main/docs",
+        "Info": "https://www.osdeploy.com/",
+        "Issues": "https://github.com/OSDeploy/OSD.Workspace/issues",
+        "Project": "https://github.com/OSDeploy/OSD.Workspace"
+    },
+    // Download URLs for Microsoft PowerShell 7
     "pwsh": {
         "amd64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-x64.zip",
         "arm64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-arm64.zip"
     },
-    "Module": {
-        "Info": "https://www.osdeploy.com/",
-        "Docs": "https://github.com/OSDeploy/OSD.Workspace/tree/main/docs",
-        "Issues": "https://github.com/OSDeploy/OSD.Workspace/issues",
-        "Project": "https://github.com/OSDeploy/OSD.Workspace"
+    // Download URLs for 7-zip
+    "sevenzip": {
+        "extra": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-extra.7z",
+        "standalone": "https://github.com/ip7z/7zip/releases/download/24.09/7zr.exe"
     }
 }

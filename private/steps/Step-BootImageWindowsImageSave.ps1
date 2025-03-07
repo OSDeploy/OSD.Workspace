@@ -8,6 +8,5 @@ function Step-BootImageWindowsImageSave {
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Save Windows Image"
     $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Save-WindowsImage.log"
     $WindowsImage | Save-WindowsImage -LogPath $CurrentLog | Out-Null
-    #Save-WindowsImage -Path $MountPath -LogPath $CurrentLog | Out-Null
     #=================================================
 }

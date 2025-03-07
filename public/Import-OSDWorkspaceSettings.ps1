@@ -1,0 +1,44 @@
+function Import-OSDWorkspaceSettings {
+    [CmdletBinding()]
+    param (
+        # Specifies a path to one or more locations.
+        [Parameter(Mandatory = $false,
+            Position = 0,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = 'Path to one or more locations.')]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Path = "$($MyInvocation.MyCommand.Module.ModuleBase)\OSD.Workspace.json",
+
+        [System.Management.Automation.SwitchParameter]
+        $AsJson
+    )
+    #=================================================
+    $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    $ModuleName = $($MyInvocation.MyCommand.Module.Name)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
+    $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
+    $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
+    #=================================================
+    # Import the RAW content of the JSON file
+    $rawJsonContent = Get-Content -Path $Path -Raw
+
+    if ($AsJson) {
+        return $rawJsonContent
+    }
+
+    # https://stackoverflow.com/questions/51066978/convert-to-json-with-comments-from-powershell
+    $JsonContent = $rawJsonContent -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/'
+
+    $hashtable = [ordered]@{}
+    (ConvertFrom-Json $JsonContent).psobject.properties | ForEach-Object { $hashtable[$_.Name] = $_.Value }
+
+    $global:OSDWorkspace = $hashtable
+    #=================================================
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    #=================================================
+}
