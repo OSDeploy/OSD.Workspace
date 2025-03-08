@@ -3,7 +3,7 @@ function Step-BootImageExportWindowsDriverPE {
     param (
         $WindowsImage = $global:WindowsImage,
         [System.String]
-        $BootMediaCorePath = $global:BootMediaCorePath
+        $BootMediaCorePath = $global:BuildMediaCorePath
     )
     #=================================================
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-WindowsDriver $BootMediaCorePath\pe-windowsdriver.json"

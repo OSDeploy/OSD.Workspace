@@ -2,8 +2,8 @@ function Step-BootImageLibraryBootImageFile {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $BootImageFile = $global:BootMedia.BootImageFile
+        $MountPath = $global:BuildMedia.MountPath,
+        $BootImageFile = $global:BuildMedia.BootImageFile
     )
     foreach ($Item in $BootImageFile) {
         if (Test-Path $Item) {
@@ -13,7 +13,7 @@ function Step-BootImageLibraryBootImageFile {
             }
             else {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying BootImage Files from $Item"
-                $null = robocopy.exe "$Item" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BootMediaLogs\Step-BootImageLibraryBootImageFile.log
+                $null = robocopy.exe "$Item" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BuildMediaLogs\Step-BootImageLibraryBootImageFile.log
             }
         }
         else {

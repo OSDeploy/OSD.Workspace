@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceBootMedia {
+function Select-OSDWorkspaceWinPE {
     <#
     .SYNOPSIS
         Selects an OSDWorkspace BootMedia.
 
     .DESCRIPTION
         This function displays available OSDWorkspace BootMedia in an Out-GridView and returns the selected BootMedia object.
-        Utilizes the Get-OSDWorkspaceBootMedia function to retrieve the BootMedia.
+        Utilizes the Get-OSDWorkspaceWinPE function to retrieve the BootMedia.
 
     .PARAMETER Architecture
         Filter BootMedia by architecture.
@@ -21,11 +21,11 @@ function Select-OSDWorkspaceBootMedia {
         This function returns the selected BootMedia object.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootMedia
+        Select-OSDWorkspaceWinPE
         Will display all available BootMedia and return the selected BootMedia in a PSObject.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootMedia -Architecture 'amd64'
+        Select-OSDWorkspaceWinPE -Architecture 'amd64'
         Will display all available BootMedia for the architecture 'amd64' and return the selected BootMedia object.
 
     .NOTES
@@ -42,7 +42,7 @@ function Select-OSDWorkspaceBootMedia {
     $Error.Clear()
     #=================================================
 
-    $BootMedia = Get-OSDWorkspaceBootMedia
+    $BootMedia = Get-OSDWorkspaceWinPE
 
     if ($Architecture) {
         $BootMedia = $BootMedia | Where-Object { $_.Architecture -eq $Architecture }

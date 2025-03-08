@@ -2,10 +2,10 @@ function Step-BootImageRegCurrentVersionExport {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
+        $MountPath = $global:BuildMedia.MountPath,
         
         [System.String]
-        $BootMediaCorePath = $global:BootMediaCorePath
+        $BootMediaCorePath = $global:BuildMediaCorePath
     )
     #=================================================
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-RegCurrentVersion $BootMediaCorePath\pe-regcurrentversion.json"

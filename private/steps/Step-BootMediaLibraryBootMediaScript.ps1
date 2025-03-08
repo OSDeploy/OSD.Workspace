@@ -1,7 +1,7 @@
 function Step-BootMediaLibraryBootMediaScript {
     [CmdletBinding()]
     param (
-        $BootMediaScript = $global:BootMedia.BootMediaScript
+        $BootMediaScript = $global:BuildMedia.BootMediaScript
     )
     if ($BootMediaScript) {
         foreach ($Item in $BootMediaScript) {

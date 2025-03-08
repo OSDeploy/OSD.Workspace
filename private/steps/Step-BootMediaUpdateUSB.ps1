@@ -2,9 +2,9 @@ function Step-BootMediaUpdateUSB {
     [CmdletBinding()]
     param (
         [System.String]
-        $UpdateUSB = $global:BootMedia.UpdateUSB,
+        $UpdateUSB = $global:BuildMedia.UpdateUSB,
         [System.String]
-        $MediaPath = $global:BootMedia.MediaPath
+        $MediaPath = $global:BuildMedia.MediaPath
     )
     if ($UpdateUSB) {
         Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update USB BootMedia Partition"

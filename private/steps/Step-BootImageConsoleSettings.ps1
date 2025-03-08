@@ -2,7 +2,7 @@ function Step-BootImageConsoleSettings {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath
+        $MountPath = $global:BuildMedia.MountPath
     )
     #=================================================
     $RegConsole = @'

@@ -1,5 +1,5 @@
 {
-    // Defines the ADK OC Packages that are added by New-OSDWorkspaceBootMedia
+    // Defines the ADK OC Packages that are added by Build-OSDWorkspaceWinPE
     "adkwinpepackages": [
         "WMI",
         "NetFx",
@@ -28,12 +28,12 @@
         "amd64": "https://aka.ms/downloadazcopy-v10-windows",
         "arm64": "https://aka.ms/downloadazcopy-v10-windows-arm64"
     },
-    // Defines the BootMedia used by New-OSDWorkspaceBootMedia
+    // Defines the BootMedia used by Build-OSDWorkspaceWinPE
     "bootmedia": {
         "IsoName": "BootMedia.iso",
         "Name": "BootMedia"
     },
-    // Defines the BootMediaEX used by New-OSDWorkspaceBootMedia
+    // Defines the BootMediaEX used by Build-OSDWorkspaceWinPE
     "bootmediaex": {
         "IsoName": "BootMediaEX.iso",
         "Name": "BootMediaEX"

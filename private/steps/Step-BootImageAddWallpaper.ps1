@@ -2,8 +2,8 @@ function Step-BootImageAddWallpaper {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $WimSourceType = $global:BootMedia.WimSourceType
+        $MountPath = $global:BuildMedia.MountPath,
+        $WimSourceType = $global:BuildMedia.WimSourceType
     )
     #=================================================
 $InfWinpeJpg = @'
@@ -35,7 +35,7 @@ HKLM,"Software\Microsoft\Windows NT\CurrentVersion\WinPE",CustomBackground,0x100
         [byte[]]$Bytes = [convert]::FromBase64String($Wallpaper)
 
         [System.IO.File]::WriteAllBytes("$env:TEMP\winpe.jpg", $Bytes)
-        $null = robocopy.exe "$env:TEMP" "$MountPath\Windows\System32" winpe.jpg /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BootMediaLogs\Step-BootImageAddWallpaper.log
+        $null = robocopy.exe "$env:TEMP" "$MountPath\Windows\System32" winpe.jpg /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BuildMediaLogs\Step-BootImageAddWallpaper.log
 
 
         # Inject the WinRE Wallpaper Driver

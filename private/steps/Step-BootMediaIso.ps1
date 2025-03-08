@@ -2,27 +2,27 @@ function Step-BootMediaIso {
     [CmdletBinding()]
     param (
         [System.String]
-        $BootMediaIsoLabel = $global:BootMedia.BootMediaIsoLabel,
+        $BuildMediaIsoLabel = $global:BuildMedia.BuildMediaIsoLabel,
         [System.String]
-        $BootMediaIsoName = $global:BootMedia.BootMediaIsoName,
+        $BuildMediaIsoName = $global:BuildMedia.BuildMediaIsoName,
         [System.String]
-        $BootMediaIsoNameEX = $global:BootMedia.BootMediaIsoNameEX,
+        $BuildMediaIsoNameEX = $global:BuildMedia.BuildMediaIsoNameEX,
         [System.String]
-        $BootMediaRootPath = $global:BootMedia.BootMediaRootPath,
+        $BuildMediaRootPath = $global:BuildMedia.BuildMediaRootPath,
         [System.String]
-        $MediaPath = $global:BootMedia.MediaPath,
+        $MediaPath = $global:BuildMedia.MediaPath,
         [System.String]
-        $MediaPathEX = $global:BootMedia.MediaPathEX,
+        $MediaPathEX = $global:BuildMedia.MediaPathEX,
         [System.String]
-        $WindowsAdkRootPath = $global:BootMedia.AdkRootPath
+        $WindowsAdkRootPath = $global:BuildMedia.AdkRootPath
     )
-    $IsoPath = Join-Path $BootMediaRootPath 'ISO'
+    $IsoPath = Join-Path $BuildMediaRootPath 'ISO'
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating bootable ISO [$IsoPath]"
     if (-not (Test-Path $IsoPath)) { New-Item -Path $IsoPath -ItemType Directory -Force | Out-Null }
     $Params = @{
         MediaPath      = $MediaPath
-        IsoFileName    = $BootMediaIsoName
-        IsoLabel       = $BootMediaIsoLabel
+        IsoFileName    = $BuildMediaIsoName
+        IsoLabel       = $BuildMediaIsoLabel
         WindowsAdkRoot = $WindowsAdkRootPath
         IsoDirectory   = $IsoPath
     }
@@ -31,8 +31,8 @@ function Step-BootMediaIso {
     if ($MediaPathEX) {
         $Params = @{
             MediaPath      = $MediaPathEX
-            IsoFileName    = $BootMediaIsoNameEX
-            IsoLabel       = $BootMediaIsoLabel
+            IsoFileName    = $BuildMediaIsoNameEX
+            IsoLabel       = $BuildMediaIsoLabel
             WindowsAdkRoot = $WindowsAdkRootPath
             IsoDirectory   = $IsoPath
         }

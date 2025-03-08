@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceBootImage {
+function Select-OSDWorkspaceImportWinRE {
     <#
     .SYNOPSIS
         Selects an OSDWorkspace BootImage.
 
     .DESCRIPTION
         This function displays available OSDWorkspace BootImages in an Out-GridView and return the selected BootImage object.
-        Utilizes the Get-OSDWorkspaceImageRE function to retrieve the BootImages.
+        Utilizes the Get-OSDWorkspaceImportWinRE function to retrieve the BootImages.
 
     .PARAMETER Architecture
         Filter BootImages by architecture.
@@ -21,11 +21,11 @@ function Select-OSDWorkspaceBootImage {
         This function returns the selected BootImage object.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootImage
+        Select-OSDWorkspaceImportWinRE
         Will display all available BootImages and return the selected BootImage object.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootImage -Architecture 'amd64'
+        Select-OSDWorkspaceImportWinRE -Architecture 'amd64'
         Will display all available BootImages for the architecture 'amd64' and return the selected BootImage object.
 
     .NOTES
@@ -42,7 +42,7 @@ function Select-OSDWorkspaceBootImage {
     $Error.Clear()
     #=================================================
 
-    $BootImage = Get-OSDWorkspaceImageRE
+    $BootImage = Get-OSDWorkspaceImportWinRE
 
     if ($Architecture) {
         $BootImage = $BootImage | Where-Object { $_.Architecture -eq $Architecture }

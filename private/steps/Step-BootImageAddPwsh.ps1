@@ -2,11 +2,11 @@ function Step-BootImageAddPwsh {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath,
-        $Architecture = $global:BootMedia.Architecture
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath,
+        $Architecture = $global:BuildMedia.Architecture
     )
-    $global:BootMedia.AddPwsh = $false
+    $global:BuildMedia.AddPwsh = $false
     $CachePowerShell7 = Join-Path $OSDWorkspaceCachePath "BootImage-PowerShell"
     if (-not (Test-Path -Path $CachePowerShell7)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell 7: Adding cache content at $CachePowerShell7"
@@ -28,7 +28,7 @@ function Step-BootImageAddPwsh {
     if ($Architecture -eq 'amd64') {
         if (Test-Path "$CachePowerShell7\$DownloadFile") {
             Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BootMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
+            $global:BuildMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
         }
     }
 
@@ -46,7 +46,7 @@ function Step-BootImageAddPwsh {
     if ($Architecture -eq 'arm64') {
         if (Test-Path "$CachePowerShell7\$DownloadFile") {
             Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BootMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
+            $global:BuildMedia.AddPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
         }
     }
 

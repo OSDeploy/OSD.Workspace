@@ -64,7 +64,7 @@ function New-OSDWorkspaceUSB {
     Block-WindowsReleaseIdLt1703
     #=================================================
     # Do we have a Boot Media?
-    $SelectBootMedia = Select-OSDWorkspaceBootMedia
+    $SelectBootMedia = Select-OSDWorkspaceWinPE
 
     if ($null -eq $SelectBootMedia) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No OSDWorkspace BootMedia was found or selected"

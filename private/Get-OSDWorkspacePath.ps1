@@ -252,49 +252,6 @@ SYSTEM
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unable to read $RegKey $RegName"
         break
     }
-    
-    <#
-    #=================================================
-    #   Initialize-OSDBuilder
-    #=================================================
-    #Must initialize the OSDBuilder variables.  This will set all to defaults
-    #If Home is not set, then we need to initialize as well
-    if ($SetHome) {Initialize-OSDBuilder -SetHome $SetHome}
-    elseif (($Initialize.IsPresent) -or (!($global:GetOSDBuilder.Home))) {Initialize-OSDBuilder}
-    if (($(Get-ItemProperty "HKCU:\Software\OSDeploy").GetOSDBuilderHome) -ne $global:GetOSDBuilderHome) {Initialize-OSDBuilder}
-    
-    
-    #=================================================
-    #   GetOSDBuilderHome
-    #=================================================
-    if (! (Test-Path HKCU:\Software\OSDeploy)) {
-        Try {New-Item HKCU:\Software -Name OSDeploy -Force | Out-Null}
-        Catch {Write-Warning 'Unable to New-Item HKCU:\Software\OSDeploy'; Break}
-    }
-
-    if (Get-ItemProperty -Path 'HKCU:\Software\OSDeploy' -Name OSBuilderPath -ErrorAction SilentlyContinue) {
-        Try {Rename-ItemProperty -Path 'HKCU:\Software\OSDeploy' -Name OSBuilderPath -NewName GetOSDBuilderHome -Force | Out-Null}
-        Catch {Write-Warning 'Unable to Rename-ItemProperty HKCU:\Software\OSDeploy OSBuilderPath to GetOSDBuilderHome'; Break}
-    }
-
-    if (! (Get-ItemProperty -Path HKCU:\Software\OSDeploy -Name GetOSDBuilderHome -ErrorAction SilentlyContinue)) {
-        Try {New-ItemProperty -Path HKCU:\Software\OSDeploy -Name GetOSDBuilderHome -Force | Out-Null}
-        Catch {Write-Warning 'Unable to New-ItemProperty HKCU:\Software\OSDeploy GetOSDBuilderHome'; Break}
-    }
-
-    if ($SetHome) {
-        Try {Set-ItemProperty -Path HKCU:\Software\OSDeploy -Name GetOSDBuilderHome -Value $SetHome -Force}
-        Catch {Write-Warning "Unable to Set-ItemProperty HKCU:\Software\OSDeploy GetOSDBuilderHome to $SetHome"; Break}
-    }
-
-    $global:GetOSDBuilderHome = $(Get-ItemProperty "HKCU:\Software\OSDeploy").GetOSDBuilderHome
-
-    if (! $global:GetOSDBuilderHome) {
-        Set-ItemProperty -Path HKCU:\Software\OSDeploy -Name GetOSDBuilderHome -Value "$env:SystemDrive\OSDBuilder" -Force
-        $global:GetOSDBuilderHome = "$env:SystemDrive\OSDBuilder"
-    }
-    #>
-
     #endregion
     #=================================================
     if (-not (Test-Path -Path $OSDWorkspacePath)) {
@@ -321,11 +278,11 @@ SYSTEM
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.cache"
         New-Item -Path "$OSDWorkspacePath" -Name '.cache' -ItemType Directory -Force | Out-Null
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\os-image"
-        New-Item -Path "$OSDWorkspacePath\.import" -Name 'os-image' -ItemType Directory -Force | Out-Null
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\WinOS"
+        New-Item -Path "$OSDWorkspacePath\.import" -Name 'WinOS' -ItemType Directory -Force | Out-Null
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\re-image"
-        New-Item -Path "$OSDWorkspacePath\.import" -Name 're-image' -ItemType Directory -Force | Out-Null
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\WinRE"
+        New-Item -Path "$OSDWorkspacePath\.import" -Name 'WinRE' -ItemType Directory -Force | Out-Null
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\build"
         New-Item -Path "$OSDWorkspacePath\build" -ItemType Directory -Force | Out-Null

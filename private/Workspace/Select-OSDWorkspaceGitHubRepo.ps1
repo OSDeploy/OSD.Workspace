@@ -18,11 +18,11 @@ function Select-OSDWorkspaceGitHubRepo {
         This function returns the selected GitHub Repository in a PSobject.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootMedia
+        Select-OSDWorkspaceWinPE
         Will display all available BootMedia and return the selected BootMedia in a PSObject.
 
     .EXAMPLE
-        Select-OSDWorkspaceBootMedia -Architecture 'amd64'
+        Select-OSDWorkspaceWinPE -Architecture 'amd64'
         Will display all available BootMedia for the architecture 'amd64' and return the selected BootMedia object.
 
     .NOTES

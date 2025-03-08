@@ -2,9 +2,9 @@ function Step-BootImageLibraryBootDriver {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $BootDriver = $global:BootMedia.BootDriver,
-        $BootMediaLogs = $global:BootMediaLogs,
+        $MountPath = $global:BuildMedia.MountPath,
+        $BootDriver = $global:BuildMedia.BootDriver,
+        $BuildMediaLogs = $global:BuildMediaLogs,
         $WindowsImage = $global:WindowsImage
     )
     if ($BootDriver) {
@@ -14,7 +14,7 @@ function Step-BootImageLibraryBootDriver {
                 # $ArchName = ( $DriverPath.FullName -split '\\' | Select-Object -last 3 ) -join '\'
                 # Write-Host -ForegroundColor DarkGray $ArchName
                 Write-Host -ForegroundColor DarkGray "$DriverPath"
-                $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Add-WindowsDriver.log"
+                $CurrentLog = "$BuildMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Add-WindowsDriver.log"
         
                 try {
                     # Dism

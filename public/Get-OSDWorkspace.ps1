@@ -75,10 +75,9 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Segura'
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Quick Start'
-    Write-Host -ForegroundColor DarkGray 'Import-OSDWorkspaceImageRE'
-    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceBootMedia'
+    Write-Host -ForegroundColor DarkGray 'Import-OSDWorkspaceWinOS'
+    Write-Host -ForegroundColor DarkGray 'Build-OSDWorkspaceWinPE'
     Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceVM'
-    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceVMware'
     Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceUSB'
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Details'
@@ -92,18 +91,18 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCacheAdkPath: $(Get-OSDWorkspaceCacheAdkPath)"
 
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportPath: $(Get-OSDWorkspaceImportPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceREImagePath: $(Get-OSDWorkspaceREImagePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceOSImagePath: $(Get-OSDWorkspaceOSImagePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportWinREPath: $(Get-OSDWorkspaceImportWinREPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportWinOSPath: $(Get-OSDWorkspaceImportWinOSPath)"
 
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildPath: $(Get-OSDWorkspaceBuildPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinPEMediaPath: $(Get-OSDWorkspaceWinPEMediaPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinOSMediaPath: $(Get-OSDWorkspaceWinOSMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildWinPEPath: $(Get-OSDWorkspaceBuildWinPEPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildWinOSPath: $(Get-OSDWorkspaceBuildWinOSPath)"
 
-    $null = Get-OSDWorkspaceImageRE
-    $null = Get-OSDWorkspaceImageOS
-    $null = Get-OSDWorkspaceBootMedia
+    $null = Get-OSDWorkspaceImportWinRE
+    $null = Get-OSDWorkspaceImportWinOS
+    $null = Get-OSDWorkspaceWinPE
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

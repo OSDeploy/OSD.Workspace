@@ -2,13 +2,13 @@ function Step-BootImageAddAzCopy {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath,
-        $Architecture = $global:BootMedia.Architecture
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath,
+        $Architecture = $global:BuildMedia.Architecture
     )
     # Get started with AzCopy
     # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf
-    $global:BootMedia.AddAzCopy = $false
+    $global:BuildMedia.AddAzCopy = $false
 
     $CacheAzCopy = Join-Path $OSDWorkspaceCachePath "BootImage-AzCopy"
     if (-not (Test-Path -Path $CacheAzCopy)) {
@@ -50,6 +50,6 @@ function Step-BootImageAddAzCopy {
 
     Get-ChildItem -Path "$CacheAzCopy\$Architecture" -Recurse -Include 'AzCopy.exe' -ErrorAction SilentlyContinue | ForEach-Object {
         Copy-Item $_.FullName -Destination "$MountPath\Windows\System32" -Force
-        $global:BootMedia.AddAzCopy = $true
+        $global:BuildMedia.AddAzCopy = $true
     }
 }

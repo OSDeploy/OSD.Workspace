@@ -9,11 +9,11 @@
     PowerShellVersion    = '5.1'
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
+        'Build-OSDWorkspaceWinPE'
         'Get-OSDWorkspace'
         'Import-OSDWorkspaceGitHubRepo'
-        'Import-OSDWorkspaceImageOS'
         'Import-OSDWorkspaceSettings'
-        'New-OSDWorkspaceBootMedia'
+        'Import-OSDWorkspaceWinOS'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
         'Open-OSDWorkspace'

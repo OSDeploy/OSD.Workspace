@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceImageRE {
+function Get-OSDWorkspaceImportWinRE {
     [CmdletBinding()]
     param (
         [ValidateSet('amd64', 'arm64')]
@@ -11,22 +11,22 @@ function Get-OSDWorkspaceImageRE {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSDWorkspaceImageREPath = Get-OSDWorkspaceREImagePath
+        $OSDWorkspaceImportWinREPath = Get-OSDWorkspaceImportWinREPath
 
         $ImageItems = @()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"
-        $ImageItems = Get-ChildItem -Path $OSDWorkspaceImageREPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
+        $ImageItems = Get-ChildItem -Path $OSDWorkspaceImportWinREPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.wim\winre.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\os-windowsimage.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\re-windowsimage.xml') }
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\winos-windowsimage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\winre-windowsimage.xml') }
 
-        $IndexXml = (Join-Path $OSDWorkspaceImageREPath 'index.xml')
-        $IndexJson = (Join-Path $OSDWorkspaceImageREPath 'index.json')
+        $IndexXml = (Join-Path $OSDWorkspaceImportWinREPath 'index.xml')
+        $IndexJson = (Join-Path $OSDWorkspaceImportWinREPath 'index.json')
 
         if ($ImageItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace ImageRE files were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceImageOS to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace Import WinRE files were not found"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceWinOS to resolve this issue"
 
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -38,7 +38,7 @@ function Get-OSDWorkspaceImageRE {
         }
     }
     process {
-        $OSDWorkspaceImageRE = foreach ($ImageItem in $ImageItems) {
+        $OSDWorkspaceImportWinRE = foreach ($ImageItem in $ImageItems) {
             #=================================================
             #   Get-FullName
             #=================================================
@@ -51,12 +51,12 @@ function Get-OSDWorkspaceImageRE {
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$ImageItemPath\.core\os-windowsimage.xml"
+            $InfoOS = "$ImageItemPath\.core\winos-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoRE = "$ImageItemPath\.core\re-windowsimage.xml"
+            $InfoRE = "$ImageItemPath\.core\winre-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
@@ -104,17 +104,17 @@ function Get-OSDWorkspaceImageRE {
             $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$ImageItemPath\properties.json" -Encoding utf8 -Force
         }
 
-        if ($OSDWorkspaceImageRE) {
-            # $OSDWorkspaceImageRE | Export-Clixml -Path $IndexXml -Force
-            $OSDWorkspaceImageRE | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
+        if ($OSDWorkspaceImportWinRE) {
+            # $OSDWorkspaceImportWinRE | Export-Clixml -Path $IndexXml -Force
+            $OSDWorkspaceImportWinRE | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
 
             if ($Architecture -eq 'amd64') {
-                $OSDWorkspaceImageRE = $OSDWorkspaceImageRE | Where-Object { $_.Architecture -eq 'amd64' }
+                $OSDWorkspaceImportWinRE = $OSDWorkspaceImportWinRE | Where-Object { $_.Architecture -eq 'amd64' }
             }
             if ($Architecture -eq 'arm64') {
-                $OSDWorkspaceImageRE = $OSDWorkspaceImageRE | Where-Object { $_.Architecture -eq 'arm64' }
+                $OSDWorkspaceImportWinRE = $OSDWorkspaceImportWinRE | Where-Object { $_.Architecture -eq 'arm64' }
             }
-            return $OSDWorkspaceImageRE | Sort-Object -Property ModifiedTime -Descending
+            return $OSDWorkspaceImportWinRE | Sort-Object -Property ModifiedTime -Descending
         }
         else {
             return $null

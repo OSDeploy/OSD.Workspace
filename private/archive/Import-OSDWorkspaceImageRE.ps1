@@ -76,7 +76,7 @@ function Import-OSDWorkspaceImageRE {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SourceImagePath: $SourceImagePath"
 
             # Get the Source Details
-            $SourceWindowsImage = Import-Clixml -Path "$SourceDirectory\os-windowsimage.xml"
+            $SourceWindowsImage = Import-Clixml -Path "$SourceDirectory\winos-windowsimage.xml"
 
             # Set Architecture to human readable
             if ($SourceWindowsImage.Architecture -eq '0') { $Architecture = 'x86' }
@@ -92,7 +92,7 @@ function Import-OSDWorkspaceImageRE {
             # Set the Destination
             $DestinationName = "$BuildDateTime $Architecture"
             
-            $DestinationDirectory = Join-Path $(Get-OSDWorkspaceREImagePath) "$DestinationName"
+            $DestinationDirectory = Join-Path $(Get-OSDWorkspaceImportWinREPath) "$DestinationName"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
 
             New-Item -Path "$DestinationDirectory\.core" -ItemType Directory -Force -ErrorAction Stop | Out-Null
@@ -100,11 +100,11 @@ function Import-OSDWorkspaceImageRE {
             New-Item -Path "$DestinationDirectory\.temp" -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationDirectory\.core\id.json" -Encoding utf8
+            $ImportId | ConvertTo-Json | Out-File "$DestinationDirectory\.core\id.json" -Encoding utf8 -Force
 
             # Copy the OS details
-            Copy-Item -Path "$SourceDirectory\os-windowsimage.xml" -Destination "$DestinationDirectory\.core"
-            Copy-Item -Path "$SourceDirectory\os-windowsimage.json" -Destination "$DestinationDirectory\.core"
+            Copy-Item -Path "$SourceDirectory\winos-windowsimage.xml" -Destination "$DestinationDirectory\.core"
+            Copy-Item -Path "$SourceDirectory\winos-windowsimage.json" -Destination "$DestinationDirectory\.core"
 
             # Mount the Windows Image and store the details
             $MountedWindows = Mount-MyWindowsImage -ImagePath $SourceImagePath -Index 1 -ErrorAction Stop -ReadOnly
@@ -115,8 +115,8 @@ function Import-OSDWorkspaceImageRE {
             Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationDirectory\sources\boot.wim"
 
             $WinreImage = Get-WindowsImage -ImagePath "$DestinationDirectory\sources\boot.wim" -Index 1
-            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\.core\re-windowsimage.json" -Encoding utf8
-            $WinreImage | Export-Clixml -Path "$DestinationDirectory\.core\re-windowsimage.xml"
+            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\.core\winre-windowsimage.json" -Encoding utf8 -Force
+            $WinreImage | Export-Clixml -Path "$DestinationDirectory\.core\winre-windowsimage.xml"
 
             # Backup OSFiles
             $RobocopyLog = "$DestinationDirectory\.temp\os-files.log"
@@ -207,7 +207,7 @@ function Import-OSDWorkspaceImageRE {
             }
 
             # Update the Index
-            Get-OSDWorkspaceImageRE
+            Get-OSDWorkspaceImportWinRE
 
             # Get-Item -Path $DestinationDirectory
             #endregion
