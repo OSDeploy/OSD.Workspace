@@ -21,7 +21,7 @@ Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWo
 Supports both Windows 11 24H2 amd64 and arm64 Windows Installation Media ISO.
 Will display a Out-GridView of the available Indexes for each Mounted Windows Installation Media ISO.
 Select one or multiple Indexes to import.
-The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmmss Architecture".
+The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmm Architecture".
 
 ## EXAMPLES
 

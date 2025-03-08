@@ -6,11 +6,11 @@ function Step-BootImageExportWindowsPackagePE {
         $BootMediaCorePath = $global:BootMediaCorePath
     )
     #=================================================
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-WindowsPackage $BootMediaCorePath\pe-WindowsPackage.json"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-WindowsPackage $BootMediaCorePath\pe-windowspackage.json"
     $WindowsPackage = $WindowsImage | Get-WindowsPackage
     if ($WindowsPackage) {
-        $WindowsPackage | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsPackage.xml" -Force
-        $WindowsPackage | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-WindowsPackage.json" -Encoding utf8 -Force
+        $WindowsPackage | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-windowspackage.xml" -Force
+        $WindowsPackage | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-windowspackage.json" -Encoding utf8 -Force
         $WindowsPackage | Sort-Object -Property PackageName | Format-Table -AutoSize
     }
     #=================================================

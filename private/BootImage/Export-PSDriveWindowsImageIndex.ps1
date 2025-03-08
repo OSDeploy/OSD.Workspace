@@ -27,7 +27,7 @@ function Export-PSDriveWindowsImageIndex {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] foreach"
 
             # Set the BuildDateTime
-            $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
+            $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildDateTime: $BuildDateTime]"
 
             # Set the Architecture
@@ -79,11 +79,11 @@ function Export-PSDriveWindowsImageIndex {
                 # Export the Operating System information
                 $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-WindowsImage.xml"
-                $Image | Export-Clixml -Path "$DestinationPath\os-WindowsImage.xml"
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-windowsimage.xml"
+                $Image | Export-Clixml -Path "$DestinationPath\os-windowsimage.xml"
                 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-WindowsImage.json"
-                $Image | ConvertTo-Json | Out-File "$DestinationPath\os-WindowsImage.json" -Encoding utf8
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-windowsimage.json"
+                $Image | ConvertTo-Json | Out-File "$DestinationPath\os-windowsimage.json" -Encoding utf8
             }
             catch {
                 throw $_

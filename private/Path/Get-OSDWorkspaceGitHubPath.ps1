@@ -28,7 +28,7 @@ function Get-OSDWorkspaceGitHubPath {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'Library-GitHub'
+    $ChildPath = 'library-github'
 
     Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================

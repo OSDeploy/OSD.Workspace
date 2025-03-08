@@ -11,20 +11,20 @@ function Get-OSDWorkspaceImageOS {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSDWorkspaceOSImagePath = Get-OSDWorkspaceImageOSPath
+        $OSDWorkspaceImageOSPath = Get-OSDWorkspaceOSImagePath
 
-        $OSImageItems = @()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSImageItems"
-        $OSImageItems = Get-ChildItem -Path $OSDWorkspaceOSImagePath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
+        $ImageItems = @()
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"
+        $ImageItems = Get-ChildItem -Path $OSDWorkspaceImageOSPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'OSMedia\sources\install.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\os-WindowsImage.xml') }
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\os-windowsimage.xml') }
 
-        $IndexXml = (Join-Path $OSDWorkspaceOSImagePath 'index.xml')
-        $IndexJson = (Join-Path $OSDWorkspaceOSImagePath 'index.json')
+        $IndexXml = (Join-Path $OSDWorkspaceImageOSPath 'index.xml')
+        $IndexJson = (Join-Path $OSDWorkspaceImageOSPath 'index.json')
 
-        if ($OSImageItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace OSImages were not found"
+        if ($ImageItems.Count -eq 0) {
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace ImageOS files were not found"
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceImageOS to resolve this issue"
 
             if (Test-Path $IndexXml) {
@@ -37,20 +37,20 @@ function Get-OSDWorkspaceImageOS {
         }
     }
     process {
-        $OSDWorkspaceOSImage = foreach ($OSImageItem in $OSImageItems) {
+        $OSDWorkspaceImageOS = foreach ($ImageItem in $ImageItems) {
             #=================================================
             #   Get-FullName
             #=================================================
-            $OSImageItemPath = $($OSImageItem.FullName)
+            $ImageItemPath = $($ImageItem.FullName)
             #=================================================
             #   Import Details
             #=================================================
-            $InfoId = "$OSImageItemPath\.core\id.json"
+            $InfoId = "$ImageItemPath\.core\id.json"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$OSImageItemPath\.core\os-WindowsImage.xml"
+            $InfoOS = "$ImageItemPath\.core\os-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
@@ -70,9 +70,9 @@ function Get-OSDWorkspaceImageOS {
             #   Create Object
             #=================================================
             $ObjectProperties = [ordered]@{
-                Type             = 'OSImage'
+                Type             = 'ImportOS'
                 Id               = $ImportId.Id
-                Name             = $OSImageItem.Name
+                Name             = $ImageItem.Name
                 CreatedTime      = [datetime]$ClixmlOS.CreatedTime
                 ModifiedTime     = [datetime]$ClixmlOS.ModifiedTime
                 InstallationType = $ClixmlOS.InstallationType
@@ -84,8 +84,8 @@ function Get-OSDWorkspaceImageOS {
                 FileCount        = $ClixmlOS.FileCount
                 ImageName        = $ClixmlOS.ImageName
                 EditionId        = $ClixmlOS.EditionId
-                Path             = $OSImageItemPath
-                ImagePath        = $OSImageItemPath + '\Media\sources\install.wim'
+                Path             = $ImageItemPath
+                ImagePath        = $ImageItemPath + '\Media\sources\install.wim'
                 ImageIndex       = [uint32]$ClixmlOS.ImageIndex
                 ImageDescription = $ClixmlOS.ImageDescription
                 WIMBoot          = $ClixmlOS.WIMBoot
@@ -104,22 +104,22 @@ function Get-OSDWorkspaceImageOS {
                 DefaultLanguageIndex = $ClixmlOS.DefaultLanguageIndex
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            $ObjectProperties | Export-Clixml -Path "$OSImageItemPath\.core\OSImage.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$OSImageItemPath\.core\OSImage.json" -Encoding utf8 -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$OSImageItemPath\properties.json" -Encoding utf8 -Force
+            $ObjectProperties | Export-Clixml -Path "$ImageItemPath\.core\object.xml" -Force
+            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$ImageItemPath\.core\object.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$ImageItemPath\properties.json" -Encoding utf8 -Force
         }
 
-        if ($OSDWorkspaceOSImage) {
-            # $OSDWorkspaceOSImage | Export-Clixml -Path $IndexXml -Force
-            $OSDWorkspaceOSImage | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
+        if ($OSDWorkspaceImageOS) {
+            # $OSDWorkspaceImageOS | Export-Clixml -Path $IndexXml -Force
+            $OSDWorkspaceImageOS | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
 
             if ($Architecture -eq 'amd64') {
-                $OSDWorkspaceOSImage = $OSDWorkspaceOSImage | Where-Object { $_.Architecture -eq 'amd64' }
+                $OSDWorkspaceImageOS = $OSDWorkspaceImageOS | Where-Object { $_.Architecture -eq 'amd64' }
             }
             if ($Architecture -eq 'arm64') {
-                $OSDWorkspaceOSImage = $OSDWorkspaceOSImage | Where-Object { $_.Architecture -eq 'arm64' }
+                $OSDWorkspaceImageOS = $OSDWorkspaceImageOS | Where-Object { $_.Architecture -eq 'arm64' }
             }
-            return $OSDWorkspaceOSImage | Sort-Object -Property ModifiedTime -Descending
+            return $OSDWorkspaceImageOS | Sort-Object -Property ModifiedTime -Descending
         }
         else {
             return $null

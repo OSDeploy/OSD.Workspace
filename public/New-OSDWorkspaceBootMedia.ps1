@@ -157,7 +157,7 @@ function New-OSDWorkspaceBootMedia {
     $WindowsAdkWinpePackages = $global:OSDWorkspace.adkwinpepackages
     #=================================================
     # Start Main
-    $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmmss'))
+    $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Starting $($MyInvocation.MyCommand.Name)"
     Block-WinPE
     Block-StandardUser
@@ -326,16 +326,15 @@ function New-OSDWorkspaceBootMedia {
         $BootImageCorePath = $GetWindowsImage.Path + '\.core'
         $BootImageOSFilesPath = $GetWindowsImage.Path + '\.core\os-files'
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using BootImage at $($GetWindowsImage.ImagePath)"
-        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
-        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageCorePath: $BootImageCorePath"
-        Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageOSFilesPath: $BootImageOSFilesPath"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using Recovery Image at $($GetWindowsImage.ImagePath)"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageCorePath: $BootImageCorePath"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootImageOSFilesPath: $BootImageOSFilesPath"
     }
-    Break
     #endregion
     #=================================================
     #region Get ADK Paths
-    if ($Architecture -ne ('amd64' -or 'arm64')) {
+    if (-not ($Architecture -match 'amd64') -or ($Architecture -match 'arm64')) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unknown architecture $Architecture"
         return
     }
@@ -368,7 +367,7 @@ function New-OSDWorkspaceBootMedia {
     
     $BootMediaIsoName = 'BootMedia.iso'
     $BootMediaIsoNameEX = 'BootMediaEX.iso'
-    $BootMediaRootPath = Join-Path $(Get-OSDWorkspaceBootMediaPath) $BootMediaName
+    $BootMediaRootPath = Join-Path $(Get-OSDWorkspaceWinPEMediaPath) $BootMediaName
     $global:BootMediaCorePath = "$BootMediaRootPath\.core"
     $BootMediaTempPath = "$env:Temp\$BootMediaName"
     #endregion
@@ -665,10 +664,10 @@ function New-OSDWorkspaceBootMedia {
     #endregion
     #=================================================
     #region Export Get-WindowsPackage
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $BootMediaCorePath\pe-WindowsPackage.xml"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $BootMediaCorePath\pe-windowspackage.xml"
     $WindowsPackage = $WindowsImage | Get-WindowsPackage
     if ($WindowsPackage) {
-        $WindowsPackage | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsPackage.xml" -Force
+        $WindowsPackage | Select-Object * | Export-Clixml -Path "$BootMediaCorePath\pe-windowspackage.xml" -Force
     }
     #endregion
     #=================================================

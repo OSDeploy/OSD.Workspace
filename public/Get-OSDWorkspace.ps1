@@ -92,14 +92,14 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCacheAdkPath: $(Get-OSDWorkspaceCacheAdkPath)"
 
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportPath: $(Get-OSDWorkspaceImportPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImageREPath: $(Get-OSDWorkspaceImageREPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImageOSPath: $(Get-OSDWorkspaceImageOSPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceREImagePath: $(Get-OSDWorkspaceREImagePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceOSImagePath: $(Get-OSDWorkspaceOSImagePath)"
 
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaPath: $(Get-OSDWorkspaceMediaPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBootMediaPath: $(Get-OSDWorkspaceBootMediaPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceOSMediaPath: $(Get-OSDWorkspaceOSMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildPath: $(Get-OSDWorkspaceBuildPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinPEMediaPath: $(Get-OSDWorkspaceWinPEMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinOSMediaPath: $(Get-OSDWorkspaceWinOSMediaPath)"
 
     $null = Get-OSDWorkspaceImageRE
     $null = Get-OSDWorkspaceImageOS

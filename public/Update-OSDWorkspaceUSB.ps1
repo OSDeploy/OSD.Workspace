@@ -94,7 +94,7 @@ function Update-OSDWorkspaceUSB {
                 if (Test-Path -Path "$($volume.DriveLetter):\") {
                     robocopy "$($BootMediaObject.FullName)" "$($volume.DriveLetter):\" *.* /e /ndl /r:0 /w:0 /xd '$RECYCLE.BIN' 'System Volume Information' /xj
                 }
-                $SelectBootMedia | ConvertTo-Json | Out-File -FilePath "$($volume.DriveLetter):\BootMedia.json" -Force
+                $SelectBootMedia | ConvertTo-Json | Out-File -FilePath "$($volume.DriveLetter):\object.json" -Force
             }
         }
         else {

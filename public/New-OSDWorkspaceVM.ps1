@@ -16,7 +16,7 @@ function New-OSDWorkspaceVM {
         Specifies the amount of memory in whole number GB to allocate to the VM. Default is 10. Maximum is 64.
 
     .PARAMETER NamePrefix
-        Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmmss 'NamePrefix' BootMediaName'.
+        Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmm 'NamePrefix' BootMediaName'.
 
     .PARAMETER ProcessorCount
         Specifies the number of processors to allocate to the VM. Default is 2. Maximum is 64.
@@ -163,10 +163,10 @@ function New-OSDWorkspaceVM {
     #=================================================
     # Automatically Set VM Name
     if ($SelectBootMedia.Name) {
-        $VmName = "$((Get-Date).ToString('yyMMdd-HHmmss')) $NamePrefix $($SelectBootMedia.Name)"
+        $VmName = "$((Get-Date).ToString('yyMMdd-HHmm')) $NamePrefix $($SelectBootMedia.Name)"
     }
     else {
-        $VmName = "$((Get-Date).ToString('yyMMdd-HHmmss')) $NamePrefix"
+        $VmName = "$((Get-Date).ToString('yyMMdd-HHmm')) $NamePrefix"
     }
     #=================================================
     # Set the Display Resolution
