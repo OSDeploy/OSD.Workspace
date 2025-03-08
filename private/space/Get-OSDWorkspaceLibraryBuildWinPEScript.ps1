@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceLibraryBootScript {
+function Get-OSDWorkspaceLibraryBuildWinPEScript {
         <#
     .SYNOPSIS
         Returns available OSDWorkspace Library BootScript(s).
@@ -18,7 +18,7 @@ function Get-OSDWorkspaceLibraryBootScript {
         This function returns the available boot scripts in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootScript
+        Get-OSDWorkspaceLibraryBuildWinPEScript
         Returns the boot scripts in the OSDWorkspace Library.
 
     .NOTES
@@ -40,14 +40,14 @@ function Get-OSDWorkspaceLibraryBootScript {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\BootImage-Script") -Recurse -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\WinPE-Script") -Recurse -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootImage-Script' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'WinPE-Script' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
             
-        Get-ChildItem -Path @("$LibraryPath\BootMedia-Script") -Recurse -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\WinPE-MediaScript") -Recurse -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootMedia-Script' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'WinPE-MediaScript' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 

@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceLibraryBootScript {
+function Select-OSDWorkspaceLibraryBuildWinPEScript {
         <#
     .SYNOPSIS
         Selects OSDWorkspace Library Boot Scripts.
 
     .DESCRIPTION
         This function displays available OSDWorkspace Library Boot Scripts in an Out-GridView and returns the selected scripts.
-        Utilizes the Get-OSDWorkspaceLibraryBootScript function to retrieve the scripts.
+        Utilizes the Get-OSDWorkspaceLibraryBuildWinPEScript function to retrieve the scripts.
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Select-OSDWorkspaceLibraryBootScript {
         This function returns the selected Library Boot Scripts.
 
     .EXAMPLE
-        Select-OSDWorkspaceLibraryBootScript
+        Select-OSDWorkspaceLibraryBuildWinPEScript
         Will display all available Library Boot Scripts and return the selected scripts.
 
     .NOTES
@@ -30,7 +30,7 @@ function Select-OSDWorkspaceLibraryBootScript {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
     #=================================================
-    $LibraryItems = Get-OSDWorkspaceLibraryBootScript
+    $LibraryItems = Get-OSDWorkspaceLibraryBuildWinPEScript
 
     if ($LibraryItems) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select BootImage and BootMedia Scripts to run during the build (Cancel to skip)"

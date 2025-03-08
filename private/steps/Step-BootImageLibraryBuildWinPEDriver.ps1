@@ -1,15 +1,15 @@
-function Step-BootImageLibraryBootDriver {
+function Step-BootImageLibraryBuildWinPEDriver {
     [CmdletBinding()]
     param (
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
-        $BootDriver = $global:BuildMedia.BootDriver,
+        $BuildWinPEDriver = $global:BuildMedia.BuildWinPEDriver,
         $BuildMediaLogs = $global:BuildMediaLogs,
         $WindowsImage = $global:WindowsImage
     )
-    if ($BootDriver) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BootDriver: Add-WindowsDriver"
-        foreach ($DriverPath in $BootDriver) {
+    if ($BuildWinPEDriver) {
+        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildWinPEDriver: Add-WindowsDriver"
+        foreach ($DriverPath in $BuildWinPEDriver) {
             if (Test-Path $DriverPath) {
                 # $ArchName = ( $DriverPath.FullName -split '\\' | Select-Object -last 3 ) -join '\'
                 # Write-Host -ForegroundColor DarkGray $ArchName
@@ -30,7 +30,7 @@ function Step-BootImageLibraryBootDriver {
                 }
             }
             else {
-                Write-Warning "BootDriver $DriverPath (not found)"
+                Write-Warning "BuildWinPEDriver $DriverPath (not found)"
             }
         }
     }

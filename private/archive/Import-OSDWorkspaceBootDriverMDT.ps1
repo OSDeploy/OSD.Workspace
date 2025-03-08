@@ -89,8 +89,8 @@ function Import-OSDWorkspaceBootDriverMDT {
         #endregion
         #=================================================
         #region WinPE
-        $BootDriver = Select-OSDWorkspaceLibraryBootDriver -Architecture 'amd64'
-        foreach ($Driver in $BootDriver) {
+        $BuildWinPEDriver = Select-OSDWorkspaceLibraryBuildWinPEDriver -Architecture 'amd64'
+        foreach ($Driver in $BuildWinPEDriver) {
             if (! (Test-Path "$($MDTPSDrive.Name):\Out-of-Box Drivers\OSDWorkspace WinPE amd64")) {
                 New-Item -Path "$($MDTPSDrive.Name):\Out-of-Box Drivers" -Enable 'True' -Name "OSDWorkspace WinPE amd64" -Comments '' -ItemType Folder -Verbose
             }

@@ -23,7 +23,7 @@ function Step-BootImageAddMicrosoftDart {
 
     $MicrosoftDartCab = "$CacheMicrosoftDaRT\Toolsx64.cab"
     if (Test-Path $MicrosoftDartCab) {
-        if ($BuildMediaName -match 'public') {
+        if ($MediaName -match 'public') {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Not adding Microsoft DaRT for Public BootMedia"
         }
         else {

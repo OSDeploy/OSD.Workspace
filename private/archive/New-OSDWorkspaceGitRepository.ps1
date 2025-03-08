@@ -62,12 +62,12 @@ function New-OSDWorkspaceGitRepository {
         New-Item -Path "$Destination\arm64\Manufacturer-Model" -ItemType Directory -Force | Out-Null
     }
     else {
-        # New-Item -Path "$Destination\BootImage-File" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$Destination\BootImage-Script" -ItemType Directory -Force | Out-Null
-        # New-Item -Path "$Destination\BootImage-Startnet" -ItemType Directory -Force | Out-Null
-        # New-Item -Path "$Destination\BootMedia-File" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$Destination\BootMedia-Profile" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$Destination\BootMedia-Script" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\Build-WinPEFile" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$Destination\WinPE-Script" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\Build-WinPEStartnet" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\Build-MediaFile" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$Destination\Build-WinPEProfile" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$Destination\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
     }
 
     Get-Item -Path $Destination

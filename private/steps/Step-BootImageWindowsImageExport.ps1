@@ -6,7 +6,7 @@ function Step-BootImageWindowsImageExport {
         [System.String]
         $BuildMediaSourcesPathEX = $global:BuildMediaSourcesPathEX,
         [System.String]
-        $BootMediaCorePath = $global:BuildMediaCorePath,
+        $BuildMediaCorePath = $global:BuildMediaCorePath,
         [System.String]
         $BuildMediaLogs = $global:BuildMediaLogs,
         [System.String]
@@ -30,8 +30,8 @@ function Step-BootImageWindowsImageExport {
     Remove-Item -Path $BuildMediaSourcesPathBootWim -Force -ErrorAction Stop | Out-Null
     Rename-Item -Path $BuildMediaSourcesPathExportWim -NewName 'boot.wim' -Force -ErrorAction Stop | Out-Null
 
-    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BootMediaCorePath\winpe-windowsimage.xml"
-    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BootMediaCorePath\winpe-windowsimage.json" -Encoding utf8 -Force
+    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BuildMediaCorePath\winpe-windowsimage.xml"
+    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-windowsimage.json" -Encoding utf8 -Force
 
     Copy-Item -Path $(Join-Path $BuildMediaSourcesPath 'boot.wim') -Destination $(Join-Path $BuildMediaSourcesPathEX 'boot.wim') -Force -ErrorAction Stop | Out-Null
     #=================================================

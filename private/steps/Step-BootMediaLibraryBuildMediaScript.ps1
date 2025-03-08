@@ -1,10 +1,10 @@
-function Step-BootMediaLibraryBootMediaScript {
+function Step-BootMediaLibraryBuildMediaScript {
     [CmdletBinding()]
     param (
-        $BootMediaScript = $global:BuildMedia.BootMediaScript
+        $BuildMediaScript = $global:BuildMedia.BuildMediaScript
     )
-    if ($BootMediaScript) {
-        foreach ($Item in $BootMediaScript) {
+    if ($BuildMediaScript) {
+        foreach ($Item in $BuildMediaScript) {
             if (Test-Path $Item -ErrorAction SilentlyContinue) {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Call BootMedia Script [$Item]"
                 & "$Item"

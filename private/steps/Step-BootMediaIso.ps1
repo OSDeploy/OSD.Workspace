@@ -2,11 +2,11 @@ function Step-BootMediaIso {
     [CmdletBinding()]
     param (
         [System.String]
-        $BuildMediaIsoLabel = $global:BuildMedia.BuildMediaIsoLabel,
+        $MediaIsoLabel = $global:BuildMedia.MediaIsoLabel,
         [System.String]
-        $BuildMediaIsoName = $global:BuildMedia.BuildMediaIsoName,
+        $MediaIsoName = $global:BuildMedia.MediaIsoName,
         [System.String]
-        $BuildMediaIsoNameEX = $global:BuildMedia.BuildMediaIsoNameEX,
+        $MediaIsoNameEX = $global:BuildMedia.MediaIsoNameEX,
         [System.String]
         $BuildMediaRootPath = $global:BuildMedia.BuildMediaRootPath,
         [System.String]
@@ -21,8 +21,8 @@ function Step-BootMediaIso {
     if (-not (Test-Path $IsoPath)) { New-Item -Path $IsoPath -ItemType Directory -Force | Out-Null }
     $Params = @{
         MediaPath      = $MediaPath
-        IsoFileName    = $BuildMediaIsoName
-        IsoLabel       = $BuildMediaIsoLabel
+        IsoFileName    = $MediaIsoName
+        IsoLabel       = $MediaIsoLabel
         WindowsAdkRoot = $WindowsAdkRootPath
         IsoDirectory   = $IsoPath
     }
@@ -31,8 +31,8 @@ function Step-BootMediaIso {
     if ($MediaPathEX) {
         $Params = @{
             MediaPath      = $MediaPathEX
-            IsoFileName    = $BuildMediaIsoNameEX
-            IsoLabel       = $BuildMediaIsoLabel
+            IsoFileName    = $MediaIsoNameEX
+            IsoLabel       = $MediaIsoLabel
             WindowsAdkRoot = $WindowsAdkRootPath
             IsoDirectory   = $IsoPath
         }
