@@ -18,11 +18,11 @@ function Select-OSDWorkspaceGitHubRepo {
         This function returns the selected GitHub Repository in a PSobject.
 
     .EXAMPLE
-        Select-OSDWorkspaceWinPE
+        Select-OSDWorkspaceMediaWinPE
         Will display all available BootMedia and return the selected BootMedia in a PSObject.
 
     .EXAMPLE
-        Select-OSDWorkspaceWinPE -Architecture 'amd64'
+        Select-OSDWorkspaceMediaWinPE -Architecture 'amd64'
         Will display all available BootMedia for the architecture 'amd64' and return the selected BootMedia object.
 
     .NOTES
@@ -32,8 +32,8 @@ function Select-OSDWorkspaceGitHubRepo {
     [OutputType([System.IO.FileSystemInfo])]
     param ()
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $OSDWorkspaceGitRepository = Get-OSDWorkspaceGitHubRepo | Select-Object -Property Name, FullName | Sort-Object -Property Name, FullName
 

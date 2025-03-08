@@ -62,10 +62,10 @@ function New-OSDWorkspaceGitRepository {
         New-Item -Path "$Destination\arm64\Manufacturer-Model" -ItemType Directory -Force | Out-Null
     }
     else {
-        # New-Item -Path "$Destination\Build-WinPEFile" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\WinPE-File" -ItemType Directory -Force | Out-Null
         New-Item -Path "$Destination\WinPE-Script" -ItemType Directory -Force | Out-Null
-        # New-Item -Path "$Destination\Build-WinPEStartnet" -ItemType Directory -Force | Out-Null
-        # New-Item -Path "$Destination\Build-MediaFile" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\WinPE-Startnet" -ItemType Directory -Force | Out-Null
+        # New-Item -Path "$Destination\WinPE-MediaFile" -ItemType Directory -Force | Out-Null
         New-Item -Path "$Destination\Build-WinPEProfile" -ItemType Directory -Force | Out-Null
         New-Item -Path "$Destination\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
     }

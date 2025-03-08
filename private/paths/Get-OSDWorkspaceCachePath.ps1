@@ -26,6 +26,7 @@ function Get-OSDWorkspaceCachePath {
     [CmdletBinding()]
     param ()
     #=================================================
+    $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $ChildPath = '.cache'

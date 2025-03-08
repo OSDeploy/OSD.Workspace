@@ -1,4 +1,4 @@
-function Select-OSDWorkspaceImportWinRE {
+function Select-OSDWorkspaceImportWinOS {
     <#
     .SYNOPSIS
         Selects an OSDWorkspace BootImage.
@@ -42,15 +42,15 @@ function Select-OSDWorkspaceImportWinRE {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
 
-    $results = Get-OSDWorkspaceImportWinRE
+    $results = Get-OSDWorkspaceImportWinOS
 
     if ($Architecture) {
         $results = $results | Where-Object { $_.Architecture -eq $Architecture }
     }
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a Windows Recovery Image and press OK (Cancel to skip)"
-        $results = $results | Out-GridView -Title 'Select a Windows Recovery Image and press OK (Cancel to skip)' -OutputMode Single
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a Windows Operating System and press OK (Cancel to skip)"
+        $results = $results | Out-GridView -Title 'Select a Windows Operating System and press OK (Cancel to skip)' -OutputMode Single
     }
     $results
     #=================================================

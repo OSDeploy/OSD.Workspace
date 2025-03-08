@@ -26,8 +26,8 @@ function Get-OSDWorkspaceImportWinOSPath {
     [CmdletBinding()]
     param ()
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $ChildPath = 'WinOS'
 

@@ -26,6 +26,7 @@ function Get-OSDWorkspaceLibraryPath {
     [CmdletBinding()]
     param ()
     #=================================================
+    $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $ChildPath = 'library'

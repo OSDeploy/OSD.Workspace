@@ -102,7 +102,7 @@ function Get-OSDWorkspace {
 
     $null = Get-OSDWorkspaceImportWinRE
     $null = Get-OSDWorkspaceImportWinOS
-    $null = Get-OSDWorkspaceWinPE
+    $null = Get-OSDWorkspaceMediaWinPE
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

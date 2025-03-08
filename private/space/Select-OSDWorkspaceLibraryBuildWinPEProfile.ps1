@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceLibraryBuildWinPEProfile {
+function Select-OSDWorkspaceLibraryBuildProfile {
         <#
     .SYNOPSIS
         Selects an OSDWorkspace Library BootMedia Profile.
 
     .DESCRIPTION
         This function displays available OSDWorkspace Library BootMedia Profiles in an Out-GridView and returns the selected BootMedia Profile object.
-        Utilizes the Get-OSDWorkspaceLibraryBuildWinPEProfile function to retrieve the BootMedia Profiles.
+        Utilizes the Get-OSDWorkspaceLibraryBuildProfile function to retrieve the BootMedia Profiles.
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Select-OSDWorkspaceLibraryBuildWinPEProfile {
         This function returns the selected BootMedia Profile object.
 
     .EXAMPLE
-        Select-OSDWorkspaceLibraryBuildWinPEProfile
+        Select-OSDWorkspaceLibraryBuildProfile
         Will display all available BootMedia Profiles and return the selected BootMedia Profile object.
 
     .NOTES
@@ -27,10 +27,10 @@ function Select-OSDWorkspaceLibraryBuildWinPEProfile {
     [CmdletBinding()]
     param ()
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $LibraryItems = Get-OSDWorkspaceLibraryBuildWinPEProfile
+    $LibraryItems = Get-OSDWorkspaceLibraryBuildProfile
 
     if ($LibraryItems) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)"
