@@ -76,7 +76,7 @@ function Get-OSDWorkspaceImportWinRE {
             #   Create Object
             #=================================================
             $ObjectProperties = [ordered]@{
-                Type             = 'ImportRE'
+                Type             = 'WinRE'
                 Id               = $ImportId.Id
                 Name             = $ImageItem.Name
                 CreatedTime      = [datetime]$ClixmlRE.CreatedTime

@@ -60,11 +60,11 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: GitHub Template Repository'
     Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Template'
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Community BootDriver Repositories'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/BootDriver-HP'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/BootDriver-Dell'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/BootDriver-Surface'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/BootDriver-Generic'
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Community WinPEDriver Repositories'
+    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-HP'
+    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Dell'
+    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Surface'
+    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Generic'
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Community Library Repositories'
     Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-OSDCloud'
@@ -84,8 +84,8 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGreen "Get-OSDWorkspacePath: $(Get-OSDWorkspacePath)"
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Newest Functions and Updates'
-    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceBootDriverCM'
-    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceBootDriverMDT'
+    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceWinPEDriverCM'
+    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceWinPEDriverMDT'
     Write-Host
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCachePath: $(Get-OSDWorkspaceCachePath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCacheAdkPath: $(Get-OSDWorkspaceCacheAdkPath)"
@@ -96,9 +96,9 @@ function Get-OSDWorkspace {
 
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildPath: $(Get-OSDWorkspaceBuildPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildWinPEPath: $(Get-OSDWorkspaceBuildWinPEPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceBuildWinOSPath: $(Get-OSDWorkspaceBuildWinOSPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaPath: $(Get-OSDWorkspaceMediaPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaWinPEPath: $(Get-OSDWorkspaceMediaWinPEPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaWinOSPath: $(Get-OSDWorkspaceMediaWinOSPath)"
 
     $null = Get-OSDWorkspaceImportWinRE
     $null = Get-OSDWorkspaceImportWinOS

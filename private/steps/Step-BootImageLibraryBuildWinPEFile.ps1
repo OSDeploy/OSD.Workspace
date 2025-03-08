@@ -1,11 +1,11 @@
-function Step-BootImageLibraryBootImageFile {
+function Step-BootImageLibraryBuildWinPEFile {
     [CmdletBinding()]
     param (
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
-        $BootImageFile = $global:BuildMedia.BootImageFile
+        $BuildWinPEFile = $global:BuildMedia.BuildWinPEFile
     )
-    foreach ($Item in $BootImageFile) {
+    foreach ($Item in $BuildWinPEFile) {
         if (Test-Path $Item) {
             if ($Item -match '.zip') {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Expanding BootImage Files from $Item"
@@ -13,7 +13,7 @@ function Step-BootImageLibraryBootImageFile {
             }
             else {
                 Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Copying BootImage Files from $Item"
-                $null = robocopy.exe "$Item" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BuildMediaLogs\Step-BootImageLibraryBootImageFile.log
+                $null = robocopy.exe "$Item" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xx /xj /mt:128 /LOG+:$BuildMediaLogs\Step-BootImageLibraryBuildWinPEFile.log
             }
         }
         else {

@@ -2,11 +2,19 @@ function Step-BootMediaUpdateUSB {
     [CmdletBinding()]
     param (
         [System.String]
-        $UpdateUSB = $global:BuildMedia.UpdateUSB,
-        [System.String]
-        $MediaPath = $global:BuildMedia.MediaPath
+        $MediaPath = $global:BuildMedia.MediaPath,
+
+        [System.Boolean]
+        $UpdateUSB = $global:BuildMedia.UpdateUSB
     )
-    if ($UpdateUSB) {
+    #=================================================
+    $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    #=================================================
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MediaPath: $MediaPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] UpdateUSB: $UpdateUSB"
+    #=================================================
+    if ($UpdateUSB -eq $true) {
         Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update USB BootMedia Partition"
         $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'BootMedia' }
         if ($WinpeVolumes) {
@@ -20,4 +28,7 @@ function Step-BootMediaUpdateUSB {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unable to find a USB Partition labeled BootMedia to update"
         }
     }
+    #=================================================
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    #=================================================
 }

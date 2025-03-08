@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceLibraryBootFile {
+function Get-OSDWorkspaceLibraryBuildWinPEFile {
     <#
     .SYNOPSIS
         Returns available OSDWorkspace Library BootFile(s).
@@ -18,7 +18,7 @@ function Get-OSDWorkspaceLibraryBootFile {
         This function returns the available boot files in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootFile
+        Get-OSDWorkspaceLibraryBuildWinPEFile
         Returns the boot files in the OSDWorkspace Library.
 
     .NOTES
@@ -40,22 +40,22 @@ function Get-OSDWorkspaceLibraryBootFile {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\BootImage-File\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\Build-WinPEFile\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.PSIsContainer -eq $true } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootImage-File' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-WinPEFile' } },
         Name, @{Name = 'Size'; Expression = { '' } }, LastWriteTime, FullName
 
-        Get-ChildItem -Path @("$LibraryPath\BootImage-File\*.zip") -File -ErrorAction SilentlyContinue | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootImage-File' } },
+        Get-ChildItem -Path @("$LibraryPath\Build-WinPEFile\*.zip") -File -ErrorAction SilentlyContinue | `
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-WinPEFile' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} MB' -f ($_.Length / 1MB) } }, LastWriteTime, FullName
 
-        Get-ChildItem -Path @("$LibraryPath\BootMedia-File\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\Build-MediaFile\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.PSIsContainer -eq $true } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootMedia-File' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-MediaFile' } },
         Name, @{Name = 'Size'; Expression = { '' } }, LastWriteTime, FullName
 
-        Get-ChildItem -Path @("$LibraryPath\BootMedia-File\*.zip") -File -ErrorAction SilentlyContinue | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootMedia-File' } },
+        Get-ChildItem -Path @("$LibraryPath\Build-MediaFile\*.zip") -File -ErrorAction SilentlyContinue | `
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-MediaFile' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} MB' -f ($_.Length / 1MB) } }, LastWriteTime, FullName
     }
     

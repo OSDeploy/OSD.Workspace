@@ -74,9 +74,9 @@ Ignore/*
 BootImage/*/
 BootMedia/*/*
 Cache/*/*
-Library/BootDriver/*/*/*/*
-Library/BootMedia-Script/*/*
-Library/BootMedia-Script/*/*
+Library/WinPE-MediaScript/*/*
+Library/WinPE-Driver/*/*/*/*
+Library/WinPE-Script/*/*
 Library-GitHub/*/*
 
 # OSDFramework Content
@@ -302,12 +302,12 @@ SYSTEM
         Push-Location "$OSDWorkspacePath\library"
         git submodule init "$OSDWorkspacePath\library"
         Pop-Location
-        New-Item -Path "$OSDWorkspacePath\library\BootDriver" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\BootDriver\amd64" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\BootDriver\arm64" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\BootImage-Script" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\BootMedia-Profile" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\BootMedia-Script" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\WinPE-Script" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\Build-WinPEProfile" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$OSDWorkspacePath\library\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library-github"
         New-Item -Path "$OSDWorkspacePath\library-github" -ItemType Directory -Force | Out-Null

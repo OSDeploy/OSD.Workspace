@@ -16,7 +16,7 @@ function New-OSDWorkspaceVM {
         Specifies the amount of memory in whole number GB to allocate to the VM. Default is 10. Maximum is 64.
 
     .PARAMETER NamePrefix
-        Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmm 'NamePrefix' BootMediaName'.
+        Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmm 'NamePrefix' MediaName'.
 
     .PARAMETER ProcessorCount
         Specifies the number of processors to allocate to the VM. Default is 2. Maximum is 64.

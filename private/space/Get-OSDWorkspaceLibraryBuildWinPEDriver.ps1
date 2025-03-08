@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryBootDriver {
+function Get-OSDWorkspaceLibraryBuildWinPEDriver {
     <#
     .SYNOPSIS
-        Returns available OSDWorkspace Library BootDriver(s).
+        Returns available OSDWorkspace Library WinPEDriver(s).
 
     .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BootDriver(s).
-        Utilizes the Get-OSDWorkspaceImportWinRE and Get-OSDWorkspaceGitHubPath functions to retrieve the BootDriver Path(s)
+        This function returns available OSDWorkspace Library and Library-GitHub WinPEDriver(s).
+        Utilizes the Get-OSDWorkspaceImportWinRE and Get-OSDWorkspaceGitHubPath functions to retrieve the WinPEDriver Path(s)
 
     .INPUTS
         None.
@@ -18,15 +18,15 @@ function Get-OSDWorkspaceLibraryBootDriver {
         This function returns the available boot drivers in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootDriver
+        Get-OSDWorkspaceLibraryBuildWinPEDriver
         Returns the boot drivers in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootDriver -Architecture amd64
+        Get-OSDWorkspaceLibraryBuildWinPEDriver -Architecture amd64
         Returns the boot drivers in the OSDWorkspace Library filtered by architecture.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootDriver -BootImage ADK
+        Get-OSDWorkspaceLibraryBuildWinPEDriver -BootImage ADK
         Returns the boot drivers in the OSDWorkspace Library filtered by boot image.
 
     .NOTES
@@ -60,7 +60,7 @@ function Get-OSDWorkspaceLibraryBootDriver {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\BootDriver\*\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\WinPE-Driver\*\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.PSIsContainer -eq $true } | `
             Select-Object Name, @{Name = 'Architecture'; Expression = { $_.Parent } }, FullName, LastWriteTime
     }

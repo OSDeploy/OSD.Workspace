@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryBootMediaProfile {
+function Get-OSDWorkspaceLibraryBuildWinPEProfile {
     <#
     .SYNOPSIS
-        Returns available OSDWorkspace Library BootMediaProfile(s).
+        Returns available OSDWorkspace Library BuildMediaProfile(s).
 
     .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BootMediaProfile(s).
-        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootMediaProfile Path(s).
+        This function returns available OSDWorkspace Library and Library-GitHub BuildMediaProfile(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BuildMediaProfile Path(s).
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Get-OSDWorkspaceLibraryBootMediaProfile {
         This function returns the available boot media profiles in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootMediaProfile
+        Get-OSDWorkspaceLibraryBuildWinPEProfile
         Returns the boot media profiles in the OSDWorkspace Library.
 
     .NOTES
@@ -40,9 +40,9 @@ function Get-OSDWorkspaceLibraryBootMediaProfile {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\BootMedia-Profile\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\Build-WinPEProfile\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.json' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootMedia-Profile' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-WinPEProfile' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 

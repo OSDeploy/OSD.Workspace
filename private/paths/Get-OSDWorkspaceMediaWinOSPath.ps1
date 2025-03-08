@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceBuildWinOSPath {
+function Get-OSDWorkspaceMediaWinOSPath {
       <#
     .SYNOPSIS
         Returns the OSDWorkspace BootImage Path.
@@ -31,7 +31,7 @@ function Get-OSDWorkspaceBuildWinOSPath {
     #=================================================
     $ChildPath = 'WinOS'
 
-    Join-Path -Path $(Get-OSDWorkspaceBuildPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspaceMediaPath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

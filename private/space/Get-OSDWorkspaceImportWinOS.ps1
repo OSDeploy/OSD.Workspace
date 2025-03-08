@@ -70,7 +70,7 @@ function Get-OSDWorkspaceImportWinOS {
             #   Create Object
             #=================================================
             $ObjectProperties = [ordered]@{
-                Type             = 'ImportOS'
+                Type             = 'WinOS'
                 Id               = $ImportId.Id
                 Name             = $ImageItem.Name
                 CreatedTime      = [datetime]$ClixmlOS.CreatedTime

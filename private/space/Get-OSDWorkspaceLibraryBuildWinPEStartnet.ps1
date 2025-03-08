@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryBootStartnet {
+function Get-OSDWorkspaceLibraryBuildWinPEStartnet {
         <#
     .SYNOPSIS
-        Returns available OSDWorkspace Library BootStartnet(s).
+        Returns available OSDWorkspace Library BuildWinPEStartnet(s).
 
     .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BootStartnet(s).
-        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BootStartnet Path(s).
+        This function returns available OSDWorkspace Library and Library-GitHub BuildWinPEStartnet(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BuildWinPEStartnet Path(s).
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Get-OSDWorkspaceLibraryBootStartnet {
         This function returns the available boot startnet scripts in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBootStartnet
+        Get-OSDWorkspaceLibraryBuildWinPEStartnet
         Returns the boot startnet scripts in the OSDWorkspace Library.
 
     .NOTES
@@ -40,9 +40,9 @@ function Get-OSDWorkspaceLibraryBootStartnet {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\BootImage-Startnet\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\Build-WinPEStartnet\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.cmd' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'BootImage-Startnet' } },
+            Select-Object @{Name = 'Phase'; Expression = { 'Build-WinPEStartnet' } },
         Name, @{Name = 'Content'; Expression = { (Get-Content $_ -Raw) } },
         @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }

@@ -5,14 +5,14 @@ function Step-BootImageRegCurrentVersionExport {
         $MountPath = $global:BuildMedia.MountPath,
         
         [System.String]
-        $BootMediaCorePath = $global:BuildMediaCorePath
+        $BuildMediaCorePath = $global:BuildMediaCorePath
     )
     #=================================================
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-RegCurrentVersion $BootMediaCorePath\pe-regcurrentversion.json"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export Get-RegCurrentVersion $BuildMediaCorePath\winpe-regcurrentversion.json"
     $RegKeyCurrentVersion = Get-RegCurrentVersion -Path $MountPath
-    $RegKeyCurrentVersion | Out-File "$BootMediaCorePath\pe-regcurrentversion.txt"
-    $RegKeyCurrentVersion | Export-Clixml -Path "$BootMediaCorePath\pe-regcurrentversion.xml"
-    $RegKeyCurrentVersion | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-regcurrentversion.json" -Encoding utf8 -Force
+    $RegKeyCurrentVersion | Out-File "$BuildMediaCorePath\winpe-regcurrentversion.txt"
+    $RegKeyCurrentVersion | Export-Clixml -Path "$BuildMediaCorePath\winpe-regcurrentversion.xml"
+    $RegKeyCurrentVersion | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-regcurrentversion.json" -Encoding utf8 -Force
     $RegKeyCurrentVersion | Out-Host
     #=================================================
 }

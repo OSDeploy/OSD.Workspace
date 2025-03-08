@@ -235,7 +235,7 @@ function Import-OSDWorkspaceWinOS {
             }
 
             # Build the WinRE directory
-            robocopy "$DestinationDirectory\.core" "$ImportWinREDirectory\.core" *.* /e /xf OSImage.* /tee /r:0 /w:0 | Out-Null
+            robocopy "$DestinationDirectory\.core" "$ImportWinREDirectory\.core" *.* /e /xf OSImage.* winpe-windowsimage* winse-windowsimage* /tee /r:0 /w:0 | Out-Null
             robocopy "$DestinationDirectory\.temp" "$ImportWinREDirectory\.temp" *.* /e /xd logs /tee /r:0 /w:0 | Out-Null
             robocopy "$DestinationDirectory\.wim" "$ImportWinREDirectory\.wim" winre.wim /e /tee /r:0 /w:0 | Out-Null
 
