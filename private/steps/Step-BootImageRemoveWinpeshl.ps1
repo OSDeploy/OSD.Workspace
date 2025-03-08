@@ -2,7 +2,7 @@ function Step-BootImageRemoveWinpeshl {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath
+        $MountPath = $global:BuildMedia.MountPath
     )
     $Winpeshl = "$MountPath\Windows\System32\winpeshl.ini"
     if (Test-Path $Winpeshl) {

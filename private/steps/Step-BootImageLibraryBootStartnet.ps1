@@ -2,8 +2,8 @@ function Step-BootImageLibraryBootStartnet {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $BootStartnet = $global:BootMedia.BootStartnet
+        $MountPath = $global:BuildMedia.MountPath,
+        $BootStartnet = $global:BuildMedia.BootStartnet
     )
     foreach ($Item in $BootStartnet) {
         if (Test-Path $Item) {

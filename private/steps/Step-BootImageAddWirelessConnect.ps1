@@ -2,15 +2,15 @@ function Step-BootImageAddWirelessConnect {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath,
-        $WimSourceType = $global:BootMedia.WimSourceType
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath,
+        $WimSourceType = $global:BuildMedia.WimSourceType
     )
     # WinRE Add WirelessConnect.exe
     # https://oliverkieselbach.com/
     # https://github.com/okieselbach/Helpers
     # https://msendpointmgr.com/2018/03/06/build-a-winpe-with-wireless-support/
-    $global:BootMedia.AddWirelessConnect = $false
+    $global:BuildMedia.AddWirelessConnect = $false
 
     if ($WimSourceType -eq 'WinRE') {
         $CacheWirelessConnect = Join-Path $OSDWorkspaceCachePath "BootImage-WirelessConnect"
@@ -26,7 +26,7 @@ function Step-BootImageAddWirelessConnect {
         if (Test-Path $WirelessConnectExe) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Using cache content at $WirelessConnectExe"
             Copy-Item -Path $WirelessConnectExe -Destination "$MountPath\Windows\System32\WirelessConnect.exe" -Force | Out-Null
-            $global:BootMedia.AddWirelessConnect = $true
+            $global:BuildMedia.AddWirelessConnect = $true
         }
     }
 }

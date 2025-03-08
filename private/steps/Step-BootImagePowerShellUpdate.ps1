@@ -2,9 +2,9 @@ function Step-BootImagePowerShellUpdate {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath,
-        $WimSourceType = $global:BootMedia.WimSourceType
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath,
+        $WimSourceType = $global:BuildMedia.WimSourceType
     )
     #=================================================
 $InfEnvironment = @'

@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceImageOS {
+function Get-OSDWorkspaceImportWinOS {
     [CmdletBinding()]
     param (
         [ValidateSet('amd64', 'arm64')]
@@ -11,21 +11,21 @@ function Get-OSDWorkspaceImageOS {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSDWorkspaceImageOSPath = Get-OSDWorkspaceOSImagePath
+        $OSDWorkspaceImageOSPath = Get-OSDWorkspaceImportWinOSPath
 
         $ImageItems = @()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"
         $ImageItems = Get-ChildItem -Path $OSDWorkspaceImageOSPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'OSMedia\sources\install.wim') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'WinOS-Media\sources\install.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\os-windowsimage.xml') }
+            Where-Object { Test-Path $(Join-Path $_.FullName '.core\winos-windowsimage.xml') }
 
         $IndexXml = (Join-Path $OSDWorkspaceImageOSPath 'index.xml')
         $IndexJson = (Join-Path $OSDWorkspaceImageOSPath 'index.json')
 
         if ($ImageItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace ImageOS files were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceImageOS to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace Import WinOS files were not found"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceWinOS to resolve this issue"
 
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -50,7 +50,7 @@ function Get-OSDWorkspaceImageOS {
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$ImageItemPath\.core\os-windowsimage.xml"
+            $InfoOS = "$ImageItemPath\.core\winos-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS

@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceBootMedia {
+function Get-OSDWorkspaceWinPE {
     [CmdletBinding()]
     param (
         [ValidateSet('amd64', 'arm64')]
@@ -11,22 +11,22 @@ function Get-OSDWorkspaceBootMedia {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSWorkspaceBootMediaPath = Get-OSDWorkspaceWinPEMediaPath
+        $OSWorkspaceBootMediaPath = Get-OSDWorkspaceBuildWinPEPath
 
         $BootMediaItems = @()
         $BootMediaItems = Get-ChildItem -Path $OSWorkspaceBootMediaPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'BootMedia\sources\boot.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-windowsimage.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\re-windowsimage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\winos-windowsimage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\winre-windowsimage.xml') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'core\gv-bootmedia.xml') }
 
         $IndexXml = (Join-Path $OSWorkspaceBootMediaPath 'index.xml')
         $IndexJson = (Join-Path $OSWorkspaceBootMediaPath 'index.json')
 
         if ($BootMediaItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace BootMedia were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run New-OSDWorkspaceBootMedia to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace WinPE Builds were not found"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Build-OSDWorkspaceWinPE to resolve this issue"
             
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -51,17 +51,17 @@ function Get-OSDWorkspaceBootMedia {
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$BootMediaItemPath\.core\os-windowsimage.xml"
+            $InfoOS = "$BootMediaItemPath\.core\winos-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoPE = "$BootMediaItemPath\.core\pe-windowsimage.xml"
+            $InfoPE = "$BootMediaItemPath\.core\winpe-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE
 
-            $InfoRE = "$BootMediaItemPath\.core\re-windowsimage.xml"
+            $InfoRE = "$BootMediaItemPath\.core\winre-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE

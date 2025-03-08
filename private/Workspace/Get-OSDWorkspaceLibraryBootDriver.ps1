@@ -5,7 +5,7 @@ function Get-OSDWorkspaceLibraryBootDriver {
 
     .DESCRIPTION
         This function returns available OSDWorkspace Library and Library-GitHub BootDriver(s).
-        Utilizes the Get-OSDWorkspaceImageRE and Get-OSDWorkspaceGitHubPath functions to retrieve the BootDriver Path(s)
+        Utilizes the Get-OSDWorkspaceImportWinRE and Get-OSDWorkspaceGitHubPath functions to retrieve the BootDriver Path(s)
 
     .INPUTS
         None.

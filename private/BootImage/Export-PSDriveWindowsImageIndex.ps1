@@ -54,7 +54,7 @@ function Export-PSDriveWindowsImageIndex {
             New-Item -Path $DestinationMedia -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationCore\id.json" -Encoding utf8
+            $ImportId | ConvertTo-Json | Out-File "$DestinationCore\id.json" -Encoding utf8 -Force
 
 
 
@@ -79,11 +79,11 @@ function Export-PSDriveWindowsImageIndex {
                 # Export the Operating System information
                 $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-windowsimage.xml"
-                $Image | Export-Clixml -Path "$DestinationPath\os-windowsimage.xml"
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\winos-windowsimage.xml"
+                $Image | Export-Clixml -Path "$DestinationPath\winos-windowsimage.xml"
                 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\os-windowsimage.json"
-                $Image | ConvertTo-Json | Out-File "$DestinationPath\os-windowsimage.json" -Encoding utf8
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\winos-windowsimage.json"
+                $Image | ConvertTo-Json | Out-File "$DestinationPath\winos-windowsimage.json" -Encoding utf8 -Force
             }
             catch {
                 throw $_

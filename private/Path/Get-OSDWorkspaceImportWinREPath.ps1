@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceWinOSMediaPath {
+function Get-OSDWorkspaceImportWinREPath {
       <#
     .SYNOPSIS
         Returns the OSDWorkspace BootImage Path.
@@ -17,7 +17,7 @@ function Get-OSDWorkspaceWinOSMediaPath {
         This function returns the path to the OSDWorkspace BootImage.
 
     .EXAMPLE
-        Get-OSDWorkspaceREImagePath
+        Get-OSDWorkspaceImportWinREPath
         Returns the default OSDWorkspace BootImage Path.
 
     .NOTES
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceWinOSMediaPath {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
     #=================================================
-    $ChildPath = 'WinOS-media'
+    $ChildPath = 'WinRE'
 
-    Join-Path -Path $(Get-OSDWorkspaceBuildPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspaceImportPath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

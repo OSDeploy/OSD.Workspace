@@ -126,7 +126,7 @@ function New-OSDWorkspaceVM {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture = $Architecture"
     #=================================================
     # Do we have a Boot Media?
-    $SelectBootMedia = Select-OSDWorkspaceBootMedia -Architecture $Architecture
+    $SelectBootMedia = Select-OSDWorkspaceWinPE -Architecture $Architecture
 
     if ($null -eq $SelectBootMedia) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No OSDWorkspace BootMedia was found or selected"

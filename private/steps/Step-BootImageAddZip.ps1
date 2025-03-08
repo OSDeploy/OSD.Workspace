@@ -2,12 +2,12 @@ function Step-BootImageAddZip {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath,
-        $Architecture = $global:BootMedia.Architecture
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath,
+        $Architecture = $global:BuildMedia.Architecture
     )
     # Thanks Gary Blok
-    $global:BootMedia.AddZip = $false
+    $global:BuildMedia.AddZip = $false
     $CacheZip = Join-Path $OSDWorkspaceCachePath "BootImage-7zip"
     if (-not (Test-Path -Path $CacheZip)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Adding cache content at $CacheZip"
@@ -31,10 +31,10 @@ function Step-BootImageAddZip {
 
     if ($Architecture -eq 'amd64') {
         Copy-Item -Path "$CacheZip\7za\x64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BootMedia.AddZip = $true
+        $global:BuildMedia.AddZip = $true
     }
     if ($Architecture -eq 'arm64') {
         Copy-Item -Path "$CacheZip\7za\arm64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BootMedia.AddZip = $true
+        $global:BuildMedia.AddZip = $true
     }
 }

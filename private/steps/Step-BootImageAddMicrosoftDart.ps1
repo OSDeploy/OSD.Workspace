@@ -2,10 +2,10 @@ function Step-BootImageAddMicrosoftDart {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
-        $OSDWorkspaceCachePath = $global:BootMedia.OSDCachePath
+        $MountPath = $global:BuildMedia.MountPath,
+        $OSDWorkspaceCachePath = $global:BuildMedia.OSDCachePath
     )
-    $global:BootMedia.AddMicrosoftDaRT = $false
+    $global:BuildMedia.AddMicrosoftDaRT = $false
 
     $CacheMicrosoftDaRT = Join-Path $OSDWorkspaceCachePath 'BootImage-MicrosoftDaRT'
 
@@ -23,13 +23,13 @@ function Step-BootImageAddMicrosoftDart {
 
     $MicrosoftDartCab = "$CacheMicrosoftDaRT\Toolsx64.cab"
     if (Test-Path $MicrosoftDartCab) {
-        if ($BootMediaName -match 'public') {
+        if ($BuildMediaName -match 'public') {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Not adding Microsoft DaRT for Public BootMedia"
         }
         else {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Using cache content at $MicrosoftDartCab"
             expand.exe "$MicrosoftDartCab" -F:*.* "$MountPath" | Out-Null
-            $global:BootMedia.AddMicrosoftDaRT = $true
+            $global:BuildMedia.AddMicrosoftDaRT = $true
         }
     }
     else {

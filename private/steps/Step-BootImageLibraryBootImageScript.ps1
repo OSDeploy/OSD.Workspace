@@ -2,9 +2,9 @@ function Step-BootImageLibraryBootImageScript {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BootMedia.MountPath,
+        $MountPath = $global:BuildMedia.MountPath,
 
-        $BootImageScript = $global:BootMedia.BootImageScript
+        $BootImageScript = $global:BuildMedia.BootImageScript
     )
     foreach ($Item in $BootImageScript) {
         if (Test-Path $Item) {
