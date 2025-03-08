@@ -5,7 +5,7 @@ function Select-OSDWorkspaceLibraryBootFile {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
     #=================================================
-    $LibraryItems = Get-OSDWorkspaceLibraryBuildWinPEFile
+    $LibraryItems = Get-OSDWorkspaceLibraryWinPEFile
 
     if ($LibraryItems) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select BootImage and BootMedia Files to add to the build (Cancel to skip)"

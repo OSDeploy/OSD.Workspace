@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryBuildProfile {
-    <#
+function Get-OSDWorkspaceLibraryWinPEStartnet {
+        <#
     .SYNOPSIS
-        Returns available OSDWorkspace Library BuildProfile(s).
+        Returns available OSDWorkspace Library LibraryWinPEStartnet(s).
 
     .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BuildProfile(s).
-        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the BuildProfile Path(s).
+        This function returns available OSDWorkspace Library and Library-GitHub LibraryWinPEStartnet(s).
+        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the LibraryWinPEStartnet Path(s).
 
     .INPUTS
         None.
@@ -15,11 +15,11 @@ function Get-OSDWorkspaceLibraryBuildProfile {
     .OUTPUTS
         System.Array
 
-        This function returns the available boot media profiles in the OSDWorkspace Library.
+        This function returns the available boot startnet scripts in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryBuildProfile
-        Returns the boot media profiles in the OSDWorkspace Library.
+        Get-OSDWorkspaceLibraryWinPEStartnet
+        Returns the boot startnet scripts in the OSDWorkspace Library.
 
     .NOTES
         David Segura
@@ -40,14 +40,14 @@ function Get-OSDWorkspaceLibraryBuildProfile {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\Build-WinPEProfile\*") -ErrorAction SilentlyContinue | `
-            Where-Object { $_.Extension -eq '.json' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'Build-WinPEProfile' } },
-        Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
+        Get-ChildItem -Path @("$LibraryPath\WinPE-Startnet\*") -ErrorAction SilentlyContinue | `
+            Where-Object { $_.Extension -eq '.cmd' } | `
+            Select-Object @{Name = 'Phase'; Expression = { 'WinPE-Startnet' } },
+        Name, @{Name = 'Content'; Expression = { (Get-Content $_ -Raw) } },
+        @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 
-    $LibraryItems = $LibraryItems | Sort-Object -Property LastWriteTime -Descending
-    #TODO Need to Write when using so we know when it was last used
+    $LibraryItems = $LibraryItems | Sort-Object -Property Phase, Name, FullName
 
     $LibraryItems
     #=================================================
