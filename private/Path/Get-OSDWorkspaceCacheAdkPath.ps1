@@ -28,7 +28,7 @@ function Get-OSDWorkspaceCacheAdkPath {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'ADK'
+    $ChildPath = 'adk'
 
     Join-Path -Path $(Get-OSDWorkspaceCachePath) -ChildPath $ChildPath
     #=================================================

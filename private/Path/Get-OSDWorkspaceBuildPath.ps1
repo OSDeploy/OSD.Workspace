@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceImageREPath {
-      <#
+function Get-OSDWorkspaceBuildPath {
+    <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootImage Path.
+        Returns the OSDWorkspace Media Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace BootImage Path. The default path is C:\OSDWorkspace\Media-Import\BootImage.
+        This function returns the OSDWorkspace Media Path. The default path is C:\OSDWorkspace\Media.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceImageREPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace BootImage.
+        This function returns the path to the OSDWorkspace Media.
 
     .EXAMPLE
-        Get-OSDWorkspaceImageREPath
-        Returns the default OSDWorkspace BootImage Path.
+        Get-OSDWorkspaceBuildPath
+        Returns the default OSDWorkspace Media Path.
 
     .NOTES
         David Segura
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceImageREPath {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
     #=================================================
-    $ChildPath = 'imagere'
+    $ChildPath = 'build'
 
-    Join-Path -Path $(Get-OSDWorkspaceImportPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

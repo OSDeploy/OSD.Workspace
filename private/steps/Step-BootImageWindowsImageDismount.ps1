@@ -6,7 +6,7 @@ function Step-BootImageWindowsImageDismount {
     )
     #=================================================
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Dismount-WindowsImage Save"
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Dismount-WindowsImage.log"
+    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Dismount-windowsimage.log"
     $WindowsImage | Dismount-WindowsImage -Save -LogPath $CurrentLog | Out-Null
     #=================================================
 }

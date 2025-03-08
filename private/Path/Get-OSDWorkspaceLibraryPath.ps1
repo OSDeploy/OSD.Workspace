@@ -28,7 +28,7 @@ function Get-OSDWorkspaceLibraryPath {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'Library'
+    $ChildPath = 'library'
 
     Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================

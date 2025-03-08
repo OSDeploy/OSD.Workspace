@@ -17,7 +17,7 @@ function Get-OSDWorkspaceImportPath {
         This function returns the path to the OSDWorkspace Media.
 
     .EXAMPLE
-        Get-OSDWorkspaceMediaPath
+        Get-OSDWorkspaceBuildPath
         Returns the default OSDWorkspace Media Path.
 
     .NOTES

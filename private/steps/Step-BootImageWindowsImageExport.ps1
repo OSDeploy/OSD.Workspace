@@ -19,7 +19,7 @@ function Step-BootImageWindowsImageExport {
     if (Test-Path $BuildMediaSourcesPathExportWim) {
         Remove-Item -Path $BuildMediaSourcesPathExportWim -Force -ErrorAction Stop | Out-Null
     }
-    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Export-WindowsImage.log"
+    $CurrentLog = "$BootMediaLogs\$((Get-Date).ToString('yyMMdd-HHmmss'))-Export-windowsimage.log"
     if ($WimSourceType -eq 'WinPE') {
         Export-WindowsImage -SourceImagePath $BuildMediaSourcesPathBootWim -SourceIndex 1 -DestinationImagePath $BuildMediaSourcesPathExportWim -LogPath $CurrentLog | Out-Null
     }
@@ -30,8 +30,8 @@ function Step-BootImageWindowsImageExport {
     Remove-Item -Path $BuildMediaSourcesPathBootWim -Force -ErrorAction Stop | Out-Null
     Rename-Item -Path $BuildMediaSourcesPathExportWim -NewName 'boot.wim' -Force -ErrorAction Stop | Out-Null
 
-    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BootMediaCorePath\pe-WindowsImage.xml"
-    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-WindowsImage.json" -Encoding utf8
+    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BootMediaCorePath\pe-windowsimage.xml"
+    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BootMediaCorePath\pe-windowsimage.json" -Encoding utf8
 
     Copy-Item -Path $(Join-Path $BuildMediaSourcesPath 'boot.wim') -Destination $(Join-Path $BuildMediaSourcesPathEX 'boot.wim') -Force -ErrorAction Stop | Out-Null
     #=================================================

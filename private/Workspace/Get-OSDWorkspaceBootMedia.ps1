@@ -11,14 +11,14 @@ function Get-OSDWorkspaceBootMedia {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSWorkspaceBootMediaPath = Get-OSDWorkspaceBootMediaPath
+        $OSWorkspaceBootMediaPath = Get-OSDWorkspaceWinPEMediaPath
 
         $BootMediaItems = @()
         $BootMediaItems = Get-ChildItem -Path $OSWorkspaceBootMediaPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'BootMedia\sources\boot.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-WindowsImage.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName 'core\re-WindowsImage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\os-windowsimage.xml') } | `
+            Where-Object { Test-Path $(Join-Path $_.FullName 'core\re-windowsimage.xml') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'core\gv-bootmedia.xml') }
 
         $IndexXml = (Join-Path $OSWorkspaceBootMediaPath 'index.xml')
@@ -51,17 +51,17 @@ function Get-OSDWorkspaceBootMedia {
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$BootMediaItemPath\.core\os-WindowsImage.xml"
+            $InfoOS = "$BootMediaItemPath\.core\os-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoPE = "$BootMediaItemPath\.core\pe-WindowsImage.xml"
+            $InfoPE = "$BootMediaItemPath\.core\pe-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE
 
-            $InfoRE = "$BootMediaItemPath\.core\re-WindowsImage.xml"
+            $InfoRE = "$BootMediaItemPath\.core\re-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
@@ -150,8 +150,8 @@ function Get-OSDWorkspaceBootMedia {
                 FileCount          = $ClixmlPE.FileCount
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\.core\BootMedia.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\.core\BootMedia.json" -Encoding utf8 -Force
+            $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\.core\object.xml" -Force
+            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\.core\object.json" -Encoding utf8 -Force
             $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\properties.json" -Encoding utf8 -Force
         }
 
