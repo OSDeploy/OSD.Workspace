@@ -100,13 +100,13 @@ function Get-OSDWorkspaceImportWinRE {
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
             $ObjectProperties | Export-Clixml -Path "$ImageItemPath\.core\object.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$ImageItemPath\.core\object.json" -Encoding utf8 -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$ImageItemPath\properties.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$ImageItemPath\.core\object.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$ImageItemPath\properties.json" -Encoding utf8 -Force
         }
 
         if ($OSDWorkspaceImportWinRE) {
             # $OSDWorkspaceImportWinRE | Export-Clixml -Path $IndexXml -Force
-            $OSDWorkspaceImportWinRE | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
+            $OSDWorkspaceImportWinRE | ConvertTo-Json -Depth 5 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
 
             if ($Architecture -eq 'amd64') {
                 $OSDWorkspaceImportWinRE = $OSDWorkspaceImportWinRE | Where-Object { $_.Architecture -eq 'amd64' }

@@ -18,7 +18,7 @@ function Step-BuildMediaAddOnZip {
     #=================================================
     # Thanks Gary Blok
     $global:BuildMedia.AddOnZip = $false
-    $CacheZip = Join-Path $WSCachePath "BootImage-7zip"
+    $CacheZip = Join-Path $WSCachePath "AddOn-7zip"
     if (-not (Test-Path -Path $CacheZip)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Adding cache content at $CacheZip"
         New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null

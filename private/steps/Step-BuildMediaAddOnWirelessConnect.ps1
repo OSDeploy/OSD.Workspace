@@ -26,7 +26,7 @@ function Step-BuildMediaAddOnWirelessConnect {
     $global:BuildMedia.AddOnWirelessConnect = $false
 
     if ($WimSourceType -eq 'WinRE') {
-        $CacheWirelessConnect = Join-Path $WSCachePath "BootImage-WirelessConnect"
+        $CacheWirelessConnect = Join-Path $WSCachePath "AddOn-WirelessConnect"
         $WirelessConnectExe = "$CacheWirelessConnect\WirelessConnect.exe"
         if (-not (Test-Path -Path $CacheWirelessConnect)) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating WirelessConnect cache at $CacheWirelessConnect"

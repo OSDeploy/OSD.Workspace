@@ -256,7 +256,7 @@ function New-OSDWorkspaceVM {
     #=================================================
     # Export Final Configuration
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting current configuration to $($SelectBootMedia.Path)\vm.json"
-    $vm | ConvertTo-Json -Depth 2 | Out-File -FilePath "$($SelectBootMedia.Path)\vm.json" -Force
+    $vm | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($SelectBootMedia.Path)\vm.json" -Force
     #=================================================
     # Start VM
     if ($StartVM -eq $true) {

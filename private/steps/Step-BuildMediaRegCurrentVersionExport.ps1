@@ -17,7 +17,7 @@ function Step-BuildMediaRegCurrentVersionExport {
     $RegKeyCurrentVersion = Get-RegCurrentVersion -Path $MountPath
     $RegKeyCurrentVersion | Out-File "$BuildMediaCorePath\winpe-regcurrentversion.txt"
     $RegKeyCurrentVersion | Export-Clixml -Path "$BuildMediaCorePath\winpe-regcurrentversion.xml"
-    $RegKeyCurrentVersion | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-regcurrentversion.json" -Encoding utf8 -Force
+    $RegKeyCurrentVersion | ConvertTo-Json -Depth 5 | Out-File "$BuildMediaCorePath\winpe-regcurrentversion.json" -Encoding utf8 -Force
     $RegKeyCurrentVersion | Out-Host
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
