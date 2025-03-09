@@ -100,7 +100,7 @@ function Import-OSDWorkspaceImageRE {
             New-Item -Path "$DestinationDirectory\.temp" -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationDirectory\.core\id.json" -Encoding utf8 -Force
+            $ImportId | ConvertTo-Json -Depth 5 | Out-File "$DestinationDirectory\.core\id.json" -Encoding utf8 -Force
 
             # Copy the OS details
             Copy-Item -Path "$SourceDirectory\winos-windowsimage.xml" -Destination "$DestinationDirectory\.core"
@@ -115,7 +115,7 @@ function Import-OSDWorkspaceImageRE {
             Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationDirectory\sources\boot.wim"
 
             $WinreImage = Get-WindowsImage -ImagePath "$DestinationDirectory\sources\boot.wim" -Index 1
-            $WinreImage | ConvertTo-Json | Out-File "$DestinationDirectory\.core\winre-windowsimage.json" -Encoding utf8 -Force
+            $WinreImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationDirectory\.core\winre-windowsimage.json" -Encoding utf8 -Force
             $WinreImage | Export-Clixml -Path "$DestinationDirectory\.core\winre-windowsimage.xml"
 
             # Backup OSFiles

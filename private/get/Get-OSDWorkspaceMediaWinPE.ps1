@@ -11,7 +11,7 @@ function Get-OSDWorkspaceMediaWinPE {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSWorkspaceBuildMediaPath = Get-OSDWorkspaceMediaWinPEPath
+        $OSWorkspaceBuildMediaPath = Get-OSDWorkspaceWinPEPath
 
         $BootMediaItems = @()
         $BootMediaItems = Get-ChildItem -Path $OSWorkspaceBuildMediaPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
@@ -55,6 +55,11 @@ function Get-OSDWorkspaceMediaWinPE {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
+
+            $InfoREG = "$BootMediaItemPath\.core\winpe-regcurrentversion.xml"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoREG: $InfoREG"
+            $ClixmlREG = @()
+            $ClixmlREG = Import-Clixml -Path $InfoREG
 
             $InfoPE = "$BootMediaItemPath\.core\winpe-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
@@ -115,49 +120,54 @@ function Get-OSDWorkspaceMediaWinPE {
             #   Create Object
             #=================================================
             $ObjectProperties = [ordered]@{
-                Type               = 'WinPE'
-                Id                 = $ImportId.Id
-                Name               = $ClixmlBM.Name
-                CreatedTime        = [datetime]$ClixmlPE.CreatedTime
-                ModifiedTime       = [datetime]$ClixmlPE.ModifiedTime
-                InstallationType   = $ClixmlPE.InstallationType
-                Version            = [System.String]"$($ClixmlPE.MajorVersion).$($ClixmlPE.MinorVersion).$($ClixmlPE.Build).$($ClixmlPE.SPBuild)"
-                Architecture       = $OSArchitecture
-                ContentWinpeshl    = $ClixmlBM.ContentWinpeshl
-                ContentStartnet    = $ClixmlBM.ContentStartnet
-                Languages          = $ClixmlPE.Languages
-                SetInputLocale     = $ClixmlBM.SetInputLocale
-                SetAllIntl         = $ClixmlBM.SetAllIntl
-                SetTimeZone           = $ClixmlBM.SetTimeZone
+                Type                 = 'WinPE'
+                Id                   = $ImportId.Id
+                Name                 = $ClixmlBM.Name
+                ModifiedTime         = [datetime]$ClixmlPE.ModifiedTime
+                InstallationType     = $ClixmlPE.InstallationType
+                Version              = [System.String]"$($ClixmlPE.MajorVersion).$($ClixmlPE.MinorVersion).$($ClixmlPE.Build).$($ClixmlPE.SPBuild)"
+                DisplayVersion       = $ClixmlREG.DisplayVersion
+                ReleaseId            = $ClixmlREG.ReleaseId
+                Architecture         = $OSArchitecture
+                Languages            = $ClixmlPE.Languages
+                SetAllIntl           = $ClixmlBM.SetAllIntl
+                InputLocale          = $ClixmlBM.SetInputLocale
+                TimeZone             = $ClixmlBM.SetTimeZone
+                ContentStartnet      = $ClixmlBM.ContentStartnet
+                ContentWinpeshl      = $ClixmlBM.ContentWinpeshl
                 AddOnAzCopy          = $ClixmlBM.AddOnAzCopy
                 AddOnMicrosoftDaRT   = $ClixmlBM.AddOnMicrosoftDaRT
                 AddOnPwsh            = $ClixmlBM.AddOnPwsh
                 AddOnWirelessConnect = $ClixmlBM.AddOnWirelessConnect
                 AddOnZip             = $ClixmlBM.AddOnZip
-                WinPEDriver        = $ClixmlBM.WinPEDriver
-                AdkVersion         = $ClixmlBM.AdkInstallVersion
-                ImageName          = $ClixmlPE.ImageName
-                OSImageName        = $ClixmlOS.ImageName
-                OSEditionId        = $ClixmlOS.EditionId
-                OSVersion          = [System.String]"$($ClixmlOS.MajorVersion).$($ClixmlOS.MinorVersion).$($ClixmlOS.Build).$($ClixmlOS.SPBuild)"
-                OSCreatedTime      = [datetime]$ClixmlOS.CreatedTime
-                OSModifiedTime     = [datetime]$ClixmlOS.ModifiedTime
-                Path               = $BootMediaItemPath
-                ImagePath          = $BootMediaItemPath + '\Media\sources\boot.wim'
-                ImageIndex         = [uint32]$ClixmlPE.ImageIndex
-                ImageSize          = $ClixmlPE.ImageSize
-                DirectoryCount     = $ClixmlPE.DirectoryCount
-                FileCount          = $ClixmlPE.FileCount
+                AdkVersion           = $ClixmlBM.AdkInstallVersion
+                BuildProfile         = $ClixmlBM.BuildProfile
+                LibraryWinPEDriver   = $ClixmlBM.LibraryWinPEDriver
+                LibraryWinPEScript   = $ClixmlBM.LibraryWinPEScript
+                LibraryMediaScript   = $ClixmlBM.LibraryMediaScript
+                CreatedTime          = [datetime]$ClixmlPE.CreatedTime
+                ImageName            = $ClixmlPE.ImageName
+                ImagePath            = $BootMediaItemPath + '\Media\sources\boot.wim'
+                ImageIndex           = [uint32]$ClixmlPE.ImageIndex
+                ImageSize            = $ClixmlPE.ImageSize
+                DirectoryCount       = $ClixmlPE.DirectoryCount
+                FileCount            = $ClixmlPE.FileCount
+                OSCreatedTime        = [datetime]$ClixmlOS.CreatedTime
+                OSModifiedTime       = [datetime]$ClixmlOS.ModifiedTime
+                OSImageName          = $ClixmlOS.ImageName
+                OSEditionId          = $ClixmlOS.EditionId
+                OSVersion            = [System.String]"$($ClixmlOS.MajorVersion).$($ClixmlOS.MinorVersion).$($ClixmlOS.Build).$($ClixmlOS.SPBuild)"
+                Path                 = $BootMediaItemPath
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
             $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\.core\object.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\.core\object.json" -Encoding utf8 -Force
-            $ObjectProperties | ConvertTo-Json -Depth 1 | Out-File -FilePath "$BootMediaItemPath\properties.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BootMediaItemPath\.core\object.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BootMediaItemPath\properties.json" -Encoding utf8 -Force
         }
 
         if ($OSDWorkspaceBootMedia) {
             # $OSDWorkspaceBootMedia | Export-Clixml -Path $IndexXml -Force
-            $OSDWorkspaceBootMedia | ConvertTo-Json -Depth 1 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
+            $OSDWorkspaceBootMedia | ConvertTo-Json -Depth 5 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
 
             if ($Architecture -eq 'amd64') {
                 $OSDWorkspaceBootMedia = $OSDWorkspaceBootMedia | Where-Object { $_.Architecture -eq 'amd64' }

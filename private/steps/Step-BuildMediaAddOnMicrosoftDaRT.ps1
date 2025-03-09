@@ -18,7 +18,7 @@ function Step-BuildMediaAddOnMicrosoftDaRT {
     #=================================================
     $global:BuildMedia.AddOnMicrosoftDaRT = $false
 
-    $CacheMicrosoftDaRT = Join-Path $WSCachePath 'BootImage-MicrosoftDaRT'
+    $CacheMicrosoftDaRT = Join-Path $WSCachePath 'AddOn-MicrosoftDaRT'
 
     # MicrosoftDartCab
     $MicrosoftDartCab = "$env:ProgramFiles\Microsoft DaRT\v10\Toolsx64.cab"

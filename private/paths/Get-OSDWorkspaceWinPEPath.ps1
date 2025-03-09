@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceMediaWinPEPath {
+function Get-OSDWorkspaceWinPEPath {
     <#
     .SYNOPSIS
         Returns the OSDWorkspace BootMedia Path.
@@ -17,7 +17,7 @@ function Get-OSDWorkspaceMediaWinPEPath {
         This function returns the path to the OSDWorkspace BootMedia.
 
     .EXAMPLE
-        Get-OSDWorkspaceMediaWinPEPath
+        Get-OSDWorkspaceWinPEPath
         Returns the default OSDWorkspace BootMedia Path.
 
     .NOTES

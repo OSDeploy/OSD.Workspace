@@ -54,7 +54,7 @@ function Export-PSDriveWindowsImageIndex {
             New-Item -Path $DestinationMedia -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationCore\id.json" -Encoding utf8 -Force
+            $ImportId | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\id.json" -Encoding utf8 -Force
 
 
 
@@ -83,7 +83,7 @@ function Export-PSDriveWindowsImageIndex {
                 $Image | Export-Clixml -Path "$DestinationPath\winos-windowsimage.xml"
                 
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationPath\winos-windowsimage.json"
-                $Image | ConvertTo-Json | Out-File "$DestinationPath\winos-windowsimage.json" -Encoding utf8 -Force
+                $Image | ConvertTo-Json -Depth 5 | Out-File "$DestinationPath\winos-windowsimage.json" -Encoding utf8 -Force
             }
             catch {
                 throw $_

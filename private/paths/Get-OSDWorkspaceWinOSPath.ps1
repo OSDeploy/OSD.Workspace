@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceMediaWinOSPath {
+function Get-OSDWorkspaceWinOSPath {
       <#
     .SYNOPSIS
         Returns the OSDWorkspace BootImage Path.

@@ -182,6 +182,9 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     #region Set TLS Defaults
     $PSDefaultParameterValues['Invoke-WebRequest:UseBasicParsing'] = $true
+    $currentProgressPref = $ProgressPreference
+    $ProgressPreference = 'SilentlyContinue'
+    
     $regproxy = Get-ItemProperty -Path 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings'
     $proxy = $regproxy.ProxyServer
 
@@ -364,7 +367,7 @@ function Build-OSDWorkspaceWinPE {
     
     $MediaIsoName = 'BootMedia.iso'
     $MediaIsoNameEX = 'BootMediaEX.iso'
-    $MediaRootPath = Join-Path $(Get-OSDWorkspaceMediaWinPEPath) $MediaName
+    $MediaRootPath = Join-Path $(Get-OSDWorkspaceWinPEPath) $MediaName
     $global:BuildMediaCorePath = "$MediaRootPath\.core"
     $BuildMediaTempPath = "$MediaRootPath\.temp"
     $global:BuildMediaLogsPath = "$BuildMediaTempPath\logs"
@@ -471,7 +474,7 @@ function Build-OSDWorkspaceWinPE {
         $MyBuildProfilePath = "$BuildProfilePath\$Name.json"
 
         Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Profile to $MyBuildProfilePath"
-        $global:BuildProfile | ConvertTo-Json | Out-File $MyBuildProfilePath -Encoding utf8 -Force
+        $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File $MyBuildProfilePath -Encoding utf8 -Force
     }
     #endregion
     #=================================================
@@ -553,7 +556,7 @@ function Build-OSDWorkspaceWinPE {
     }
 
     $ImportId = @{id = $MediaName }
-    $ImportId | ConvertTo-Json | Out-File "$BuildMediaCorePath\id.json" -Encoding utf8 -Force
+    $ImportId | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\id.json" -Encoding utf8 -Force
     #endregion
     #=================================================
     #region Build Media
@@ -867,14 +870,15 @@ function Build-OSDWorkspaceWinPE {
 
     Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Profile to $BuildMediaCorePath\gv-BuildProfile.json"
     $global:BuildProfile | Export-Clixml -Path "$BuildMediaCorePath\gv-BuildProfile.xml" -Force
-    $global:BuildProfile | ConvertTo-Json | Out-File "$BuildMediaCorePath\gv-BuildProfile.json" -Encoding utf8 -Force
+    $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-BuildProfile.json" -Encoding utf8 -Force
 
     Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Properties to $BuildMediaCorePath\gv-buildmedia.json"
     $global:BuildMedia | Export-Clixml -Path "$BuildMediaCorePath\gv-buildmedia.xml" -Force
-    $global:BuildMedia | ConvertTo-Json | Out-File "$BuildMediaCorePath\gv-buildmedia.json" -Encoding utf8 -Force
+    $global:BuildMedia | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-buildmedia.json" -Encoding utf8 -Force
 
     # Restore TLS settings
     [Net.ServicePointManager]::SecurityProtocol = $currentVersionTls
+    $ProgressPreference = $currentProgressPref
 
     # Update BootMedia Index
     $null = Get-OSDWorkspaceMediaWinPE

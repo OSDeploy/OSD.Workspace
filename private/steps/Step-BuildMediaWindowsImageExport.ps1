@@ -40,7 +40,7 @@ function Step-BuildMediaWindowsImageExport {
     Rename-Item -Path $BuildMediaSourcesPathExportWim -NewName 'boot.wim' -Force -ErrorAction Stop | Out-Null
 
     Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | Export-Clixml -Path "$BuildMediaCorePath\winpe-windowsimage.xml"
-    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-windowsimage.json" -Encoding utf8 -Force
+    Get-WindowsImage -ImagePath $BuildMediaSourcesPathBootWim -Index 1 | ConvertTo-Json -Depth 5 | Out-File "$BuildMediaCorePath\winpe-windowsimage.json" -Encoding utf8 -Force
 
     Copy-Item -Path $(Join-Path $BuildMediaSourcesPath 'boot.wim') -Destination $(Join-Path $BuildMediaSourcesPathEX 'boot.wim') -Force -ErrorAction Stop | Out-Null
     #=================================================

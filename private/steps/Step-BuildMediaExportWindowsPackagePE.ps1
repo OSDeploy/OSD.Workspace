@@ -16,7 +16,7 @@ function Step-BuildMediaExportWindowsPackagePE {
     $WindowsPackage = $WindowsImage | Get-WindowsPackage
     if ($WindowsPackage) {
         $WindowsPackage | Select-Object * | Export-Clixml -Path "$BuildMediaCorePath\winpe-windowspackage.xml" -Force
-        $WindowsPackage | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-windowspackage.json" -Encoding utf8 -Force
+        $WindowsPackage | ConvertTo-Json -Depth 5 | Out-File "$BuildMediaCorePath\winpe-windowspackage.json" -Encoding utf8 -Force
         $WindowsPackage | Sort-Object -Property PackageName | Format-Table -AutoSize
     }
     #=================================================

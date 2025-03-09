@@ -96,7 +96,7 @@ function Import-OSDWorkspaceWinOS {
             New-Item -Path $DestinationMedia -ItemType Directory -Force -ErrorAction Stop | Out-Null
 
             $ImportId = @{id = $DestinationName }
-            $ImportId | ConvertTo-Json | Out-File "$DestinationCore\id.json" -Encoding utf8 -Force
+            $ImportId | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\id.json" -Encoding utf8 -Force
 
             robocopy "$($SourceWindowsImage.MediaRoot)" "$DestinationMedia" *.* /e /xf install.wim install.esd | Out-Null
             Get-ChildItem -Recurse -Path "$DestinationMedia\*" | Set-ItemProperty -Name IsReadOnly -Value $false -ErrorAction SilentlyContinue | Out-Null
@@ -113,7 +113,7 @@ function Import-OSDWorkspaceWinOS {
             $Image | Export-Clixml -Path "$DestinationCore\winos-windowsimage.xml"
             
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationCore\winos-windowsimage.json"
-            $Image | ConvertTo-Json | Out-File "$DestinationCore\winos-windowsimage.json" -Encoding utf8
+            $Image | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winos-windowsimage.json" -Encoding utf8
 
             # Mount the Windows Image and store the details
             $MountedWindows = Mount-MyWindowsImage -ImagePath $DestinationImagePath -Index 1 -ErrorAction Stop -ReadOnly
@@ -124,7 +124,7 @@ function Import-OSDWorkspaceWinOS {
             Copy-Item -Path "$MountDirectory\Windows\System32\Recovery\winre.wim" -Destination "$DestinationWim\winre.wim" | Out-Null
 
             $WinreImage = Get-WindowsImage -ImagePath "$DestinationWim\winre.wim" -Index 1
-            $WinreImage | ConvertTo-Json | Out-File "$DestinationCore\winre-windowsimage.json" -Encoding utf8 -Force
+            $WinreImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winre-windowsimage.json" -Encoding utf8 -Force
             $WinreImage | Export-Clixml -Path "$DestinationCore\winre-windowsimage.xml"
 
             # Export WinSE and WinPE
@@ -133,14 +133,14 @@ function Import-OSDWorkspaceWinOS {
                 $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinSE.log"
                 $ExportWinSE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 1 -DestinationImagePath "$DestinationWim\winse.wim" -LogPath "$CurrentLog" | Out-Null
                 $WinseImage = Get-WindowsImage -ImagePath "$DestinationWim\winse.wim" -Index 1
-                $WinseImage | ConvertTo-Json | Out-File "$DestinationCore\winse-windowsimage.json" -Encoding utf8 -Force
+                $WinseImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winse-windowsimage.json" -Encoding utf8 -Force
                 $WinseImage | Export-Clixml -Path "$DestinationCore\winse-windowsimage.xml"
 
 
                 $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinPE.log"
                 $ExportWinPE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 2 -DestinationImagePath "$DestinationWim\winpe.wim" -LogPath "$CurrentLog" | Out-Null
                 $WinpeImage = Get-WindowsImage -ImagePath "$DestinationWim\winpe.wim" -Index 1
-                $WinpeImage | ConvertTo-Json | Out-File "$DestinationCore\winpe-windowsimage.json" -Encoding utf8 -Force
+                $WinpeImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winpe-windowsimage.json" -Encoding utf8 -Force
                 $WinpeImage | Export-Clixml -Path "$DestinationCore\winpe-windowsimage.xml"
             }
 

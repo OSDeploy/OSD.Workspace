@@ -97,8 +97,8 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
     Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaPath: $(Get-OSDWorkspaceMediaPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaWinPEPath: $(Get-OSDWorkspaceMediaWinPEPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaWinOSPath: $(Get-OSDWorkspaceMediaWinOSPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinPEPath: $(Get-OSDWorkspaceWinPEPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinOSPath: $(Get-OSDWorkspaceWinOSPath)"
 
     $null = Get-OSDWorkspaceImportWinRE
     $null = Get-OSDWorkspaceImportWinOS

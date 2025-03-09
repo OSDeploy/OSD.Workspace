@@ -20,7 +20,7 @@ function Step-BuildMediaAddOnAzCopy {
     # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf
     $global:BuildMedia.AddOnAzCopy = $false
 
-    $CacheAzCopy = Join-Path $WSCachePath "BootImage-AzCopy"
+    $CacheAzCopy = Join-Path $WSCachePath "AddOn-AzCopy"
     if (-not (Test-Path -Path $CacheAzCopy)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] AzCopy: Adding cache content at $CacheAzCopy"
         New-Item -Path $CacheAzCopy -ItemType Directory -Force | Out-Null

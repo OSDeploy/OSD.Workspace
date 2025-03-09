@@ -16,7 +16,7 @@ function Step-BuildMediaExportWindowsDriverPE {
     $WindowsDriver = $WindowsImage | Get-WindowsDriver
     if ($WindowsDriver) {
         $WindowsDriver | Select-Object * | Export-Clixml -Path "$BuildMediaCorePath\winpe-windowsdriver.xml" -Force
-        $WindowsDriver | ConvertTo-Json | Out-File "$BuildMediaCorePath\winpe-windowsdriver.json" -Encoding utf8 -Force
+        $WindowsDriver | ConvertTo-Json -Depth 5 | Out-File "$BuildMediaCorePath\winpe-windowsdriver.json" -Encoding utf8 -Force
         $WindowsDriver | Sort-Object ProviderName, CatalogFile, Version | Select-Object ProviderName, CatalogFile, Version, Date, ClassName, BootCritical, Driver, @{ Name = 'FileRepository'; Expression = { ($_.OriginalFileName.split('\')[-2]) } } | Format-Table -AutoSize
     }
     #=================================================

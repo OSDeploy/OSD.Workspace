@@ -36,7 +36,7 @@ function New-OSDWorkspaceUSB {
     [CmdletBinding()]
     param (
         [ValidateLength(0,11)]
-        [string]$BootLabel = 'BootMedia',
+        [string]$BootLabel = 'USB-WinPE',
 
         [ValidateLength(0,32)]
         [string]$DataLabel = 'USB-Data'
@@ -64,21 +64,21 @@ function New-OSDWorkspaceUSB {
     Block-WindowsReleaseIdLt1703
     #=================================================
     # Do we have a Boot Media?
-    $SelectBootMedia = Select-OSDWorkspaceMediaWinPE
+    $SelectWinPEMedia = Select-OSDWorkspaceMediaWinPE
 
-    if ($null -eq $SelectBootMedia) {
+    if ($null -eq $SelectWinPEMedia) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No OSDWorkspace BootMedia was found or selected"
         return
     }
     #=================================================
     # Select a BootMedia Media folder
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)"
-    $BootMediaObject = Get-ChildItem $($SelectBootMedia.Path) -Directory | Where-Object { ($_.Name -eq 'BootMedia') -or ($_.Name -eq 'BootMediaEx') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)' -OutputMode Single
+    $BootMediaObject = Get-ChildItem $($SelectWinPEMedia.Path) -Directory | Where-Object { ($_.Name -eq 'WinPE-Media') -or ($_.Name -eq 'WinPE-MediaEX') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)' -OutputMode Single
     if ($null -eq $BootMediaObject) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No BootMedia path was found"
         return
     }
-    $BootMediaArch = $SelectBootMedia.Architecture.ToUpper()
+    $BootMediaArch = $SelectWinPEMedia.Architecture.ToUpper()
     #$BootLabel = "WinPE-$($BootMediaArch)"
     #=================================================
     # Disable Autorun
@@ -178,7 +178,7 @@ function New-OSDWorkspaceUSB {
     #=================================================
     #	Complete
     #=================================================
-    $SelectBootMedia | ConvertTo-Json | Out-File -FilePath "$($WinpeDestinationPath)\BootMedia.json" -Force
+    $SelectWinPEMedia | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($WinpeDestinationPath)\BootMedia.json" -Force
     #=================================================
     #	Return
     #=================================================
