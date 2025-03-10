@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceCacheAdkPath {
+function Get-OSDWSLibraryRemotePath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Windows ADK Cache Path.
+        Returns the OSDWorkspace Library-GitHub Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace Windows ADK Cache Path. The default path is C:\OSDWorkspace\.cache\ADK.
+        This function returns the OSDWorkspace Library-GitHub Path. The default path is C:\OSDWorkspace\Library-GitHub.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceCacheAdkPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace Windows ADK Cache.
+        This function returns the path to the OSDWorkspace Library-GitHub.
 
     .EXAMPLE
-        Get-OSDWorkspaceCacheAdkPath
-        Returns the default OSDWorkspace Windows ADK Cache Path.
+        Get-OSDWSLibraryRemotePath
+        Returns the default OSDWorkspace Library-GitHub Path.
 
     .NOTES
         David Segura
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceCacheAdkPath {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'ADK'
+    $ChildPath = 'library-remote'
 
-    Join-Path -Path $(Get-OSDWorkspaceCachePath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceMediaWinPE {
+function Get-OSDWSWinPEBuild {
     [CmdletBinding()]
     param (
         [ValidateSet('amd64', 'arm64')]
@@ -11,20 +11,20 @@ function Get-OSDWorkspaceMediaWinPE {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $OSWorkspaceBuildMediaPath = Get-OSDWorkspaceWinPEPath
+        $BuildPath = Get-OSDWSWinPEBuildPath
 
-        $BootMediaItems = @()
-        $BootMediaItems = Get-ChildItem -Path $OSWorkspaceBuildMediaPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
+        $BuildItems = @()
+        $BuildItems = Get-ChildItem -Path $BuildPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'WinPE-Media\sources\boot.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\winos-windowsimage.xml') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\winre-windowsimage.xml') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\gv-buildmedia.xml') }
 
-        $IndexXml = (Join-Path $OSWorkspaceBuildMediaPath 'index.xml')
-        $IndexJson = (Join-Path $OSWorkspaceBuildMediaPath 'index.json')
+        $IndexXml = (Join-Path $BuildPath 'index.xml')
+        $IndexJson = (Join-Path $BuildPath 'index.json')
 
-        if ($BootMediaItems.Count -eq 0) {
+        if ($BuildItems.Count -eq 0) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace WinPE Builds were not found"
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Build-OSDWorkspaceWinPE to resolve this issue"
             
@@ -38,40 +38,40 @@ function Get-OSDWorkspaceMediaWinPE {
         }
     }
     process {
-        $OSDWorkspaceBootMedia = foreach ($BootMediaItem in $BootMediaItems) {
+        $WinPEBuilds = foreach ($BuildItem in $BuildItems) {
             #=================================================
             #   Get-FullName
             #=================================================
-            $BootMediaItemPath = $($BootMediaItem.FullName)
+            $BuildItemPath = $($BuildItem.FullName)
             #=================================================
             #   Import Details
             #=================================================
-            $InfoId = "$BootMediaItemPath\.core\id.json"
+            $InfoId = "$BuildItemPath\.core\id.json"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
 
-            $InfoOS = "$BootMediaItemPath\.core\winos-windowsimage.xml"
+            $InfoOS = "$BuildItemPath\.core\winos-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
-            $InfoREG = "$BootMediaItemPath\.core\winpe-regcurrentversion.xml"
+            $InfoREG = "$BuildItemPath\.core\winpe-regcurrentversion.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoREG: $InfoREG"
             $ClixmlREG = @()
             $ClixmlREG = Import-Clixml -Path $InfoREG
 
-            $InfoPE = "$BootMediaItemPath\.core\winpe-windowsimage.xml"
+            $InfoPE = "$BuildItemPath\.core\winpe-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE
 
-            $InfoRE = "$BootMediaItemPath\.core\winre-windowsimage.xml"
+            $InfoRE = "$BuildItemPath\.core\winre-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
 
-            $InfoBM = "$BootMediaItemPath\.core\gv-buildmedia.xml"
+            $InfoBM = "$BuildItemPath\.core\gv-buildmedia.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoBM: $InfoBM"
             $ClixmlBM = @()
             $ClixmlBM = Import-Clixml -Path $InfoBM
@@ -147,7 +147,7 @@ function Get-OSDWorkspaceMediaWinPE {
                 LibraryMediaScript   = $ClixmlBM.LibraryMediaScript
                 CreatedTime          = [datetime]$ClixmlPE.CreatedTime
                 ImageName            = $ClixmlPE.ImageName
-                ImagePath            = $BootMediaItemPath + '\Media\sources\boot.wim'
+                ImagePath            = $BuildItemPath + '\Media\sources\boot.wim'
                 ImageIndex           = [uint32]$ClixmlPE.ImageIndex
                 ImageSize            = $ClixmlPE.ImageSize
                 DirectoryCount       = $ClixmlPE.DirectoryCount
@@ -157,28 +157,28 @@ function Get-OSDWorkspaceMediaWinPE {
                 OSImageName          = $ClixmlOS.ImageName
                 OSEditionId          = $ClixmlOS.EditionId
                 OSVersion            = [System.String]"$($ClixmlOS.MajorVersion).$($ClixmlOS.MinorVersion).$($ClixmlOS.Build).$($ClixmlOS.SPBuild)"
-                Path                 = $BootMediaItemPath
+                Path                 = $BuildItemPath
             }
             New-Object -TypeName PSObject -Property $ObjectProperties
-            $ObjectProperties | Export-Clixml -Path "$BootMediaItemPath\.core\object.xml" -Force
-            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BootMediaItemPath\.core\object.json" -Encoding utf8 -Force
-            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BootMediaItemPath\properties.json" -Encoding utf8 -Force
+            $ObjectProperties | Export-Clixml -Path "$BuildItemPath\.core\object.xml" -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BuildItemPath\.core\object.json" -Encoding utf8 -Force
+            $ObjectProperties | ConvertTo-Json -Depth 5 | Out-File -FilePath "$BuildItemPath\properties.json" -Encoding utf8 -Force
         }
 
-        if ($OSDWorkspaceBootMedia) {
-            # $OSDWorkspaceBootMedia | Export-Clixml -Path $IndexXml -Force
-            $OSDWorkspaceBootMedia | ConvertTo-Json -Depth 5 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
+        if ($WinPEBuilds) {
+            # $WinPEBuilds | Export-Clixml -Path $IndexXml -Force
+            $WinPEBuilds | ConvertTo-Json -Depth 5 | Out-File -FilePath $IndexJson -Encoding utf8 -Force
 
             if ($Architecture -eq 'amd64') {
-                $OSDWorkspaceBootMedia = $OSDWorkspaceBootMedia | Where-Object { $_.Architecture -eq 'amd64' }
+                $WinPEBuilds = $WinPEBuilds | Where-Object { $_.Architecture -eq 'amd64' }
             }
             if ($Architecture -eq 'arm64') {
-                $OSDWorkspaceBootMedia = $OSDWorkspaceBootMedia | Where-Object { $_.Architecture -eq 'arm64' }
+                $WinPEBuilds = $WinPEBuilds | Where-Object { $_.Architecture -eq 'arm64' }
             }
             if ($GridView) {
-                $OSDWorkspaceBootMedia = $OSDWorkspaceBootMedia | Out-GridView -Title 'Select a BootMedia and press OK (Cancel to Exit)' -OutputMode $GridView
+                $WinPEBuilds = $WinPEBuilds | Out-GridView -Title 'Select a BootMedia and press OK (Cancel to Exit)' -OutputMode $GridView
             }
-            return $OSDWorkspaceBootMedia | Sort-Object -Property ModifiedTime -Descending
+            return $WinPEBuilds | Sort-Object -Property ModifiedTime -Descending
         }
         else {
             return $null

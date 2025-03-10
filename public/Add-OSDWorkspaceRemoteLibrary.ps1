@@ -1,4 +1,4 @@
-function Import-OSDWorkspaceGitHubRepo {
+function Add-OSDWorkspaceRemoteLibrary {
     <#
     .SYNOPSIS
         Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
@@ -6,10 +6,7 @@ function Import-OSDWorkspaceGitHubRepo {
     .DESCRIPTION
         This function clones a specified GitHub repository into the OSDWorkspace Library-GitHub directory.
         Performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have already cloned the repository, use the Update-OSDWorkspaceGitHubRepo cmdlet to update it.
-
-    .PARAMETER Url
-        The HTTPS URL of the GitHub repository to clone.
+        If you have already cloned the repository, use the Update-OSDWorkspaceRemoteLibrary cmdlet to update it.
 
     .INPUTS
         None.
@@ -22,12 +19,12 @@ function Import-OSDWorkspaceGitHubRepo {
         This function does not return any output.
 
     .EXAMPLE
-        Import-OSDWorkspaceGitHubRepo -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
+        Add-OSDWorkspaceRemoteLibrary -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
         Clones the repository 'OSDWorkspace-MichaelEscamilla' into the OSDWorkspace Library-GitHub directory.
         #TODO Update URL to the OSDWorkspace Template GitHub Repository
 
     .LINK
-    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceGitHubRepo.md
+    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Add-OSDWorkspaceRemoteLibrary.md
 
     .NOTES
         David Segura
@@ -64,28 +61,43 @@ function Import-OSDWorkspaceGitHubRepo {
         return
     }
     #=================================================
+    # Create library-remote
+    $LibraryRemote = Get-OSDWSLibraryRemotePath
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Remote Library: $LibraryRemote"
+    if (-not (Test-Path $LibraryRemote -ErrorAction SilentlyContinue)) {
+        New-Item -Path $LibraryRemote -ItemType Directory -Force | Out-Null
+    }
+    #=================================================
     # Region Build the paths
     $Source = $Url
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Source: $Source"
-
-    # Destination Path
-    $RepositoryParent = Get-OSDWorkspaceGitHubPath
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Parent: $RepositoryParent"
     
     $RepositoryName = (Split-Path $Url -Leaf).Replace('.git', '')
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Name: $RepositoryName"
 
-    $Destination = Join-Path -Path $RepositoryParent -ChildPath $RepositoryName
+    $Destination = Join-Path -Path $LibraryRemote -ChildPath $RepositoryName
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Destination: $Destination"
 
     if (Test-Path -Path "$Destination\.git") {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination repository already exists"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceGitHubRepo cmdlet to update this repository"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceRemoteLibrary cmdlet to update this repository"
         return
     }
     #endregion
     #=================================================
+    # Region Git Submodule Add
+    # https://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+    Push-Location "$LibraryRemote"
+    
+    git submodule add $Source
+
+    Pop-Location
+
+    #endregion
+    #=================================================
     # Region Git Clone
+    <#
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git clone --verbose --progress --single-branch --depth 1 `"$Source`" `"$Destination`""
     git clone --verbose --progress --single-branch --depth 1 "$Source" "$Destination"
 
@@ -109,6 +121,7 @@ function Import-OSDWorkspaceGitHubRepo {
     else {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Failed to clone repository"
     }
+    #>
     #endregion
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

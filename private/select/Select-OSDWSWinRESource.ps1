@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceImportWinRE {
+function Select-OSDWSWinRESource {
     <#
     .SYNOPSIS
         Selects an OSDWorkspace BootImage.
 
     .DESCRIPTION
         This function displays available OSDWorkspace BootImages in an Out-GridView and return the selected BootImage object.
-        Utilizes the Get-OSDWorkspaceImportWinRE function to retrieve the BootImages.
+        Utilizes the Get-OSDWSWinRESource function to retrieve the BootImages.
 
     .PARAMETER Architecture
         Filter BootImages by architecture.
@@ -21,11 +21,11 @@ function Select-OSDWorkspaceImportWinRE {
         This function returns the selected BootImage object.
 
     .EXAMPLE
-        Select-OSDWorkspaceImportWinRE
+        Select-OSDWSWinRESource
         Will display all available BootImages and return the selected BootImage object.
 
     .EXAMPLE
-        Select-OSDWorkspaceImportWinRE -Architecture 'amd64'
+        Select-OSDWSWinRESource -Architecture 'amd64'
         Will display all available BootImages for the architecture 'amd64' and return the selected BootImage object.
 
     .NOTES
@@ -42,7 +42,7 @@ function Select-OSDWorkspaceImportWinRE {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
 
-    $results = Get-OSDWorkspaceImportWinRE
+    $results = Get-OSDWSWinRESource
 
     if ($Architecture) {
         $results = $results | Where-Object { $_.Architecture -eq $Architecture }
@@ -51,8 +51,9 @@ function Select-OSDWorkspaceImportWinRE {
     if ($results) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a Windows Recovery Image and press OK (Cancel to skip)"
         $results = $results | Out-GridView -Title 'Select a Windows Recovery Image and press OK (Cancel to skip)' -OutputMode Single
+
+        return $results
     }
-    $results
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

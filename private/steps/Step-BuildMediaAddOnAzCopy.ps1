@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnAzCopy {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSCachePath = $global:BuildMedia.WSCachePath
+        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath)
     )
     #=================================================
     $Error.Clear()
@@ -14,13 +14,13 @@ function Step-BuildMediaAddOnAzCopy {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
     #=================================================
     # Get started with AzCopy
     # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf
     $global:BuildMedia.AddOnAzCopy = $false
+    $CacheAzCopy = Join-Path $WSAddOnPackagesPath 'AzCopy'
 
-    $CacheAzCopy = Join-Path $WSCachePath "AddOn-AzCopy"
     if (-not (Test-Path -Path $CacheAzCopy)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] AzCopy: Adding cache content at $CacheAzCopy"
         New-Item -Path $CacheAzCopy -ItemType Directory -Force | Out-Null
@@ -33,7 +33,8 @@ function Step-BuildMediaAddOnAzCopy {
     # amd64
     if (-not (Test-Path "$CacheAzCopy\amd64")) {
         $Uri = $global:OSDWorkspace.azcopy.amd64
-        $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
+        #$DownloadUri = (Invoke-WebRequest -Uri $Uri -Method Head -ErrorAction SilentlyContinue).headers.location
+        $DownloadUri = (Invoke-WebRequest -Uri $Uri -Method Head -ErrorAction SilentlyContinue).BaseResponse.RequestMessage.RequestUri.AbsoluteUri
         if ($DownloadUri) {
             $FileName = Split-Path $DownloadUri -Leaf
             if (-not (Test-Path "$CacheAzCopy\$FileName")) {
@@ -47,7 +48,8 @@ function Step-BuildMediaAddOnAzCopy {
     # arm64
     if (-not (Test-Path "$CacheAzCopy\arm64")) {
         $Uri = $global:OSDWorkspace.azcopy.arm64
-        $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue).headers.location
+        # $DownloadUri = (Invoke-WebRequest -Uri $Uri -UseBasicParsing -Method Head -ErrorAction SilentlyContinue).headers.location
+        $DownloadUri = (Invoke-WebRequest -Uri $Uri -Method Head -ErrorAction SilentlyContinue).BaseResponse.RequestMessage.RequestUri.AbsoluteUri
         if ($DownloadUri) {
             $FileName = Split-Path $DownloadUri -Leaf
             if (-not (Test-Path "$CacheAzCopy\$FileName")) {

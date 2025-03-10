@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceImportWinOSPath {
-      <#
+function Get-OSDWSAddOnPackagesPath {
+    <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootImage Path.
+        Returns the OSDWorkspace Windows ADK Cache Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace BootImage Path. The default path is C:\OSDWorkspace\Media-Import\BootImage.
+        This function returns the OSDWorkspace Windows ADK Cache Path. The default path is C:\OSDWorkspace\cache\ADK.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceImportWinOSPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace BootImage.
+        This function returns the path to the OSDWorkspace Windows ADK Cache.
 
     .EXAMPLE
-        Get-OSDWorkspaceImportWinREPath
-        Returns the default OSDWorkspace BootImage Path.
+        Get-OSDWSAddOnPackagesPath
+        Returns the default OSDWorkspace Windows ADK Cache Path.
 
     .NOTES
         David Segura
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceImportWinOSPath {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'WinOS'
+    $ChildPath = 'addon-packages'
 
-    Join-Path -Path $(Get-OSDWorkspaceImportPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWSCachePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

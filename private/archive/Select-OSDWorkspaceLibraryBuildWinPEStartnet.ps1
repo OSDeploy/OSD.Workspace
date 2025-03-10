@@ -5,7 +5,7 @@ function Select-OSDWorkspaceLibraryWinPEStartnet {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
     #=================================================
-    $LibraryItems = Get-OSDWorkspaceLibraryWinPEStartnet
+    $LibraryItems = Get-OSDWSWinPEBuildStartnet
 
     if ($LibraryItems) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a Startnet.cmd to add to this BootImage (Cancel to skip)"

@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceWinOSPath {
-      <#
+function Get-OSDWSWinPEBuildProfilePath {
+    <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootImage Path.
+        Returns the OSDWorkspace Library Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace BootImage Path. The default path is C:\OSDWorkspace\Media-Import\BootImage.
+        This function returns the OSDWorkspace Library Path. Default is C:\OSDWorkspace\Library.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceWinOSPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace BootImage.
+        This function returns the OSDWorkspace Library Path as a string.
 
     .EXAMPLE
-        Get-OSDWorkspaceImportWinREPath
-        Returns the default OSDWorkspace BootImage Path.
+        Get-OSDWSLibraryPath
+        Returns the OSDWorkspace Library Path.
 
     .NOTES
         David Segura
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceWinOSPath {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'WinOS'
+    $ChildPath = 'winpe-buildprofile'
 
-    Join-Path -Path $(Get-OSDWorkspaceMediaPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWSCachePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

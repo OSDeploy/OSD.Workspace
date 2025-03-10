@@ -83,26 +83,20 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Details'
     Write-Host -ForegroundColor DarkGreen "Get-OSDWorkspacePath: $(Get-OSDWorkspacePath)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Newest Functions and Updates'
-    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceWinPEDriverCM'
-    Write-Host -ForegroundColor DarkGreen 'Import-OSDWorkspaceWinPEDriverMDT'
-    Write-Host
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCachePath: $(Get-OSDWorkspaceCachePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceCacheAdkPath: $(Get-OSDWorkspaceCacheAdkPath)"
-
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportPath: $(Get-OSDWorkspaceImportPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportWinREPath: $(Get-OSDWorkspaceImportWinREPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceImportWinOSPath: $(Get-OSDWorkspaceImportWinOSPath)"
-
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceLibraryPath: $(Get-OSDWorkspaceLibraryPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceGitHubPath: $(Get-OSDWorkspaceGitHubPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceMediaPath: $(Get-OSDWorkspaceMediaPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinPEPath: $(Get-OSDWorkspaceWinPEPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWorkspaceWinOSPath: $(Get-OSDWorkspaceWinOSPath)"
-
-    $null = Get-OSDWorkspaceImportWinRE
-    $null = Get-OSDWorkspaceImportWinOS
-    $null = Get-OSDWorkspaceMediaWinPE
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSAdkVersionsPath: $(Get-OSDWSAdkVersionsPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSBuildPath: $(Get-OSDWSBuildPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSCachePath: $(Get-OSDWSCachePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSDocsPath: $(Get-OSDWSDocsPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSLibraryPath: $(Get-OSDWSLibraryPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSLibraryRemotePath: $(Get-OSDWSLibraryRemotePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSSourcePath: $(Get-OSDWSSourcePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinOSSourcePath: $(Get-OSDWSWinOSSourcePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinPEBuildPath: $(Get-OSDWSWinPEBuildPath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinPEBuildProfilePath: $(Get-OSDWSWinPEBuildProfilePath)"
+    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinRESourcePath: $(Get-OSDWSWinRESourcePath)"
+    $null = Get-OSDWSWinRESource
+    $null = Get-OSDWSWinOSSource
+    $null = Get-OSDWSWinPEBuild
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

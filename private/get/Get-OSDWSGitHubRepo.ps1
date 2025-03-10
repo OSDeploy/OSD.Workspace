@@ -1,4 +1,4 @@
-function Get-OSDWorkspaceGitHubRepo {
+function Get-OSDWSGitHubRepo {
      <#
     .SYNOPSIS
         Returns the OSDWorkspace Library-GitHub Repositories.
@@ -17,7 +17,7 @@ function Get-OSDWorkspaceGitHubRepo {
         This function returns the repositories in the OSDWorkspace Library-GitHub.
 
     .EXAMPLE
-        Get-OSDWorkspaceGitHubRepo
+        Get-OSDWSGitHubRepo
         Returns the repositories in the OSDWorkspace Library-GitHub.
 
     .NOTES
@@ -30,7 +30,7 @@ function Get-OSDWorkspaceGitHubRepo {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $OSDWorkspacePath = Get-OSDWorkspaceGitHubPath
+    $OSDWorkspacePath = Get-OSDWSLibraryRemotePath
 
     $Results = foreach ($Path in $OSDWorkspacePath) {
         Get-ChildItem -Path $Path -Directory -Depth 0 -ErrorAction SilentlyContinue | Select-Object -Property * | Where-Object { Test-Path $(Join-Path $_.FullName '.git') }

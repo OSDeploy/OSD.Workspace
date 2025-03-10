@@ -7,7 +7,7 @@ $Enums = @( Get-ChildItem -Path $PSScriptRoot\Enums\*.ps1 -ErrorAction SilentlyC
 # Get all assemblies
 $AssemblyFolders = Get-ChildItem -Path $PSScriptRoot\Lib -Directory -ErrorAction SilentlyContinue
 
-# Lets find which libraries we need to load
+# Lets find which library we need to load
 $Default = $false
 $Core = $false
 $Standard = $false

@@ -92,7 +92,7 @@ function Import-OSDWorkspaceImageRE {
             # Set the Destination
             $DestinationName = "$BuildDateTime $Architecture"
             
-            $DestinationDirectory = Join-Path $(Get-OSDWorkspaceImportWinREPath) "$DestinationName"
+            $DestinationDirectory = Join-Path $(Get-OSDWSWinRESourcePath) "$DestinationName"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
 
             New-Item -Path "$DestinationDirectory\.core" -ItemType Directory -Force -ErrorAction Stop | Out-Null
@@ -207,7 +207,7 @@ function Import-OSDWorkspaceImageRE {
             }
 
             # Update the Index
-            Get-OSDWorkspaceImportWinRE
+            Get-OSDWSWinRESource
 
             # Get-Item -Path $DestinationDirectory
             #endregion

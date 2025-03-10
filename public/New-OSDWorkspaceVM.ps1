@@ -126,9 +126,11 @@ function New-OSDWorkspaceVM {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture = $Architecture"
     #=================================================
     # Do we have a Boot Media?
-    $SelectBootMedia = Select-OSDWorkspaceMediaWinPE -Architecture $Architecture
+    $SelectWinPEBuild = $null
+    $SelectWinPEBuild = Select-OSDWSWinPEBuild -Architecture $Architecture
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SelectWinPEBuild: $SelectWinPEBuild"
 
-    if ($null -eq $SelectBootMedia) {
+    if ($null -eq $SelectWinPEBuild) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No OSDWorkspace BootMedia was found or selected"
         return
     }
@@ -138,9 +140,9 @@ function New-OSDWorkspaceVM {
     $VMManagementServiceSettingData = Get-WmiObject -Namespace root\virtualization\v2 Msvm_VirtualSystemManagementServiceSettingData
     #=================================================
     # Set the Boot ISO
-    # $DvdDrivePath = Join-Path $($SelectBootMedia.Path) 'BootMedia_NoPrompt.iso'
+    # $DvdDrivePath = Join-Path $($SelectWinPEBuild.Path) 'BootMedia_NoPrompt.iso'
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia ISO to use with this Virtual Machine (Cancel to exit)"
-    $SelectDvdDrive = Get-ChildItem "$($SelectBootMedia.Path)\iso" *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a BootMedia ISO to use with this Virtual Machine' -OutputMode Single
+    $SelectDvdDrive = Get-ChildItem "$($SelectWinPEBuild.Path)\iso" *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a BootMedia ISO to use with this Virtual Machine' -OutputMode Single
     if ($null -eq $SelectDvdDrive) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No BootMedia ISO was found"
         return
@@ -162,8 +164,8 @@ function New-OSDWorkspaceVM {
     }
     #=================================================
     # Automatically Set VM Name
-    if ($SelectBootMedia.Name) {
-        $VmName = "$((Get-Date).ToString('yyMMdd-HHmm')) $NamePrefix $($SelectBootMedia.Name)"
+    if ($SelectWinPEBuild.Name) {
+        $VmName = "$((Get-Date).ToString('yyMMdd-HHmm')) $NamePrefix $($SelectWinPEBuild.Name)"
     }
     else {
         $VmName = "$((Get-Date).ToString('yyMMdd-HHmm')) $NamePrefix"
@@ -255,8 +257,8 @@ function New-OSDWorkspaceVM {
     }
     #=================================================
     # Export Final Configuration
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting current configuration to $($SelectBootMedia.Path)\vm.json"
-    $vm | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($SelectBootMedia.Path)\vm.json" -Force
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting current configuration to $($SelectWinPEBuild.Path)\vm.json"
+    $vm | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($SelectWinPEBuild.Path)\vm.json" -Force
     #=================================================
     # Start VM
     if ($StartVM -eq $true) {

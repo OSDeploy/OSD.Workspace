@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceLibraryBuildProfile {
+function Select-OSDWSWinPEBuildProfile {
         <#
     .SYNOPSIS
         Selects an OSDWorkspace Library BootMedia Profile.
 
     .DESCRIPTION
         This function displays available OSDWorkspace Library BootMedia Profiles in an Out-GridView and returns the selected BootMedia Profile object.
-        Utilizes the Get-OSDWorkspaceLibraryBuildProfile function to retrieve the BootMedia Profiles.
+        Utilizes the Get-OSDWSWinPEBuildProfile function to retrieve the BootMedia Profiles.
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Select-OSDWorkspaceLibraryBuildProfile {
         This function returns the selected BootMedia Profile object.
 
     .EXAMPLE
-        Select-OSDWorkspaceLibraryBuildProfile
+        Select-OSDWSWinPEBuildProfile
         Will display all available BootMedia Profiles and return the selected BootMedia Profile object.
 
     .NOTES
@@ -30,13 +30,13 @@ function Select-OSDWorkspaceLibraryBuildProfile {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $LibraryItems = Get-OSDWorkspaceLibraryBuildProfile
+    $results = Get-OSDWSWinPEBuildProfile
 
-    if ($LibraryItems) {
+    if ($results) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)"
-        $LibraryItems = $LibraryItems | Out-GridView -OutputMode Single -Title 'Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)'
+        $results = $results | Out-GridView -OutputMode Single -Title 'Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)'
     
-        $LibraryItems
+        return $results
     }
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

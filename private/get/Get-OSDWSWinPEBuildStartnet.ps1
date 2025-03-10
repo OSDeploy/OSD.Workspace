@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryWinPEStartnet {
+function Get-OSDWSWinPEBuildStartnet {
         <#
     .SYNOPSIS
         Returns available OSDWorkspace Library LibraryWinPEStartnet(s).
 
     .DESCRIPTION
         This function returns available OSDWorkspace Library and Library-GitHub LibraryWinPEStartnet(s).
-        Utilizes the Get-OSDWorkspaceLibraryPath and Get-OSDWorkspaceGitHubPath functions to retrieve the LibraryWinPEStartnet Path(s).
+        Utilizes the Get-OSDWSLibraryPath and Get-OSDWSLibraryRemotePath functions to retrieve the LibraryWinPEStartnet Path(s).
 
     .INPUTS
         None.
@@ -18,7 +18,7 @@ function Get-OSDWorkspaceLibraryWinPEStartnet {
         This function returns the available boot startnet scripts in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryWinPEStartnet
+        Get-OSDWSWinPEBuildStartnet
         Returns the boot startnet scripts in the OSDWorkspace Library.
 
     .NOTES
@@ -31,23 +31,29 @@ function Get-OSDWorkspaceLibraryWinPEStartnet {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $LibraryPaths = @()
-    $LibraryPaths += Get-OSDWorkspaceLibraryPath
 
-    $LibraryGitPaths = Get-OSDWorkspaceGitHubPath
-    foreach ($LibraryGitPath in $LibraryGitPaths) {
-        $LibraryPaths += Get-ChildItem -Path $LibraryGitPath -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+    # Get the OSDWorkspace Library Subfolders
+    $PrivateLibrary = Get-OSDWSLibraryPath
+    foreach ($Subfolder in $PrivateLibrary) {
+        $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+    }
+
+    # Get the OSDWorkspace Public Subfolders
+    $PublicLibrary = Get-OSDWSLibraryRemotePath
+    foreach ($Subfolder in $PublicLibrary) {
+        $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
         Get-ChildItem -Path @("$LibraryPath\WinPE-Startnet\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.cmd' } | `
-            Select-Object @{Name = 'Phase'; Expression = { 'WinPE-Startnet' } },
+            Select-Object @{Name = 'Type'; Expression = { 'WinPE-Startnet' } },
         Name, @{Name = 'Content'; Expression = { (Get-Content $_ -Raw) } },
         @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 
-    $LibraryItems = $LibraryItems | Sort-Object -Property Phase, Name, FullName
+    $LibraryItems = $LibraryItems | Sort-Object -Property Type, Name, FullName
 
     $LibraryItems
     #=================================================

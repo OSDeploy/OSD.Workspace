@@ -22,8 +22,8 @@ function Get-OSDWorkspacePath {
     [CmdletBinding()]
     param ()
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     #=================================================
     #region Update Windows Environment
@@ -45,6 +45,15 @@ function Get-OSDWorkspacePath {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Git for Windows is not installed.  Use WinGet to install Git for Windows:"
         Write-Host 'winget install -e --id Git.Git'
         Break
+    }
+    #endregion
+    #=================================================
+    #region Require Git for Windows
+    if (-not (Get-Module platyPS -ListAvailable -ErrorAction SilentlyContinue)) {
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell Module platyPS is not installed.  Use the following PowerShell command to resolve this issue:"
+        Write-Host 'Install-Module -Name platyPS -Scope CurrentUser'
+        Write-Host 'Import-Module platyPS'
+        Start-Sleep -Seconds 10
     }
     #endregion
     #=================================================
@@ -254,11 +263,10 @@ SYSTEM
     }
     #endregion
     #=================================================
+    # Create OSDWorkspace if it does not exist
     if (-not (Test-Path -Path $OSDWorkspacePath)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace will be created at $OSDWorkspacePath"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] If this is your first time using OSDWorkspace, it is recommended that you review the documentation"
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] https://github.com/OSDeploy/OSDWorkspace-Template"
-        
+
         if (-not $IsAdmin ) {
             Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace first run must be run with Administrator privileges"
             Break
@@ -274,43 +282,44 @@ SYSTEM
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] GitAtributes is being added at $OSDWorkspacePath\.gitignore"
         $gitattributes | Set-Content -Path (Join-Path -Path $OSDWorkspacePath -ChildPath '.gitattributes') -Encoding utf8
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.cache"
-        New-Item -Path "$OSDWorkspacePath" -Name '.cache' -ItemType Directory -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\WinOS"
-        New-Item -Path "$OSDWorkspacePath\.import" -Name 'WinOS' -ItemType Directory -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.import\WinRE"
-        New-Item -Path "$OSDWorkspacePath\.import" -Name 'WinRE' -ItemType Directory -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\build"
-        New-Item -Path "$OSDWorkspacePath\build" -ItemType Directory -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\docs\psmodules"
-        New-Item -Path "$OSDWorkspacePath\docs\psmodules" -ItemType Directory -Force | Out-Null
-
-        if (Get-Command -Name 'New-MarkdownHelp') {
-            Update-Help -Module Dism -Force | Out-Null
-            $MarkdownHelpPath = "$OSDWorkspacePath\docs\psmodules"
-            New-MarkdownHelp -Module Dism -OutputFolder $MarkdownHelpPath -Force | Out-Null
-            New-MarkdownHelp -Module OSD.Workspace -OutputFolder $MarkdownHelpPath -Force | Out-Null
+    }
+    #=================================================
+    # Update PowerShell-Help
+    $MarkdownHelpPath = "$OSDWorkspacePath\docs\powershell-help"
+    if (Get-Module platyPS -ListAvailable -ErrorAction SilentlyContinue) {
+        if (-not (Test-Path $MarkdownHelpPath)) {
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $MarkdownHelpPath"
+            New-Item -Path $MarkdownHelpPath -ItemType Directory -Force | Out-Null
         }
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library"
-        New-Item -Path "$OSDWorkspacePath\library" -ItemType Directory -Force | Out-Null
-        Push-Location "$OSDWorkspacePath\library"
-        git submodule init "$OSDWorkspacePath\library"
-        Pop-Location
-        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\WinPE-Script" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\Build-WinPEProfile" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$OSDWorkspacePath\library\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
-
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library-github"
-        New-Item -Path "$OSDWorkspacePath\library-github" -ItemType Directory -Force | Out-Null
+        if (-not (Test-Path "$MarkdownHelpPath\Dism")) {
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update-Help Dism"
+            Update-Help -Module Dism -Force | Out-Null
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $MarkdownHelpPath\Dism"
+            New-MarkdownHelp -Module 'Dism' -OutputFolder "$MarkdownHelpPath\Dism" -Force | Out-Null
+        }
+        if (-not (Test-Path "$MarkdownHelpPath\OSD.Workspace")) {
+            if (-not (Test-Path "$MarkdownHelpPath\OSD.Workspace")) {
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $MarkdownHelpPath\OSD.Workspace"
+                New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder "$MarkdownHelpPath\OSD.Workspace" -Force | Out-Null
+            }
+        }
+    }
+    #=================================================
+    # Update Default Library
+    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Driver\amd64")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-Driver"
+        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
+    }
+    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Driver\arm64")) {
+        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
+    }
+    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Script")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-Script"
+        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Script" -ItemType Directory -Force | Out-Null
+    }
+    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-MediaScript")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-MediaScript"
+        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
     }
 
     return $OSDWorkspacePath

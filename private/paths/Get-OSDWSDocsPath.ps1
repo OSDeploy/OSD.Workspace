@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceCachePath {
+function Get-OSDWSDocsPath {
     <#
     .SYNOPSIS
-        Returns the OSDWorkspace Cache Path.
+        Returns the OSDWorkspace Library Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace Cache Path. The default path is C:\OSDWorkspace\.cache.
+        This function returns the OSDWorkspace Library Path. Default is C:\OSDWorkspace\Library.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceCachePath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace Cache.
+        This function returns the OSDWorkspace Library Path as a string.
 
     .EXAMPLE
-        Get-OSDWorkspaceCachePath
-        Returns the default OSDWorkspace Cache Path.
+        Get-OSDWSDocsPath
+        Returns the OSDWorkspace Library Path.
 
     .NOTES
         David Segura
@@ -29,7 +29,7 @@ function Get-OSDWorkspaceCachePath {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = '.cache'
+    $ChildPath = 'docs'
 
     Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================

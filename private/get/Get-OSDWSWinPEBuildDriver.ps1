@@ -1,11 +1,11 @@
-function Get-OSDWorkspaceLibraryWinPEDriver {
+function Get-OSDWSWinPEBuildDriver {
     <#
     .SYNOPSIS
         Returns available OSDWorkspace Library WinPEDriver(s).
 
     .DESCRIPTION
         This function returns available OSDWorkspace Library and Library-GitHub WinPEDriver(s).
-        Utilizes the Get-OSDWorkspaceImportWinRE and Get-OSDWorkspaceGitHubPath functions to retrieve the WinPEDriver Path(s)
+        Utilizes the Get-OSDWSWinRESource and Get-OSDWSLibraryRemotePath functions to retrieve the WinPEDriver Path(s)
 
     .INPUTS
         None.
@@ -18,15 +18,15 @@ function Get-OSDWorkspaceLibraryWinPEDriver {
         This function returns the available boot drivers in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryWinPEDriver
+        Get-OSDWSWinPEBuildDriver
         Returns the boot drivers in the OSDWorkspace Library.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryWinPEDriver -Architecture amd64
+        Get-OSDWSWinPEBuildDriver -Architecture amd64
         Returns the boot drivers in the OSDWorkspace Library filtered by architecture.
 
     .EXAMPLE
-        Get-OSDWorkspaceLibraryWinPEDriver -BootImage ADK
+        Get-OSDWSWinPEBuildDriver -BootImage ADK
         Returns the boot drivers in the OSDWorkspace Library filtered by boot image.
 
     .NOTES
@@ -51,11 +51,17 @@ function Get-OSDWorkspaceLibraryWinPEDriver {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     $LibraryPaths = @()
-    $LibraryPaths += Get-OSDWorkspaceLibraryPath
 
-    $LibraryGitPaths = Get-OSDWorkspaceGitHubPath
-    foreach ($LibraryGitPath in $LibraryGitPaths) {
-        $LibraryPaths += Get-ChildItem -Path $LibraryGitPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+    # Get the OSDWorkspace Library Subfolders
+    $PrivateLibrary = Get-OSDWSLibraryPath
+    foreach ($Subfolder in $PrivateLibrary) {
+        $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+    }
+
+    # Get the OSDWorkspace Public Subfolders
+    $PublicLibrary = Get-OSDWSLibraryRemotePath
+    foreach ($Subfolder in $PublicLibrary) {
+        $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
     
     $LibraryItems = @()
@@ -75,6 +81,7 @@ function Get-OSDWorkspaceLibraryWinPEDriver {
     if (($BootImage -eq 'ADK') -or ($BootImage -eq 'WinPE')) {
         $LibraryItems = $LibraryItems | Where-Object { $_.Name -notmatch 'Wireless' }
     }
+    
     $LibraryItems
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

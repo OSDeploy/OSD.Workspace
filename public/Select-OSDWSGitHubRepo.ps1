@@ -1,11 +1,11 @@
-function Select-OSDWorkspaceGitHubRepo {
+function Select-OSDWSGitHubRepo {
        <#
     .SYNOPSIS
         Selects an OSDWorkspace Library GitHub Reposiotry.
 
     .DESCRIPTION
         This function displays available OSDWorkspace Library GitHub Repositories in an Out-GridView and returns the selected BootMedia object.
-        Utilizes the Get-OSDWorkspaceGitHubRepo function to retrieve the available HitHub Repositories.
+        Utilizes the Get-OSDWSGitHubRepo function to retrieve the available HitHub Repositories.
 
     .INPUTS
         None.
@@ -18,11 +18,11 @@ function Select-OSDWorkspaceGitHubRepo {
         This function returns the selected GitHub Repository in a PSobject.
 
     .EXAMPLE
-        Select-OSDWorkspaceMediaWinPE
+        Select-OSDWSWinPEBuild
         Will display all available BootMedia and return the selected BootMedia in a PSObject.
 
     .EXAMPLE
-        Select-OSDWorkspaceMediaWinPE -Architecture 'amd64'
+        Select-OSDWSWinPEBuild -Architecture 'amd64'
         Will display all available BootMedia for the architecture 'amd64' and return the selected BootMedia object.
 
     .NOTES
@@ -35,13 +35,13 @@ function Select-OSDWorkspaceGitHubRepo {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $OSDWorkspaceGitRepository = Get-OSDWorkspaceGitHubRepo | Select-Object -Property Name, FullName | Sort-Object -Property Name, FullName
+    $results = Get-OSDWSGitHubRepo | Select-Object -Property Name, FullName | Sort-Object -Property Name, FullName
 
-    if ($OSDWorkspaceGitRepository) {
+    if ($results) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select an OSDWorkspace Repository (Cancel to skip)"
-        $OSDWorkspaceGitRepository = $OSDWorkspaceGitRepository | Out-GridView -PassThru -Title 'Select an OSDWorkspace Repository (Cancel to skip)'
+        $results = $results | Out-GridView -PassThru -Title 'Select an OSDWorkspace Repository (Cancel to skip)'
     
-        $OSDWorkspaceGitRepository
+        return $results
     }
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

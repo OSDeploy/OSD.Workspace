@@ -1,10 +1,10 @@
-function Get-OSDWorkspaceImportWinREPath {
-      <#
+function Get-OSDWSCachePath {
+    <#
     .SYNOPSIS
-        Returns the OSDWorkspace BootImage Path.
+        Returns the OSDWorkspace Cache Path.
 
     .DESCRIPTION
-        This function returns the OSDWorkspace BootImage Path. The default path is C:\OSDWorkspace\Media-Import\BootImage.
+        This function returns the OSDWorkspace Cache Path. The default path is C:\OSDWorkspace\cache.
 
     .INPUTS
         None.
@@ -14,11 +14,11 @@ function Get-OSDWorkspaceImportWinREPath {
     .OUTPUTS
         System.String
 
-        This function returns the path to the OSDWorkspace BootImage.
+        This function returns the path to the OSDWorkspace Cache.
 
     .EXAMPLE
-        Get-OSDWorkspaceImportWinREPath
-        Returns the default OSDWorkspace BootImage Path.
+        Get-OSDWSCachePath
+        Returns the default OSDWorkspace Cache Path.
 
     .NOTES
         David Segura
@@ -29,9 +29,9 @@ function Get-OSDWorkspaceImportWinREPath {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $ChildPath = 'WinRE'
+    $ChildPath = 'cache'
 
-    Join-Path -Path $(Get-OSDWorkspaceImportPath) -ChildPath $ChildPath
+    Join-Path -Path $(Get-OSDWorkspacePath) -ChildPath $ChildPath
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

@@ -1,4 +1,17 @@
 {
+    "paths": {
+        "osdworkspace": "C:/OSDWorkspace",
+        "cache": "C:/OSDWorkspace/cache",
+        "addon-packages": "C:/OSDWorkspace/cache/addon-packages",
+        "adk-versions": "C:/OSDWorkspace/cache/adk-versions",
+        "build-profiles-windows-os": "C:/OSDWorkspace/cache/build-profiles-windows-os",
+        "build-profiles-windows-pe": "C:/OSDWorkspace/cache/build-profiles-windows-pe",
+        "powershell-modules": "C:/OSDWorkspace/cache/powershell-modules",
+        "source": "C:/OSDWorkspace/src",
+        "library": "C:/OSDWorkspace/src/library",
+        "windows-os": "C:/OSDWorkspace/src/windows-os",
+        "windows-re": "C:/OSDWorkspace/src/windows-re"
+    },
     // Defines the ADK OC Packages that are added by Build-OSDWorkspaceWinPE
     "adkwinpepackages": [
         "WMI",
