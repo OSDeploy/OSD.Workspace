@@ -1,25 +1,7 @@
 function Get-OSDWSWinPEBuildScript {
-        <#
+    <#
     .SYNOPSIS
         Returns available OSDWorkspace Library BootScript(s).
-
-    .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BootScript(s).
-        Utilizes the Get-OSDWSLibraryPath and Get-OSDWSLibraryRemotePath functions to retrieve the BootScript Path(s).
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        System.Array
-
-        This function returns the available boot scripts in the OSDWorkspace Library.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildScript
-        Returns the boot scripts in the OSDWorkspace Library.
 
     .NOTES
         David Segura
@@ -33,13 +15,13 @@ function Get-OSDWSWinPEBuildScript {
     $LibraryPaths = @()
 
     # Get the OSDWorkspace Library Subfolders
-    $PrivateLibrary = Get-OSDWSLibraryPath
+    $PrivateLibrary = $OSDWorkspace.paths.library
     foreach ($Subfolder in $PrivateLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = Get-OSDWSLibraryRemotePath
+    $PublicLibrary = $OSDWorkspace.paths.library_submodule
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }

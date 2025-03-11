@@ -11,7 +11,8 @@ function Get-OSDWSWinPEBuild {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $BuildPath = Get-OSDWSWinPEBuildPath
+        $BuildPath = $OSDWorkspace.paths.build_windows_pe
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildPath: $BuildPath"
 
         $BuildItems = @()
         $BuildItems = Get-ChildItem -Path $BuildPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `

@@ -1,4 +1,4 @@
-function Update-OSDWorkspaceRemoteLibrary {
+function Update-OSDWorkspaceLibrarySubmodule {
     <#
     .SYNOPSIS
         Updates a GitHub Repository in C:\OSDWorkspace\Library-GitHub from the GitHub Origin
@@ -7,7 +7,7 @@ function Update-OSDWorkspaceRemoteLibrary {
         This function updates ALL GitHub repositories in the OSDWorkspace Library-GitHub directory.
         The function will update this Git repository to the latest GitHub commit in the main branch.
         It performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have not cloned the repository, use Add-OSDWorkspaceRemoteLibrary to clone it.
+        If you have not cloned the repository, use Add-OSDWorkspaceLibrarySubmodule to clone it.
 
     .PARAMETER Force
         The -Force switch is Required to update the GitHub repository.
@@ -24,11 +24,11 @@ function Update-OSDWorkspaceRemoteLibrary {
         This function does not return any output.
 
     .EXAMPLE
-        Update-OSDWorkspaceRemoteLibrary -Force
+        Update-OSDWorkspaceLibrarySubmodule -Force
         Updates all GitHub repositories in the OSDWorkspace Library-GitHub directory to the latest GitHub commit in the main branch.
 
     .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceRemoteLibrary.md
+        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceLibrarySubmodule.md
 
     .NOTES
         David Segura

@@ -24,8 +24,8 @@
             "path": "./library"
         },
         {
-            "name": "Library (Remote)",
-            "path": "./library-remote"
+            "name": "Library (submodules)",
+            "path": "./library-submodule"
         },
         {
             "name": "Import WindowsOS",

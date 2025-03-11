@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnWirelessConnect {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath),
+        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages),
         [System.String]
         $WimSourceType = $global:BuildMedia.WimSourceType
     )
