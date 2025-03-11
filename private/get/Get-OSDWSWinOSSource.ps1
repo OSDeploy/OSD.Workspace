@@ -11,7 +11,7 @@ function Get-OSDWSWinOSSource {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $SourcePath = Get-OSDWSWinOSSourcePath
+        $SourcePath = $OSDWorkspace.paths.import_windows_os
 
         $SourceItems = @()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"

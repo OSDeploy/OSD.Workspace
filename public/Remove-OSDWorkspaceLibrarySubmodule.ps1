@@ -1,4 +1,4 @@
-function Remove-OSDWorkspaceRemoteLibrary {
+function Remove-OSDWorkspaceLibrarySubmodule {
     [CmdletBinding()]
     param (
         # Force the delete of the OSDWorkspace Remote Library
@@ -41,18 +41,18 @@ function Remove-OSDWorkspaceRemoteLibrary {
                 $RepositoryName = $Item.Name
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryName: $RepositoryName"
 
-                $RepositoryPathToDelete = "library-remote/$RepositoryName"
+                $RepositoryPathToDelete = "library-submodule/$RepositoryName"
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryPathToDelete: $RepositoryPathToDelete"
 
                 Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule entry from OSDWorkspace .git/config"
                 Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule deinit --force $RepositoryPathToDelete"
                 git submodule deinit --force "$RepositoryPathToDelete"
 
-                $DeletePath = ".git\modules\library-remote\$RepositoryName"
+                $DeletePath = ".git\modules\library-submodule\$RepositoryName"
                 if (Test-Path $DeletePath) {
                     Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule from OSDWorkspace .git/modules"
-                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Remove-Item .git\modules\library-remote\$RepositoryName -Recurse -Force"
-                    Remove-Item ".git\modules\library-remote\$RepositoryName" -Recurse -Force -ErrorAction SilentlyContinue
+                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Remove-Item .git\modules\library-submodule\$RepositoryName -Recurse -Force"
+                    Remove-Item ".git\modules\library-submodule\$RepositoryName" -Recurse -Force -ErrorAction SilentlyContinue
                 }
 
                 Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule from .gitmodules"

@@ -1,0 +1,32 @@
+# Updated 2025.03.10 Segura
+
+# VSCodeIgnore/*
+.vs/*
+.vscode/*
+
+# OSDWorkspace Defaults
+# This level is just enough to capture the index files
+build/*/*/
+cache/*/*/
+src/*/*/
+
+# OSDWorkspace Files
+# These should be excludes as they can be too large
+# but adjust accordingly
+*.cab
+*.esd
+*.iso
+*.swm
+*.wim
+*.zip
+
+# WindowsUpdate
+*kb*.cab
+*.msu
+
+# WinPE Registry Hives
+SOFTWARE
+SYSTEM
+
+# Software
+**/PortableGit*/*

@@ -3,32 +3,6 @@ function Get-OSDWSWinPEBuildDriver {
     .SYNOPSIS
         Returns available OSDWorkspace Library WinPEDriver(s).
 
-    .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub WinPEDriver(s).
-        Utilizes the Get-OSDWSWinRESource and Get-OSDWSLibraryRemotePath functions to retrieve the WinPEDriver Path(s)
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        System.Array
-
-        This function returns the available boot drivers in the OSDWorkspace Library.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildDriver
-        Returns the boot drivers in the OSDWorkspace Library.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildDriver -Architecture amd64
-        Returns the boot drivers in the OSDWorkspace Library filtered by architecture.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildDriver -BootImage ADK
-        Returns the boot drivers in the OSDWorkspace Library filtered by boot image.
-
     .NOTES
         David Segura
     #>
@@ -53,13 +27,13 @@ function Get-OSDWSWinPEBuildDriver {
     $LibraryPaths = @()
 
     # Get the OSDWorkspace Library Subfolders
-    $PrivateLibrary = Get-OSDWSLibraryPath
+    $PrivateLibrary = $OSDWorkspace.paths.library
     foreach ($Subfolder in $PrivateLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = Get-OSDWSLibraryRemotePath
+    $PublicLibrary = $OSDWorkspace.paths.library_submodule
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }

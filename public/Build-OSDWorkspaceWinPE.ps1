@@ -219,20 +219,20 @@ function Build-OSDWorkspaceWinPE {
     #endregion
     #=================================================
     #region Get and Update the ADK Cache
-    $WSCachePath = Get-OSDWSCachePath -WarningAction SilentlyContinue
-    $WSCachePathAdk = Get-OSDWSAdkVersionsPath -WarningAction SilentlyContinue
+    $WSCachePath = $OSDWorkspace.paths.cache
+    $WSAdkVersionsPath = $OSDWorkspace.paths.adk_versions
     #endregion
     #=================================================
     #region Get the WindowsAdkCacheOptions
     $WindowsAdkCacheOptions = $null
-    if (Test-Path $WSCachePathAdk) {
-        $WindowsAdkCacheOptions = Get-ChildItem -Path "$WSCachePathAdk\*" -Directory -ErrorAction SilentlyContinue | Sort-Object -Property Name
+    if (Test-Path $WSAdkVersionsPath) {
+        $WindowsAdkCacheOptions = Get-ChildItem -Path "$WSAdkVersionsPath\*" -Directory -ErrorAction SilentlyContinue | Sort-Object -Property Name
     }
     #endregion
     #=================================================
     #region If ADK is installed then we need to update the cache
     if ($IsWindowsAdkInstalled) {
-        $WindowsAdkRootPath = Join-Path $WSCachePathAdk $WindowsAdkInstallVersion
+        $WindowsAdkRootPath = Join-Path $WSAdkVersionsPath $WindowsAdkInstallVersion
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Windows ADK cache content is $WindowsAdkRootPath"
         $null = robocopy.exe "$WindowsAdkInstallPath" "$WindowsAdkRootPath" *.* /e /z /ndl /nfl /np /r:0 /w:0 /xj /mt:128
     }
@@ -276,7 +276,7 @@ function Build-OSDWorkspaceWinPE {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] $($WindowsAdkCacheOptions.Count) Windows ADK options are available to select from the ADK cache"
         if ($SelectAdkCacheVersion) {
             Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a Windows ADK option and press OK (Cancel to Exit)"
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To remove a Windows ADK option, delete one of the ADK cache directories in $WSCachePathAdk"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To remove a Windows ADK option, delete one of the ADK cache directories in $WSAdkVersionsPath"
             $WindowsAdkCacheSelected = $WindowsAdkCacheOptions | Select-Object FullName | Sort-Object FullName -Descending | Out-GridView -Title 'Select a Windows ADK to use and press OK (Cancel to Exit)' -OutputMode Single
             if ($WindowsAdkCacheSelected) {
                 $WindowsAdkRootPath = $WindowsAdkCacheSelected.FullName
@@ -366,7 +366,7 @@ function Build-OSDWorkspaceWinPE {
     
     $MediaIsoName = 'BootMedia.iso'
     $MediaIsoNameEX = 'BootMediaEX.iso'
-    $MediaRootPath = Join-Path $(Get-OSDWSWinPEBuildPath) $MediaName
+    $MediaRootPath = Join-Path $($OSDWorkspace.paths.build) $MediaName
     $global:BuildMediaCorePath = "$MediaRootPath\.core"
     $BuildMediaTempPath = "$MediaRootPath\.temp"
     $global:BuildMediaLogsPath = "$BuildMediaTempPath\logs"
@@ -388,23 +388,6 @@ function Build-OSDWorkspaceWinPE {
     }
     #endregion
     #=================================================
-    #region Select-OSDWorkspaceLibraryBootFile
-    $LibraryWinPEFile = $null
-    $LibraryMediaFile = $null
-    <#
-    if (-not $MyBuildProfile) {
-        $OSDWorkspaceLibraryWinPEFile = Select-OSDWorkspaceLibraryBootFile
-
-        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-File' }) {
-            $LibraryWinPEFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-File' } | Select-Object -ExpandProperty FullName)
-        }
-        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-MediaFile' }) {
-            $LibraryMediaFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-MediaFile' } | Select-Object -ExpandProperty FullName)
-        }
-    }
-    #>
-    #endregion
-    #=================================================
     #region Select-OSDWSWinPEBuildScript
     $LibraryWinPEScript = $null
     $LibraryMediaScript = $null
@@ -421,27 +404,12 @@ function Build-OSDWorkspaceWinPE {
     }
     #endregion
     #=================================================
-    #region Select-OSDWorkspaceLibraryWinPEStartnet
-    <#
-    if (-not $MyBuildProfile) {
-        $OSDWorkspaceLibraryWinPEStartnet = Select-OSDWorkspaceLibraryWinPEStartnet
-
-        if ($OSDWorkspaceLibraryWinPEStartnet) {
-            $LibraryWinPEStartnet = ($OSDWorkspaceLibraryWinPEStartnet | Select-Object -ExpandProperty FullName)
-        }
-    }
-    #>
-    #endregion
-    #=================================================
     #region MyBuildProfile
     if ($MyBuildProfile) {
         $global:BuildProfile = $null
         $global:BuildProfile = Get-Content $MyBuildProfile.FullName -Raw | ConvertFrom-Json
         $LibraryWinPEDriver = $global:BuildProfile.LibraryWinPEDriver
-        # $LibraryWinPEFile = $global:BuildProfile.LibraryWinPEFile
         $LibraryWinPEScript = $global:BuildProfile.LibraryWinPEScript
-        # $LibraryWinPEStartnet = $global:BuildProfile.LibraryWinPEStartnet
-        # $LibraryMediaFile = $global:BuildProfile.LibraryMediaFile
         $LibraryMediaScript = $global:BuildProfile.LibraryMediaScript
         [System.String[]]$Languages = $global:BuildProfile.Languages
         $SetAllIntl = $global:BuildProfile.SetAllIntl
@@ -453,10 +421,7 @@ function Build-OSDWorkspaceWinPE {
         $global:BuildProfile = $null
         $global:BuildProfile = [ordered]@{
             LibraryWinPEDriver = $LibraryWinPEDriver
-            # LibraryWinPEFile   = $LibraryWinPEFile
             LibraryWinPEScript = $LibraryWinPEScript
-            # LibraryWinPEStartnet    = $LibraryWinPEStartnet
-            # LibraryMediaFile   = $LibraryMediaFile
             LibraryMediaScript = $LibraryMediaScript
             Languages          = [System.String[]]$Languages
             SetAllIntl         = [System.String]$SetAllIntl
@@ -464,7 +429,7 @@ function Build-OSDWorkspaceWinPE {
             SetTimeZone        = [System.String]$SetTimeZone
         }
 
-        $BuildProfilePath = Get-OSDWSWinPEBuildProfilePath
+        $BuildProfilePath = $OSDWorkspace.paths.winpe_buildprofile
 
         if (-not (Test-Path $BuildProfilePath)) {
             $null = New-Item -Path $BuildProfilePath -ItemType Directory -Force
@@ -495,12 +460,9 @@ function Build-OSDWorkspaceWinPE {
         ImportImageRootPath     = $ImportImageRootPath
         ImportImageWimPath      = $ImportImageWimPath
         Languages               = [System.String[]]$Languages
-        # LibraryMediaFile      = $LibraryMediaFile
         LibraryMediaScript      = $LibraryMediaScript
         LibraryWinPEDriver      = $LibraryWinPEDriver
-        # LibraryWinPEFile      = $LibraryWinPEFile
         LibraryWinPEScript      = $LibraryWinPEScript
-        # LibraryWinPEStartnet  = $LibraryWinPEStartnet
         MediaIsoLabel           = $MediaIsoLabel
         MediaIsoName            = $MediaIsoName
         MediaIsoNameEX          = $MediaIsoNameEX
@@ -520,7 +482,7 @@ function Build-OSDWorkspaceWinPE {
         UseAdkWinPE             = $UseAdkWinPE
         WimSourceType           = $WimSourceType
         WSCachePath             = $WSCachePath
-        WSCachePathAdk          = $WSCachePathAdk
+        WSCachePathAdk          = $WSAdkVersionsPath
     }
     #endregion
     #=================================================
@@ -844,9 +806,7 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaRemoveWinpeshl
     Step-BuildMediaConsoleSettings
     Step-BuildMediaLibraryWinPEDriver
-    # Step-BuildMediaLibraryWinPEFile
     Step-BuildMediaLibraryWinPEScript
-    # Step-BuildMediaLibraryWinPEStartnet
     Step-BuildMediaExportWindowsDriverPE
     Step-BuildMediaExportWindowsPackagePE
     Step-BuildMediaRegCurrentVersionExport
@@ -855,7 +815,6 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaGetContentWinpeshl
     Step-BuildMediaWindowsImageDismount
     Step-BuildMediaWindowsImageExport
-    # Step-BuildMediaLibraryMediaFile
     Step-BuildMediaLibraryMediaScript
     Step-BuildMediaIso
     Step-BuildMediaUpdateUSB

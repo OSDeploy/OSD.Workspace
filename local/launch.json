@@ -40,21 +40,21 @@
             "name": "Remote Library: Add the OSDCloud Archive",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Add-OSDWorkspaceRemoteLibrary -Url https://github.com/OSDeploy/OSDWSLibrary-OSDCloud-Archive.git'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Add-OSDWorkspaceLibrarySubmodule -Url https://github.com/OSDeploy/OSDWSLibrary-OSDCloud-Archive.git'",
             "cwd": "${cwd}"
         },
         {
             "name": "Remote Library: Remove a Remote Library",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Remove-OSDWorkspaceRemoteLibrary'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Remove-OSDWorkspaceLibrarySubmodule'",
             "cwd": "${cwd}"
         },
         {
             "name": "Remote Library: Update a Remote Library",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Update-OSDWorkspaceRemoteLibrary'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Update-OSDWorkspaceLibrarySubmodule'",
             "cwd": "${cwd}"
         },
         {

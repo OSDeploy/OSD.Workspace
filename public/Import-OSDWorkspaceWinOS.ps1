@@ -77,11 +77,11 @@ function Import-OSDWorkspaceWinOS {
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationName: $DestinationName"
             
             # Set the Destination Path
-            $DestinationDirectory = Join-Path $(Get-OSDWSWinOSSourcePath) "$DestinationName"
+            $DestinationDirectory = Join-Path $($OSDWorkspace.paths.import_windows_os) "$DestinationName"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
             
             # Set the Recovery Image Path
-            $ImportWinREDirectory = Join-Path $(Get-OSDWSWinRESourcePath) "$DestinationName"
+            $ImportWinREDirectory = Join-Path $($OSDWorkspace.paths.import_windows_re) "$DestinationName"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageREDirectory: $ImportWinREDirectory"
 
             $DestinationCore = "$DestinationDirectory\.core"

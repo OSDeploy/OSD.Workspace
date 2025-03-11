@@ -5,18 +5,19 @@
     Copyright            = '(c) 2025 David Segura @ osdeploy.com. All rights reserved.'
     Description          = 'OSD.Workspace PowerShell Module for OSDWorkspace'
     GUID                 = '083be276-ac05-4da6-b72b-15a53e68c0c4'
-    ModuleVersion        = '25.3.7.1'
+    ModuleVersion        = '25.3.11.1'
     PowerShellVersion    = '5.1'
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
-        'Add-OSDWorkspaceRemoteLibrary'
+        'Add-OSDWorkspaceLibrarySubmodule'
         'Build-OSDWorkspaceWinPE'
         'Get-OSDWorkspace'
         'Import-OSDWorkspaceWinOS'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
-        'Remove-OSDWorkspaceRemoteLibrary'
-        'Update-OSDWorkspaceRemoteLibrary'
+        'Remove-OSDWorkspaceLibrarySubmodule'
+        'Test-OSDWorkspace'
+        'Update-OSDWorkspaceLibrarySubmodule'
         'Update-OSDWorkspaceUSB'
     )
     PrivateData          = @{

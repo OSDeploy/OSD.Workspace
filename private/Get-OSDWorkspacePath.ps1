@@ -42,180 +42,31 @@ function Get-OSDWorkspacePath {
     #=================================================
     #region Require Git for Windows
     if (-NOT (Get-Command 'git' -ErrorAction SilentlyContinue)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Git for Windows is not installed.  Use WinGet to install Git for Windows:"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Git for Windows is not installed"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use WinGet to install Git for Windows:"
         Write-Host 'winget install -e --id Git.Git'
         Break
     }
     #endregion
     #=================================================
-    #region Require Git for Windows
+    #region Require platyPS
     if (-not (Get-Module platyPS -ListAvailable -ErrorAction SilentlyContinue)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell Module platyPS is not installed.  Use the following PowerShell command to resolve this issue:"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell Module platyPS is not installed"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use PowerShell to resolve this issue:"
         Write-Host 'Install-Module -Name platyPS -Scope CurrentUser'
         Write-Host 'Import-Module platyPS'
-        Start-Sleep -Seconds 10
+        Break
     }
     #endregion
     #=================================================
-    #TODO Update the GitIgnore
-    #region GitIgnore
-    $gitignore = @'
-# Updated 2025.03.10 Segura
-
-# VSCodeIgnore/*
-.vs/*
-.vscode/*
-
-# OSDWorkspace Defaults
-# This level is just enough to capture the index files
-build/*/*
-cache/*/*
-src/*/*
-
-# OSDWorkspace Files
-# These should be excludes as they can be too large
-# but adjust accordingly
-*.cab
-*.esd
-*.iso
-*.swm
-*.wim
-*.zip
-
-# WindowsUpdate
-*kb*.cab
-*.msu
-
-# WinPE Registry Hives
-SOFTWARE
-SYSTEM
-
-# Software
-**/PortableGit*/*
-'@
-    #endregion
-    #=================================================
-    #region GitAttributes
-    $gitattributes = @'
-# Common settings that generally should always be used with your language specific settings
-
-# Auto detect text files and perform LF normalization
-*          text=auto
-
-#
-# The above will handle all files NOT found below
-#
-
-# Documents
-*.bibtex   text diff=bibtex
-*.doc      diff=astextplain
-*.DOC      diff=astextplain
-*.docx     diff=astextplain
-*.DOCX     diff=astextplain
-*.dot      diff=astextplain
-*.DOT      diff=astextplain
-*.pdf      diff=astextplain
-*.PDF      diff=astextplain
-*.rtf      diff=astextplain
-*.RTF      diff=astextplain
-*.md       text diff=markdown
-*.mdx      text diff=markdown
-*.tex      text diff=tex
-*.adoc     text
-*.textile  text
-*.mustache text
-*.csv      text eol=crlf
-*.tab      text
-*.tsv      text
-*.txt      text
-*.sql      text
-*.epub     diff=astextplain
-
-# Graphics
-*.png      binary
-*.jpg      binary
-*.jpeg     binary
-*.gif      binary
-*.tif      binary
-*.tiff     binary
-*.ico      binary
-# SVG treated as text by default.
-*.svg      text
-# If you want to treat it as binary,
-# use the following line instead.
-# *.svg    binary
-*.eps      binary
-
-# Scripts
-*.bash     text eol=lf
-*.fish     text eol=lf
-*.ksh      text eol=lf
-*.sh       text eol=lf
-*.zsh      text eol=lf
-# These are explicitly windows files and should use crlf
-*.bat      text eol=crlf
-*.cmd      text eol=crlf
-*.ps1      text eol=crlf
-
-# Serialisation
-*.json     text
-*.toml     text
-*.xml      text
-*.yaml     text
-*.yml      text
-
-# Archives
-*.7z       binary
-*.bz       binary
-*.bz2      binary
-*.bzip2    binary
-*.gz       binary
-*.lz       binary
-*.lzma     binary
-*.rar      binary
-*.tar      binary
-*.taz      binary
-*.tbz      binary
-*.tbz2     binary
-*.tgz      binary
-*.tlz      binary
-*.txz      binary
-*.xz       binary
-*.Z        binary
-*.zip      binary
-*.zst      binary
-
-# Text files where line endings should be preserved
-*.patch    -text
-
-#
-# Exclude files from exporting
-#
-
-#.gitattributes export-ignore
-#.gitignore     export-ignore
-.gitkeep       export-ignore
-
-# Basic .gitattributes for a PowerShell repo.
-
-# Source files
-# ============
-*.ps1      text eol=crlf
-*.ps1x     text eol=crlf
-*.psm1     text eol=crlf
-*.psd1     text eol=crlf
-*.ps1xml   text eol=crlf
-*.pssc     text eol=crlf
-*.psrc     text eol=crlf
-*.cdxml    text eol=crlf
-'@
+    #region Get Resources
+    $gitignore = Get-Content $Path = "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitignore" -Raw
+    $gitattributes = Get-Content $Path = "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitignore" -Raw
     #endregion
     #=================================================
     #region OSDWorkspacePath
     # Path will always default to C:\OSDWorkspace
-    $ParentPath = $env:SystemDrive
-    $ChildPath = 'OSDWorkspace'
-    $OSDWorkspacePath = Join-Path -Path $ParentPath -ChildPath $ChildPath
+    $OSDWorkspacePath = $OSDWorkspace.paths.root
     #endregion
     #=================================================
     #region OSDWorkspace Registry
@@ -280,41 +131,44 @@ SYSTEM
     }
     #=================================================
     # Update PowerShell-Help
-    $MarkdownHelpPath = "$OSDWorkspacePath\docs\powershell-help"
+    $PowerShellHelpPath = $OSDWorkspace.paths.powershell_help
+
     if (Get-Module platyPS -ListAvailable -ErrorAction SilentlyContinue) {
-        if (-not (Test-Path $MarkdownHelpPath)) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $MarkdownHelpPath"
-            New-Item -Path $MarkdownHelpPath -ItemType Directory -Force | Out-Null
+        if (-not (Test-Path $PowerShellHelpPath)) {
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $PowerShellHelpPath"
+            New-Item -Path $PowerShellHelpPath -ItemType Directory -Force | Out-Null
         }
-        if (-not (Test-Path "$MarkdownHelpPath\Dism")) {
+        if (-not (Test-Path "$PowerShellHelpPath\Dism")) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update-Help Dism"
             Update-Help -Module Dism -Force | Out-Null
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $MarkdownHelpPath\Dism"
-            New-MarkdownHelp -Module 'Dism' -OutputFolder "$MarkdownHelpPath\Dism" -Force | Out-Null
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\Dism"
+            New-MarkdownHelp -Module 'Dism' -OutputFolder "$PowerShellHelpPath\Dism" -Force | Out-Null
         }
-        if (-not (Test-Path "$MarkdownHelpPath\OSD.Workspace")) {
-            if (-not (Test-Path "$MarkdownHelpPath\OSD.Workspace")) {
-                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $MarkdownHelpPath\OSD.Workspace"
-                New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder "$MarkdownHelpPath\OSD.Workspace" -Force | Out-Null
+        if (-not (Test-Path "$PowerShellHelpPath\OSD.Workspace")) {
+            if (-not (Test-Path "$PowerShellHelpPath\OSD.Workspace")) {
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\OSD.Workspace"
+                New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder "$PowerShellHelpPath\OSD.Workspace" -Force | Out-Null
             }
         }
     }
     #=================================================
     # Update Default Library
-    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Driver\amd64")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-Driver"
-        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
+    $DefaultLibraryPath = $OSDWorkspace.paths.default_library
+
+    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Driver\amd64")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-Driver"
+        New-Item -Path "$DefaultLibraryPath\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Driver\arm64")) {
-        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Driver\arm64")) {
+        New-Item -Path "$DefaultLibraryPath\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-Script")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-Script"
-        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-Script" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Script")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-Script"
+        New-Item -Path "$DefaultLibraryPath\WinPE-Script" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$OSDWorkspacePath\library\default\WinPE-MediaScript")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\library\default\WinPE-MediaScript"
-        New-Item -Path "$OSDWorkspacePath\library\default\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\WinPE-MediaScript")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-MediaScript"
+        New-Item -Path "$DefaultLibraryPath\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
     }
 
     return $OSDWorkspacePath

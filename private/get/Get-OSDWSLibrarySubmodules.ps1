@@ -1,24 +1,7 @@
-function Get-OSDWSRemoteLibrary {
-     <#
+function Get-OSDWSLibrarySubmodule {
+    <#
     .SYNOPSIS
         Returns the OSDWorkspace Library-GitHub Repositories.
-
-    .DESCRIPTION
-        This function returns the OSDWorkspace Library-GitHub Repositories.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        System.IO.FileSystemInfo
-
-        This function returns the repositories in the OSDWorkspace Library-GitHub.
-
-    .EXAMPLE
-        Get-OSDWSRemoteLibrary
-        Returns the repositories in the OSDWorkspace Library-GitHub.
 
     .NOTES
         David Segura
@@ -30,9 +13,9 @@ function Get-OSDWSRemoteLibrary {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $OSDWorkspacePath = Get-OSDWSLibraryRemotePath
+    $OSDWSPath = $OSDWorkspace.paths.library_submodule
 
-    $Results = foreach ($Path in $OSDWorkspacePath) {
+    $Results = foreach ($Path in $OSDWSPath) {
         Get-ChildItem -Path $Path -Directory -Depth 0 -ErrorAction SilentlyContinue | Select-Object -Property * | Where-Object { Test-Path $(Join-Path $_.FullName '.git') }
     }
 

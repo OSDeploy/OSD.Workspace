@@ -1,25 +1,7 @@
 function Get-OSDWSWinPEBuildStartnet {
-        <#
+    <#
     .SYNOPSIS
         Returns available OSDWorkspace Library LibraryWinPEStartnet(s).
-
-    .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub LibraryWinPEStartnet(s).
-        Utilizes the Get-OSDWSLibraryPath and Get-OSDWSLibraryRemotePath functions to retrieve the LibraryWinPEStartnet Path(s).
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        System.Array
-
-        This function returns the available boot startnet scripts in the OSDWorkspace Library.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildStartnet
-        Returns the boot startnet scripts in the OSDWorkspace Library.
 
     .NOTES
         David Segura
@@ -33,13 +15,13 @@ function Get-OSDWSWinPEBuildStartnet {
     $LibraryPaths = @()
 
     # Get the OSDWorkspace Library Subfolders
-    $PrivateLibrary = Get-OSDWSLibraryPath
+    $PrivateLibrary = $OSDWorkspace.paths.library
     foreach ($Subfolder in $PrivateLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = Get-OSDWSLibraryRemotePath
+    $PublicLibrary = $OSDWorkspace.paths.library_submodule
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }

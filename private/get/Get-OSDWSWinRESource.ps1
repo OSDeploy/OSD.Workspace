@@ -11,7 +11,7 @@ function Get-OSDWSWinRESource {
         $Error.Clear()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
         #=================================================
-        $SourcePath = Get-OSDWSWinRESourcePath
+        $SourcePath = $OSDWorkspace.paths.import_windows_re
 
         $SourceItems = @()
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"

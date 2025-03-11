@@ -140,7 +140,6 @@ function New-OSDWorkspaceVM {
     $VMManagementServiceSettingData = Get-WmiObject -Namespace root\virtualization\v2 Msvm_VirtualSystemManagementServiceSettingData
     #=================================================
     # Set the Boot ISO
-    # $DvdDrivePath = Join-Path $($SelectWinPEBuild.Path) 'BootMedia_NoPrompt.iso'
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia ISO to use with this Virtual Machine (Cancel to exit)"
     $SelectDvdDrive = Get-ChildItem "$($SelectWinPEBuild.Path)\iso" *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a BootMedia ISO to use with this Virtual Machine' -OutputMode Single
     if ($null -eq $SelectDvdDrive) {

@@ -3,24 +3,6 @@ function Get-OSDWSWinPEBuildProfile {
     .SYNOPSIS
         Returns available OSDWorkspace Library BuildProfile(s).
 
-    .DESCRIPTION
-        This function returns available OSDWorkspace Library and Library-GitHub BuildProfile(s).
-        Utilizes the Get-OSDWSLibraryPath and Get-OSDWSLibraryRemotePath functions to retrieve the BuildProfile Path(s).
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        System.Array
-
-        This function returns the available boot media profiles in the OSDWorkspace Library.
-
-    .EXAMPLE
-        Get-OSDWSWinPEBuildProfile
-        Returns the boot media profiles in the OSDWorkspace Library.
-
     .NOTES
         David Segura
     #>
@@ -30,7 +12,7 @@ function Get-OSDWSWinPEBuildProfile {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $LibraryPath = Get-OSDWSWinPEBuildProfilePath
+    $LibraryPath = $OSDWorkspace.paths.winpe_buildprofile
 
     $LibraryItems = Get-ChildItem -Path @("$LibraryPath\*") -ErrorAction SilentlyContinue | `
         Where-Object { $_.Extension -eq '.json' } | `

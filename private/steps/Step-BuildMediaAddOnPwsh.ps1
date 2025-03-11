@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnPwsh {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath)
+        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages)
     )
     #=================================================
     $Error.Clear()

@@ -12,7 +12,7 @@ function Select-OSDWSRemoteLibrary {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $results = Get-OSDWSRemoteLibrary | Select-Object -Property Name, FullName | Sort-Object -Property Name, FullName
+    $results = Get-OSDWSLibrarySubmodule | Select-Object -Property Name, FullName | Sort-Object -Property Name, FullName
 
     if ($results) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select an OSDWorkspace Repository (Cancel to skip)"
