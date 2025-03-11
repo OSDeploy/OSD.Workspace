@@ -366,7 +366,7 @@ function Build-OSDWorkspaceWinPE {
     
     $MediaIsoName = 'BootMedia.iso'
     $MediaIsoNameEX = 'BootMediaEX.iso'
-    $MediaRootPath = Join-Path $($OSDWorkspace.paths.build) $MediaName
+    $MediaRootPath = Join-Path $($OSDWorkspace.paths.build_windows_pe) $MediaName
     $global:BuildMediaCorePath = "$MediaRootPath\.core"
     $BuildMediaTempPath = "$MediaRootPath\.temp"
     $global:BuildMediaLogsPath = "$BuildMediaTempPath\logs"

@@ -60,8 +60,8 @@ function Get-OSDWorkspacePath {
     #endregion
     #=================================================
     #region Get Resources
-    $gitignore = Get-Content $Path = "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitignore" -Raw
-    $gitattributes = Get-Content $Path = "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitignore" -Raw
+    $gitignore = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitignore" -Raw
+    $gitattributes = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\resources\.gitattributes" -Raw
     #endregion
     #=================================================
     #region OSDWorkspacePath
