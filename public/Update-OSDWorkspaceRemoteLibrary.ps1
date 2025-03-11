@@ -58,7 +58,7 @@ function Update-OSDWorkspaceRemoteLibrary {
         #=================================================
         #region Get InputObject
         $InputObject = @()
-        $InputObject = Select-OSDWSGitHubRepo
+        $InputObject = Select-OSDWSRemoteLibrary
         #endregion
         #=================================================
         #region Process foreach
@@ -66,13 +66,14 @@ function Update-OSDWorkspaceRemoteLibrary {
             Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository: $($Repository.FullName)"
 
             if ($Force -eq $true) {
-                $Destination = $Repository.FullName
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$Destination`""
-                Push-Location "$Destination"
+                $RepositoryPath = $Repository.FullName
+                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$RepositoryPath`""
+                Push-Location "$RepositoryPath"
 
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git fetch --verbose --progress --depth 1 origin"
                 git fetch --verbose --progress --depth 1 origin
 
+                <#
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --hard origin"
                 git reset --hard origin
 
@@ -81,13 +82,12 @@ function Update-OSDWorkspaceRemoteLibrary {
 
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git clean -d --force"
                 git clean -d --force
-
+                #>
                 Pop-Location
             }
             else {
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This command will update this Git repository to the latest GitHub commit in the main branch."
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Any local content that has been modified or changed will be lost."
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] To update this Git Repository, use the -Force switch when running this command."
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This command will update this Git repository to the latest GitHub commit in the main branch using git fetch."
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force switch when running this command."
                 Write-Host
             }
         }

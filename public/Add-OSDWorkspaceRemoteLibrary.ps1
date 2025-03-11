@@ -61,39 +61,48 @@ function Add-OSDWorkspaceRemoteLibrary {
         return
     }
     #=================================================
+    # Get Paths
+    $OSDWorkspacePath = Get-OSDWorkspacePath
+    $LibraryRemotePath = Get-OSDWSLibraryRemotePath
+    #=================================================
     # Create library-remote
-    $LibraryRemote = Get-OSDWSLibraryRemotePath
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Remote Library: $LibraryRemote"
-    if (-not (Test-Path $LibraryRemote -ErrorAction SilentlyContinue)) {
-        New-Item -Path $LibraryRemote -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path $LibraryRemotePath -ErrorAction SilentlyContinue)) {
+        New-Item -Path $LibraryRemotePath -ItemType Directory -Force | Out-Null
     }
     #=================================================
     # Region Build the paths
-    $Source = $Url
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Source: $Source"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace Library-Remote path: $LibraryRemotePath"
+
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Url to Add: $Url"
     
     $RepositoryName = (Split-Path $Url -Leaf).Replace('.git', '')
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Name: $RepositoryName"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Name to Add: $RepositoryName"
 
-    $Destination = Join-Path -Path $LibraryRemote -ChildPath $RepositoryName
+    $Destination = "library-remote/$RepositoryName"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Destination: $Destination"
 
+    <#
     if (Test-Path -Path "$Destination\.git") {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination repository already exists"
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceRemoteLibrary cmdlet to update this repository"
         return
     }
+    #>
     #endregion
     #=================================================
     # Region Git Submodule Add
+    # https://git-scm.com/docs/git-submodule
     # https://git-scm.com/book/en/v2/Git-Tools-Submodules
+    # git submodule add <URL> <path>
 
-    Push-Location "$LibraryRemote"
-    
-    git submodule add $Source
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location $OSDWorkspacePath"
+    Push-Location $OSDWorkspacePath
 
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule add $Url library-remote/$RepositoryName"
+    git submodule add $Url library-remote/$RepositoryName
+
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Pop-Location"
     Pop-Location
-
     #endregion
     #=================================================
     # Region Git Clone

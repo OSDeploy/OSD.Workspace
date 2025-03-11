@@ -19,7 +19,6 @@
         'Open-OSDWorkspace'
         'Update-OSDWorkspaceRemoteLibrary'
         'Update-OSDWorkspaceUSB'
-        'Select-OSDWSGitHubRepo'
         'Remove-OSDWorkspaceRemoteLibrary'
     )
     PrivateData          = @{

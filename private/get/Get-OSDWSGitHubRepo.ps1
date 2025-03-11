@@ -1,4 +1,4 @@
-function Get-OSDWSGitHubRepo {
+function Get-OSDWSRemoteLibrary {
      <#
     .SYNOPSIS
         Returns the OSDWorkspace Library-GitHub Repositories.
@@ -17,7 +17,7 @@ function Get-OSDWSGitHubRepo {
         This function returns the repositories in the OSDWorkspace Library-GitHub.
 
     .EXAMPLE
-        Get-OSDWSGitHubRepo
+        Get-OSDWSRemoteLibrary
         Returns the repositories in the OSDWorkspace Library-GitHub.
 
     .NOTES

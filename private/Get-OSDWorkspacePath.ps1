@@ -60,43 +60,38 @@ function Get-OSDWorkspacePath {
     #TODO Update the GitIgnore
     #region GitIgnore
     $gitignore = @'
-# VSCode
-Ignore/*
+# Updated 2025.03.10 Segura
+
+# VSCodeIgnore/*
 .vs/*
 .vscode/*
 
-# BootMediaIso
-*.iso
+# OSDWorkspace Defaults
+# This level is just enough to capture the index files
+build/*/*
+cache/*/*
+src/*/*
 
-# WindowsImage
-*.wim
+# OSDWorkspace Files
+# These should be excludes as they can be too large
+# but adjust accordingly
+*.cab
+*.esd
+*.iso
 *.swm
+*.wim
+*.zip
 
 # WindowsUpdate
 *kb*.cab
 *.msu
 
-# PowerShell
-*.ps1
-
-# OSDWorkspace
-BootImage/*/
-BootMedia/*/*
-Cache/*/*
-Library/WinPE-MediaScript/*/*
-Library/WinPE-Driver/*/*/*/*
-Library/WinPE-Script/*/*
-Library-GitHub/*/*
-
-# OSDFramework Content
-**/PortableGit*/*
-
-# BootImage os-files
-**/os-files/*
-
-# BootImage Registry Hives
+# WinPE Registry Hives
 SOFTWARE
 SYSTEM
+
+# Software
+**/PortableGit*/*
 '@
     #endregion
     #=================================================
