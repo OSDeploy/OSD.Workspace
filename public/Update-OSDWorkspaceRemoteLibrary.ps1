@@ -72,7 +72,7 @@ function Update-OSDWorkspaceRemoteLibrary {
 
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git fetch --verbose --progress --depth 1 origin"
                 git fetch --verbose --progress --depth 1 origin
-
+                #TODO Make sure the git configuration is correct!!!!!
                 <#
                 Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --hard origin"
                 git reset --hard origin
