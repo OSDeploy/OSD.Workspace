@@ -75,7 +75,7 @@ function Import-OSDWorkspaceBootDriverCM {
     #endregion
     #=================================================
     # Select BootDriver
-    $LibraryWinPEDriver = Select-OSDWorkspaceLibraryWinPEDriver -Architecture $Architecture
+    $LibraryWinPEDriver = Select-OSDWSWinPEBuildDriver -Architecture $Architecture
 
     foreach ($Driver in $LibraryWinPEDriver) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Boot Driver: [$($Driver.FullName)]"

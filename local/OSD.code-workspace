@@ -1,0 +1,92 @@
+{
+    "folders": [
+        {
+            "name": "filesystem",
+            "description": "OSDWorkspace root",
+            "path": "."
+        },
+        {
+            "name": "Docs",
+            "description": "Documentation",
+            "path": "./docs"
+        },
+        {
+            "name": "Windows ADK (cache)",
+            "description": "Windows Assessment and Deployment Kit (ADK)",
+            "path": "./cache/adk-versions"
+        },
+        {
+            "name": "AddOn Packages (cache)",
+            "path": "./cache/addon-packages"
+        },
+        {
+            "name": "Library",
+            "path": "./library"
+        },
+        {
+            "name": "Library (Remote)",
+            "path": "./library-remote"
+        },
+        {
+            "name": "Import WindowsOS",
+            "description": "Windows Operating System (WinOS)",
+            "path": "./src/windows-os"
+        },
+        {
+            "name": "Import WindowsRE",
+            "description": "Windows Recovery Environment (WinRE)",
+            "path": "./src/windows-re"
+        },
+        {
+            "name": "Build WindowsPE",
+            "description": "Windows Preinstallation Environment (WinPE)",
+            "path": "./build/windows-pe"
+        }
+    ],
+    "settings": {
+        "explorer.compactFolders": false,
+        "explorer.sortOrder": "type",
+        "files.exclude": {
+            "**/.git": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true
+        },
+        "files.associations": {
+            "*.ps1": "powershell",
+            "*.psm1": "powershell",
+            "*.psd1": "powershell",
+            "*.json": "jsonc",
+            "*.esd": "binary",
+            "*.iso": "binary",
+            "*.wim": "binary"
+        },
+        "git.confirmSync": true,
+        "git.enableSmartCommit": true,
+        "powershell.codeFormatting.preset": "OTBS",
+        "powershell.scriptAnalysis.enable": true,
+        "powershell.integratedConsole.focusConsoleOnExecute": false,
+        "scm.alwaysShowRepositories": true,
+        "scm.alwaysShowActions": true,
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/*.wim": true,
+            "**/*.iso": true,
+            "cache/**": true
+        },
+        "workbench.editorLargeFileConfirmation": 1,
+        "[powershell]": {
+            "files.encoding": "utf8bom",
+            "files.eol": "\r\n",
+            "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?"
+        },
+        "powershell.cwd": "OSDWorkspace",
+        "githubPullRequests.experimental.chat": true,
+        "githubPullRequests.experimental.useQuickChat": true,
+        "github.copilot.chat.edits.temporalContext.enabled": true,
+        "github.copilot.chat.commitMessageGeneration.instructions": [
+            {
+                "text": "Be extremely detailed with the file changes and the reason for the change. Add a reference to the issue or pull request that this commit is related to. Add emojis to make the commit message more readable. If you are fixing a bug, add the bug number. If you are adding a new feature, add the feature number. If you are updating a feature, add the feature number. If you are removing a feature, add the feature number. If you are updating the documentation, add the documentation number. If you are updating the tests, add the test number. If you are updating the configuration, add the configuration number. If you are updating the build process, add the build number. If you are updating the deployment process, add the deployment number. If you are updating the code review process, add the code review number. If you are updating the code quality process, add the code quality number. If you are updating the code coverage process, add the code coverage number.",
+            }
+        ]
+    }
+}

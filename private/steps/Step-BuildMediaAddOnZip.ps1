@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnZip {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSCachePath = $global:BuildMedia.WSCachePath
+        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath)
     )
     #=================================================
     $Error.Clear()
@@ -14,11 +14,11 @@ function Step-BuildMediaAddOnZip {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
     #=================================================
     # Thanks Gary Blok
     $global:BuildMedia.AddOnZip = $false
-    $CacheZip = Join-Path $WSCachePath "AddOn-7zip"
+    $CacheZip = Join-Path $WSAddOnPackagesPath "7zip"
     if (-not (Test-Path -Path $CacheZip)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Adding cache content at $CacheZip"
         New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null

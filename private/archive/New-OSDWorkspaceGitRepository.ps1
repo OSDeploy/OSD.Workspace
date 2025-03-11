@@ -35,7 +35,7 @@ function New-OSDWorkspaceGitRepository {
         $RepositoryParent = Get-OSDWorkspaceLibraryGitBootDriverPath
     }
     elseif ($Type -eq 'Library') {
-        $RepositoryParent = Get-OSDWorkspaceGitHubPath
+        $RepositoryParent = Get-OSDWSLibraryRemotePath
     }
     else {
         Write-Error "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Invalid Content: $Type"
@@ -48,7 +48,7 @@ function New-OSDWorkspaceGitRepository {
 
     if (Test-Path -Path "$Destination" -ErrorAction SilentlyContinue) {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination repository already exists"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceGitHubRepo cmdlet to update this repository"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceRemoteLibrary cmdlet to update this repository"
         return
     }
     #endregion
@@ -66,7 +66,7 @@ function New-OSDWorkspaceGitRepository {
         New-Item -Path "$Destination\WinPE-Script" -ItemType Directory -Force | Out-Null
         # New-Item -Path "$Destination\WinPE-Startnet" -ItemType Directory -Force | Out-Null
         # New-Item -Path "$Destination\WinPE-MediaFile" -ItemType Directory -Force | Out-Null
-        New-Item -Path "$Destination\Build-WinPEProfile" -ItemType Directory -Force | Out-Null
+        New-Item -Path "$Destination\WinPE-BuildProfile" -ItemType Directory -Force | Out-Null
         New-Item -Path "$Destination\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
     }
 

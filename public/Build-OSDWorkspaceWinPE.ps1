@@ -220,8 +220,8 @@ function Build-OSDWorkspaceWinPE {
     #endregion
     #=================================================
     #region Get and Update the ADK Cache
-    $WSCachePath = Get-OSDWorkspaceCachePath -WarningAction SilentlyContinue
-    $WSCachePathAdk = Get-OSDWorkspaceCacheAdkPath -WarningAction SilentlyContinue
+    $WSCachePath = Get-OSDWSCachePath -WarningAction SilentlyContinue
+    $WSCachePathAdk = Get-OSDWSAdkVersionsPath -WarningAction SilentlyContinue
     #endregion
     #=================================================
     #region Get the WindowsAdkCacheOptions
@@ -308,13 +308,13 @@ function Build-OSDWorkspaceWinPE {
         $WimSourceType = 'WinPE'
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using WinRE from Select-OSDWorkspaceImportWinRE"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using WinRE from Select-OSDWSWinRESource"
         $WimSourceType = 'WinRE'
         if ($Architecture) {
-            $GetWindowsImage = Select-OSDWorkspaceImportWinRE -Architecture $Architecture
+            $GetWindowsImage = Select-OSDWSWinRESource -Architecture $Architecture
         }
         else {
-            $GetWindowsImage = Select-OSDWorkspaceImportWinRE
+            $GetWindowsImage = Select-OSDWSWinRESource
         }
 
         if ($GetWindowsImage.Count -eq 0) {
@@ -367,21 +367,21 @@ function Build-OSDWorkspaceWinPE {
     
     $MediaIsoName = 'BootMedia.iso'
     $MediaIsoNameEX = 'BootMediaEX.iso'
-    $MediaRootPath = Join-Path $(Get-OSDWorkspaceWinPEPath) $MediaName
+    $MediaRootPath = Join-Path $(Get-OSDWSWinPEBuildPath) $MediaName
     $global:BuildMediaCorePath = "$MediaRootPath\.core"
     $BuildMediaTempPath = "$MediaRootPath\.temp"
     $global:BuildMediaLogsPath = "$BuildMediaTempPath\logs"
     #endregion
     #=================================================
-    #region Select-OSDWorkspaceMediaWinPEProfile
+    #region Select-OSDWSWinPEBuildProfile
     $MyBuildProfile = $null
-    $MyBuildProfile = Select-OSDWorkspaceLibraryBuildProfile
+    $MyBuildProfile = Select-OSDWSWinPEBuildProfile
     #endregion
     #=================================================
-    #region Select-OSDWorkspaceLibraryWinPEDriver
+    #region Select-OSDWSWinPEBuildDriver
     $LibraryWinPEDriver = $null
     if (-not $MyBuildProfile) {
-        $OSDWorkspaceLibraryWinPEDriver= Select-OSDWorkspaceLibraryWinPEDriver -Architecture $Architecture
+        $OSDWorkspaceLibraryWinPEDriver= Select-OSDWSWinPEBuildDriver -Architecture $Architecture
 
         if ($OSDWorkspaceLibraryWinPEDriver) {
             $LibraryWinPEDriver = ($OSDWorkspaceLibraryWinPEDriver| Select-Object -ExpandProperty FullName)
@@ -396,28 +396,28 @@ function Build-OSDWorkspaceWinPE {
     if (-not $MyBuildProfile) {
         $OSDWorkspaceLibraryWinPEFile = Select-OSDWorkspaceLibraryBootFile
 
-        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Phase -eq 'WinPE-File' }) {
-            $LibraryWinPEFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Phase -eq 'WinPE-File' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-File' }) {
+            $LibraryWinPEFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-File' } | Select-Object -ExpandProperty FullName)
         }
-        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Phase -eq 'WinPE-MediaFile' }) {
-            $LibraryMediaFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Phase -eq 'WinPE-MediaFile' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-MediaFile' }) {
+            $LibraryMediaFile = ($OSDWorkspaceLibraryWinPEFile | Where-Object { $_.Type -eq 'WinPE-MediaFile' } | Select-Object -ExpandProperty FullName)
         }
     }
     #>
     #endregion
     #=================================================
-    #region Select-OSDWorkspaceLibraryWinPEScript
+    #region Select-OSDWSWinPEBuildScript
     $LibraryWinPEScript = $null
     $LibraryMediaScript = $null
     if (-not $MyBuildProfile) {
         $OSDWorkspaceLibraryWinPEScript = @()
-        $OSDWorkspaceLibraryWinPEScript = Select-OSDWorkspaceLibraryWinPEScript
+        $OSDWorkspaceLibraryWinPEScript = Select-OSDWSWinPEBuildScript
 
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Phase -eq 'WinPE-Script' }) {
-            $LibraryWinPEScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Phase -eq 'WinPE-Script' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-Script' }) {
+            $LibraryWinPEScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-Script' } | Select-Object -ExpandProperty FullName)
         }
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Phase -eq 'WinPE-MediaScript' }) {
-            $LibraryMediaScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Phase -eq 'WinPE-MediaScript' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-MediaScript' }) {
+            $LibraryMediaScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-MediaScript' } | Select-Object -ExpandProperty FullName)
         }
     }
     #endregion
@@ -465,7 +465,7 @@ function Build-OSDWorkspaceWinPE {
             SetTimeZone        = [System.String]$SetTimeZone
         }
 
-        $BuildProfilePath = Join-Path $(Get-OSDWorkspaceLibraryPath) 'Build-WinPEProfile'
+        $BuildProfilePath = Get-OSDWSWinPEBuildProfilePath
 
         if (-not (Test-Path $BuildProfilePath)) {
             $null = New-Item -Path $BuildProfilePath -ItemType Directory -Force
@@ -868,9 +868,9 @@ function Build-OSDWorkspaceWinPE {
     # Add the final WinPE information to the bootmedia object
     $global:BuildMedia.PEInfo = $GetWindowsImage
 
-    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Profile to $BuildMediaCorePath\gv-BuildProfile.json"
-    $global:BuildProfile | Export-Clixml -Path "$BuildMediaCorePath\gv-BuildProfile.xml" -Force
-    $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-BuildProfile.json" -Encoding utf8 -Force
+    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Profile to $BuildMediaCorePath\gv-buildprofile.json"
+    $global:BuildProfile | Export-Clixml -Path "$BuildMediaCorePath\gv-buildprofile.xml" -Force
+    $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-buildprofile.json" -Encoding utf8 -Force
 
     Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Exporting BootMedia Properties to $BuildMediaCorePath\gv-buildmedia.json"
     $global:BuildMedia | Export-Clixml -Path "$BuildMediaCorePath\gv-buildmedia.xml" -Force
@@ -881,7 +881,7 @@ function Build-OSDWorkspaceWinPE {
     $ProgressPreference = $currentProgressPref
 
     # Update BootMedia Index
-    $null = Get-OSDWorkspaceMediaWinPE
+    $null = Get-OSDWSWinPEBuild
 
     $buildEndTime = Get-Date
     $buildTimeSpan = New-TimeSpan -Start $BuildStartTime -End $buildEndTime

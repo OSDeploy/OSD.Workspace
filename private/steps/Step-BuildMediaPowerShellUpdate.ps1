@@ -41,7 +41,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEPATH,0x00000
 HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Local"
 '@
     #=================================================
-    $CachePowerShellModules = Join-Path $WSCachePath "PowerShell\Modules"
+    $CachePowerShellModules = Get-OSDWSPowerShellModulesPath
     $PSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
 
     $ModuleNames = @('PackageManagement', 'PowerShellGet', 'Microsoft.PowerShell.PSResourceGet')

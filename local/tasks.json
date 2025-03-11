@@ -1,0 +1,72 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  // Tasks Schema
+  // https://code.visualstudio.com/docs/reference/tasks-appendix
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build WinPE",
+      "command": "pwsh",
+      "type": "shell",
+      "windows": {
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Build-OSDWorkspaceWinPE'"
+        ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "PSModule: Update OSD.Workspace",
+      "type": "shell",
+      "command": "Update-Module -Name OSD.Workspace -Verbose",
+      "problemMatcher": []
+    },
+    {
+      "label": "PSModule: Install platyPS",
+      "type": "shell",
+      "command": "Install-Module -Name platyPS -Verbose",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for Dism (requires platyPS)",
+      "type": "shell",
+      "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for OSD (requires platyPS)",
+      "type": "shell",
+      "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for OSD.Workspace (requires platyPS)",
+      "type": "shell",
+      "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
+      "problemMatcher": []
+    },
+    {
+      "label": "Library (Remote): Search GitHub for published remote libraries",
+      "type": "shell",
+      "command": "start",
+      "args": [
+        "'https://github.com/search?q=OSDWSLibrary&type=repositories'"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

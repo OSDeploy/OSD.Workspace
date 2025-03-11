@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnPwsh {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSCachePath = $global:BuildMedia.WSCachePath
+        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath)
     )
     #=================================================
     $Error.Clear()
@@ -14,10 +14,11 @@ function Step-BuildMediaAddOnPwsh {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
     #=================================================
     $global:BuildMedia.AddOnPwsh = $false
-    $CachePowerShell7 = Join-Path $WSCachePath "AddOn-Pwsh"
+    $CachePowerShell7 = Join-Path $WSAddOnPackagesPath "Pwsh"
+    
     if (-not (Test-Path -Path $CachePowerShell7)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell 7: Adding cache content at $CachePowerShell7"
         New-Item -Path $CachePowerShell7 -ItemType Directory -Force | Out-Null

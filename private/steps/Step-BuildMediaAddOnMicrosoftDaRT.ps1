@@ -6,7 +6,7 @@ function Step-BuildMediaAddOnMicrosoftDaRT {
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSCachePath = $global:BuildMedia.WSCachePath
+        $WSAddOnPackagesPath = $(Get-OSDWSAddOnPackagesPath)
     )
     #=================================================
     $Error.Clear()
@@ -14,11 +14,10 @@ function Step-BuildMediaAddOnMicrosoftDaRT {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
     #=================================================
     $global:BuildMedia.AddOnMicrosoftDaRT = $false
-
-    $CacheMicrosoftDaRT = Join-Path $WSCachePath 'AddOn-MicrosoftDaRT'
+    $CacheMicrosoftDaRT = Join-Path $WSAddOnPackagesPath 'MicrosoftDaRT'
 
     # MicrosoftDartCab
     $MicrosoftDartCab = "$env:ProgramFiles\Microsoft DaRT\v10\Toolsx64.cab"

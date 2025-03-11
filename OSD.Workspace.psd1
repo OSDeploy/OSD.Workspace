@@ -11,14 +11,15 @@
     FunctionsToExport    = @(
         'Build-OSDWorkspaceWinPE'
         'Get-OSDWorkspace'
-        'Import-OSDWorkspaceGitHubRepo'
+        'Add-OSDWorkspaceRemoteLibrary'
         'Import-OSDWorkspaceSettings'
         'Import-OSDWorkspaceWinOS'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
         'Open-OSDWorkspace'
-        'Update-OSDWorkspaceGitHubRepo'
+        'Update-OSDWorkspaceRemoteLibrary'
         'Update-OSDWorkspaceUSB'
+        'Remove-OSDWorkspaceRemoteLibrary'
     )
     PrivateData          = @{
         PSData = @{
