@@ -83,17 +83,17 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Details'
     Write-Host -ForegroundColor DarkGreen "Get-OSDWorkspacePath: $(Get-OSDWorkspacePath)"
     Write-Host
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSAdkVersionsPath: $(Get-OSDWSAdkVersionsPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSBuildPath: $(Get-OSDWSBuildPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSCachePath: $(Get-OSDWSCachePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSDocsPath: $(Get-OSDWSDocsPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSLibraryPath: $(Get-OSDWSLibraryPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSLibraryRemotePath: $(Get-OSDWSLibraryRemotePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSSourcePath: $(Get-OSDWSSourcePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinOSSourcePath: $(Get-OSDWSWinOSSourcePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinPEBuildPath: $(Get-OSDWSWinPEBuildPath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinPEBuildProfilePath: $(Get-OSDWSWinPEBuildProfilePath)"
-    Write-Host -ForegroundColor DarkGray "Get-OSDWSWinRESourcePath: $(Get-OSDWSWinRESourcePath)"
+    Write-Verbose "Get-OSDWSAdkVersionsPath: $(Get-OSDWSAdkVersionsPath)"
+    Write-Verbose "Get-OSDWSBuildPath: $(Get-OSDWSBuildPath)"
+    Write-Verbose "Get-OSDWSCachePath: $(Get-OSDWSCachePath)"
+    Write-Verbose "Get-OSDWSDocsPath: $(Get-OSDWSDocsPath)"
+    Write-Verbose "Get-OSDWSLibraryPath: $(Get-OSDWSLibraryPath)"
+    Write-Verbose "Get-OSDWSLibraryRemotePath: $(Get-OSDWSLibraryRemotePath)"
+    Write-Verbose "Get-OSDWSSourcePath: $(Get-OSDWSSourcePath)"
+    Write-Verbose "Get-OSDWSWinOSSourcePath: $(Get-OSDWSWinOSSourcePath)"
+    Write-Verbose "Get-OSDWSWinPEBuildPath: $(Get-OSDWSWinPEBuildPath)"
+    Write-Verbose "Get-OSDWSWinPEBuildProfilePath: $(Get-OSDWSWinPEBuildProfilePath)"
+    Write-Verbose "Get-OSDWSWinRESourcePath: $(Get-OSDWSWinRESourcePath)"
     $null = Get-OSDWSWinRESource
     $null = Get-OSDWSWinOSSource
     $null = Get-OSDWSWinPEBuild

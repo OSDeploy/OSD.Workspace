@@ -9,17 +9,15 @@
     PowerShellVersion    = '5.1'
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
+        'Add-OSDWorkspaceRemoteLibrary'
         'Build-OSDWorkspaceWinPE'
         'Get-OSDWorkspace'
-        'Add-OSDWorkspaceRemoteLibrary'
-        'Import-OSDWorkspaceSettings'
         'Import-OSDWorkspaceWinOS'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
-        'Open-OSDWorkspace'
+        'Remove-OSDWorkspaceRemoteLibrary'
         'Update-OSDWorkspaceRemoteLibrary'
         'Update-OSDWorkspaceUSB'
-        'Remove-OSDWorkspaceRemoteLibrary'
     )
     PrivateData          = @{
         PSData = @{

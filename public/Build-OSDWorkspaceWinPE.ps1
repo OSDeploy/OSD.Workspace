@@ -75,10 +75,9 @@ function Build-OSDWorkspaceWinPE {
     #>
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        # Name to append to the BootMedia Id
         [Parameter(Mandatory)]
-        [System.String]
-        $Name,
+        # Name to append to the BootMedia Id
+        [System.String]$Name,
 
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(Mandatory, ParameterSetName = 'ADK')]
@@ -105,7 +104,7 @@ function Build-OSDWorkspaceWinPE {
         $SetAllIntl = 'en-US',
 
         [System.String]
-        #Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
+        # Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
         $SetInputLocale = 'en-US',
 
         [ValidateScript( {
