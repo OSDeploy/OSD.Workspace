@@ -225,13 +225,6 @@ function Build-OSDWorkspaceWinPE {
     $WSAdkVersionsPath = $OSDWorkspace.paths.adk_versions
     #endregion
     #=================================================
-    #region Get the WindowsAdkCacheOptions
-    $WindowsAdkCacheOptions = $null
-    if (Test-Path $WSAdkVersionsPath) {
-        $WindowsAdkCacheOptions = Get-ChildItem -Path "$WSAdkVersionsPath\*" -Directory -ErrorAction SilentlyContinue | Sort-Object -Property Name
-    }
-    #endregion
-    #=================================================
     #region If ADK is installed then we need to update the cache
     if ($IsWindowsAdkInstalled) {
         $WindowsAdkRootPath = Join-Path $WSAdkVersionsPath $WindowsAdkInstallVersion
@@ -242,6 +235,13 @@ function Build-OSDWorkspaceWinPE {
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Cannot update the ADK cache because the ADK is not installed"
         $SelectAdkCacheVersion = $true
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SelectAdkCacheVersion: $SelectAdkCacheVersion"
+    }
+    #endregion
+    #=================================================
+    #region Get the WindowsAdkCacheOptions
+    $WindowsAdkCacheOptions = $null
+    if (Test-Path $WSAdkVersionsPath) {
+        $WindowsAdkCacheOptions = Get-ChildItem -Path "$WSAdkVersionsPath\*" -Directory -ErrorAction SilentlyContinue | Sort-Object -Property Name
     }
     #endregion
     #=================================================
@@ -267,7 +267,7 @@ function Build-OSDWorkspaceWinPE {
     #region ADK is available by this point and we either have 1 or more to select from
     if ($WindowsAdkCacheOptions.Count -eq 1) {
         # Only one version of the ADK is present in the cache, so this must be used
-        $WindowsAdkCacheSelected = $WindowsAdkCacheOptions.FullName
+        $WindowsAdkRootPath = $WindowsAdkCacheOptions.FullName
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ADK cache contains 1 offline Windows ADK option"
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Using ADK cache at $WindowsAdkCacheSelected"
 
