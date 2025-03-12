@@ -23,13 +23,6 @@
             "cwd": "${cwd}"
         },
         {
-            "name": "PowerShell Gallery: Update the OSD.Workspace PowerShell Module",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "Update-Module -Name OSD.Workspace",
-            "cwd": "${cwd}"
-        },
-        {
             "name": "Import: Add a Windows 11 Operating System and Recovery Environment",
             "type": "PowerShell",
             "request": "launch",
@@ -40,21 +33,21 @@
             "name": "Remote Library: Add the OSDCloud Archive",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Add-OSDWorkspaceLibrarySubmodule -Url https://github.com/OSDeploy/OSDWSLibrary-OSDCloud-Archive.git'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Add-OSDWorkspaceRemoteLibrary -Url https://github.com/OSDeploy/OSDWSLibrary-OSDCloud-Archive.git'",
             "cwd": "${cwd}"
         },
         {
             "name": "Remote Library: Remove a Remote Library",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Remove-OSDWorkspaceLibrarySubmodule'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Remove-OSDWorkspaceRemoteLibrary'",
             "cwd": "${cwd}"
         },
         {
             "name": "Remote Library: Update a Remote Library",
             "type": "PowerShell",
             "request": "launch",
-            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Update-OSDWorkspaceLibrarySubmodule'",
+            "script": "Start-Process pwsh -Verb RunAs -ArgumentList '-NoExit -Command Update-OSDWorkspaceRemoteLibrary'",
             "cwd": "${cwd}"
         },
         {

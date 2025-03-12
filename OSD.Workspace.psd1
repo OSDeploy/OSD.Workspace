@@ -13,10 +13,11 @@
         'Build-OSDWorkspaceWinPE'
         'Get-OSDWorkspace'
         'Import-OSDWorkspaceWinOS'
+        'Initialize-OSDWorkspace'
         'New-OSDWorkspaceUSB'
         'New-OSDWorkspaceVM'
         'Remove-OSDWorkspaceLibrarySubmodule'
-        'Test-OSDWorkspace'
+        'Update-OSDWorkspaceHelp'
         'Update-OSDWorkspaceLibrarySubmodule'
         'Update-OSDWorkspaceUSB'
     )

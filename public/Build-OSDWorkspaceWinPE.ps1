@@ -141,11 +141,13 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
-
+    Initialize-OSDWorkspace
+    #=================================================
+    # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] must be run with Administrator privileges"
-        Break
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This function must be Run as Administrator"
+        return
     }
     #=================================================
     # Import OSD.Workspace settings

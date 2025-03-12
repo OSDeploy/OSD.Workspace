@@ -29,61 +29,39 @@ function Get-OSDWorkspace {
     [CmdletBinding()]
     param ()
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     $Error.Clear()
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Initialize-OSDWorkspace
     #=================================================
-    Write-Host -ForegroundColor DarkCyan "OSDWorkspace Team"
-    Write-Host -ForegroundColor DarkGray "David Segura https://linkedin.com/in/davidsegura/"
-    Write-Host -ForegroundColor DarkGray "Michael Escamilla https://linkedin.com/in/michael-a-escamilla/"
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Team'
+    Write-Host -ForegroundColor DarkGray "David Segura | $($OSDWorkspace.links.david)"
+    Write-Host -ForegroundColor DarkGray "Michael Escamilla | $($OSDWorkspace.links.michael)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan "NWSCUG: OSDWorkspace Preview"
-    Write-Host -ForegroundColor DarkGray "March 21, 2025"
-    Write-Host -ForegroundColor DarkGray "https://nwscug.org/"
+    Write-Host -ForegroundColor DarkCyan 'NWSCUG: OSD 2025 Preview'
+    Write-Host -ForegroundColor DarkGray "March 28, 2025 | $($OSDWorkspace.links.nwscug)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan "MMSMOA: OSDWorkspace / OSDCloud"
-    Write-Host -ForegroundColor DarkGray "May 5-8, 2025"
-    Write-Host -ForegroundColor DarkGray "https://mmsmoa.com/"
+    Write-Host -ForegroundColor DarkCyan 'MMSMOA: OSDWorkspace and OSDCloud 2025'
+    Write-Host -ForegroundColor DarkGray "May 5-8, 2025 | $($OSDWorkspace.links.mmsmoa)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan "WPNinjasUK: OSDWorkspace / OSDCloud"
-    Write-Host -ForegroundColor DarkGray "June 16-17, 2025"
-    Write-Host -ForegroundColor DarkGray 'https://wpninjas.uk/'
+    Write-Host -ForegroundColor DarkCyan 'WPNinjasUK: OSDWorkspace and OSDCloud 2025'
+    Write-Host -ForegroundColor DarkGray "June 16-17, 2025 | $($OSDWorkspace.links.wpninjasuk)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace PowerShell Module - PowerShell Gallery'
-    Write-Host -ForegroundColor DarkGray 'https://www.powershellgallery.com/packages/OSDWorkspace'
+    Write-Host -ForegroundColor DarkCyan 'WPNinjas: OSDWorkspace and OSDCloud 2025'
+    Write-Host -ForegroundColor DarkGray "September 22-25, 2025 | $($OSDWorkspace.links.wpninjasch)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace PowerShell Module - GitHub Repository'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace'
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on GitHub'
+    Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.github)
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace PowerShell Module - Issues / Support'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace/issues'
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on PowerShell Gallery'
+    Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.powershellgallery)
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: GitHub Template Repository'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Template'
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Community WinPEDriver Repositories'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-HP'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Dell'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Surface'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/WinPEDriver-Generic'
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Community Library Repositories'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-OSDCloud'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-OSDCloud-MSP'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-OSDCloud-Vault'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-BlackLotus'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Library-WindowsUpdate'
-    Write-Host -ForegroundColor DarkGray 'https://github.com/OSDeploy/OSDWorkspace-Segura'
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Quick Start'
-    Write-Host -ForegroundColor DarkGray 'Import-OSDWorkspaceWinOS'
-    Write-Host -ForegroundColor DarkGray 'Build-OSDWorkspaceWinPE'
-    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceVM'
-    Write-Host -ForegroundColor DarkGray 'New-OSDWorkspaceUSB'
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace: Details'
-    $null = Get-OSDWSWinRESource
-    $null = Get-OSDWSWinOSSource
-    $null = Get-OSDWSWinPEBuild
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on Discord'
+    Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.discord)
+    #=================================================
+    #endregion
+    $null = Get-OSDWSWinRESource -WarningAction SilentlyContinue
+    $null = Get-OSDWSWinOSSource -WarningAction SilentlyContinue
+    $null = Get-OSDWSWinPEBuild -WarningAction SilentlyContinue
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

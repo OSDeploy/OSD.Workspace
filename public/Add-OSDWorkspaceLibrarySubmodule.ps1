@@ -41,6 +41,7 @@ function Add-OSDWorkspaceLibrarySubmodule {
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Initialize-OSDWorkspace
     #=================================================
     # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
@@ -62,7 +63,7 @@ function Add-OSDWorkspaceLibrarySubmodule {
     }
     #=================================================
     # Get Paths
-    $OSDWorkspaceRoot = $OSDWorkspace.paths.root
+    $OSDWorkspaceRoot = $OSDWorkspace.path
     $LibrarySubmodulePath = $OSDWorkspace.paths.library_submodule
     #=================================================
     # Create library-submodule
