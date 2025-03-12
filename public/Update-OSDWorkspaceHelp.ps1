@@ -8,6 +8,13 @@ function Update-OSDWorkspaceHelp {
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    $ModuleName = $($MyInvocation.MyCommand.Module.Name)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
+    $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
+    $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
+
     Initialize-OSDWorkspace
     #=================================================
     # Test Run as Administrator
@@ -32,6 +39,13 @@ function Update-OSDWorkspaceHelp {
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $PowerShellHelpPath"
         New-Item -Path $PowerShellHelpPath -ItemType Directory -Force | Out-Null
     }
+
+    # Set Registry version information
+    $RegKey = 'HKCU:\Software\OSDWorkspace'
+    $RegName = $($MyInvocation.MyCommand.Name)
+    $RegValue = $ModuleVersion
+    try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+    catch {}
     #=================================================
     # OSD.Workspace Module
     $ModuleName = 'OSD.Workspace'
@@ -39,6 +53,16 @@ function Update-OSDWorkspaceHelp {
     if ((-not (Test-Path "$PowerShellHelpPath\$ModuleName")) -or $Force) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\$ModuleName"
         New-MarkdownHelp -Module $ModuleName -OutputFolder "$PowerShellHelpPath\$ModuleName" -Force | Out-Null
+
+        # Set Registry version information
+        $RegKey = 'HKCU:\Software\OSDWorkspace'
+        $RegName = 'powershell-help-osdworkspace'
+        $RegValue = $ModuleVersion
+
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
     else {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force parameter to update $ModuleName"
@@ -53,6 +77,16 @@ function Update-OSDWorkspaceHelp {
 
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\$ModuleName"
         New-MarkdownHelp -Module $ModuleName -OutputFolder "$PowerShellHelpPath\$ModuleName" -Force | Out-Null
+
+        # Set Registry version information
+        $RegKey = 'HKCU:\Software\OSDWorkspace'
+        $RegName = 'powershell-help-dism'
+        $RegValue = $ModuleVersion
+
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
     else {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force parameter to update $ModuleName"

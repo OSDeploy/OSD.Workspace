@@ -4,6 +4,12 @@ function Initialize-OSDWorkspace {
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    $ModuleName = $($MyInvocation.MyCommand.Module.Name)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
+    $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
+    $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
     #=================================================
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     #=================================================
@@ -105,12 +111,48 @@ function Initialize-OSDWorkspace {
         $null = git init "$OSDWorkspacePath"
     }
     #=================================================
+    # Add Registry Key for OSDWorkspace
+    $RegKey = 'HKCU:\Software\OSDWorkspace'
+    $RegName = 'Initialize-OSDWorkspace'
+    $RegValue = $ModuleVersion
+
+    # Test if RegKey exists
+    if (-not (Test-Path $RegKey -ErrorAction SilentlyContinue)) {
+        try {New-Item 'HKCU:\Software' -Name 'OSDWorkspace' -Force | Out-Null}
+        catch {}
+    }
+
+    # Set the value in the registry
+    if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+        try {New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null}
+        catch {}
+    }
+
+    # Read the value from the registry
+    # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
+    #=================================================
     # Add Git Configuration
+    if (-not (Test-Path "$OSDWorkspacePath\.github")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.github"
+        New-Item -Path "$OSDWorkspacePath\.github" -ItemType Directory -Force | Out-Null
+    }
+    if (-not (Test-Path "$OSDWorkspacePath\.vscode")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.github"
+        New-Item -Path "$OSDWorkspacePath\.vscode" -ItemType Directory -Force | Out-Null
+    }
+
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\.gitattributes" -Raw
     $Path = "$OSDWorkspacePath\.gitattributes"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
+        
+        # Set the value in the registry
+        $RegName = '.gitattributes'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\.gitignore" -Raw
@@ -118,11 +160,13 @@ function Initialize-OSDWorkspace {
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-    }
-
-    if (-not (Test-Path "$OSDWorkspacePath\.github")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.github"
-        New-Item -Path "$OSDWorkspacePath\.github" -ItemType Directory -Force | Out-Null
+        
+        # Set the value in the registry
+        $RegName = '.gitignore'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\copilot-instructions.md" -Raw
@@ -130,11 +174,13 @@ function Initialize-OSDWorkspace {
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-    }
-
-    if (-not (Test-Path "$OSDWorkspacePath\.vscode")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $OSDWorkspacePath\.github"
-        New-Item -Path "$OSDWorkspacePath\.vscode" -ItemType Directory -Force | Out-Null
+        
+        # Set the value in the registry
+        $RegName = 'copilot-instructions.md'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\launch.json" -Raw
@@ -142,6 +188,13 @@ function Initialize-OSDWorkspace {
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
+        
+        # Set the value in the registry
+        $RegName = 'launch.json'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\tasks.json" -Raw
@@ -149,6 +202,13 @@ function Initialize-OSDWorkspace {
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
+        
+        # Set the value in the registry
+        $RegName = 'tasks.json'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\OSD.code-workspace" -Raw
@@ -156,6 +216,13 @@ function Initialize-OSDWorkspace {
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
+        
+        # Set the value in the registry
+        $RegName = 'OSD.code-workspace'
+        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
+            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
+            catch {}
+        }
     }
     #=================================================
     # Update Default Library
