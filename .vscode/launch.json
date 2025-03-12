@@ -1,0 +1,172 @@
+{
+    "configurations": [
+        {
+            "name": "PowerShell Attach to Host Process",
+            "request": "attach",
+            "type": "PowerShell"
+        },
+        {
+            "attachDotnetDebugger": true,
+            "createTemporaryIntegratedConsole": true,
+            "name": "PowerShell: Binary Module Interactive",
+            "request": "launch",
+            "script": "Enter command to import your binary module, for example: \"Import-Module -Force /path/to/module.psd1|dll\"",
+            "type": "PowerShell"
+        },
+        {
+            "name": "PowerShell: Module Interactive Session",
+            "request": "launch",
+            "script": "Enter command to import your binary module, for example: \"Import-Module -Force /path/to/module.psd1|dll\"",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Launch Script",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "attachDotnetDebugger": true,
+            "createTemporaryIntegratedConsole": true,
+            "name": "PowerShell Run Pester Tests",
+            "request": "launch",
+            "script": "Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "attachDotnetDebugger": true,
+            "createTemporaryIntegratedConsole": true,
+            "name": "PowerShell: Binary Module Pester Tests",
+            "request": "launch",
+            "script": "Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Interactive Session",
+            "request": "launch",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Launch Current File",
+            "request": "launch",
+            "script": "${file}",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Launch Current File (Interactive)",
+            "request": "launch",
+            "script": "${file}",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Launch Current File (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "${file}",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell Launch Current File (Interactive) (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "${file}",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (Interactive)",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (Interactive) (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script (Interactive)",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script (Interactive) (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "customPipeName": "myCustomPipeName",
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (Interactive)",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "customPipeName": "myCustomPipeName",
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (Interactive) (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "customPipeName": "myCustomPipeName",
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script with Profile (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script (Interactive)",
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        },
+        {
+            "cwd": "${cwd}",
+            "name": "PowerShell: Launch Script (Interactive) (No Debug)",
+            "noDebug": true,
+            "request": "launch",
+            "script": "Enter path or command to execute, for example, ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
+            "type": "PowerShell"
+        }
+    ],
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0"
+}

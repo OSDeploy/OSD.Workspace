@@ -1,27 +1,10 @@
 function Get-OSDWorkspace {
     <#
     .SYNOPSIS
-        Displays information about the OSDWorkspace PowerShell Module.
+        Displays information about the OSD.Workspace PowerShell Module.
 
     .DESCRIPTION
-        Dislays information about the OSDWorkspace PowerShell Module including Upcoming Events, Links to Resources, and Newest Functions.
-
-    .EXAMPLE
-        Get-OSDWorkspace
-        Displays information about the OSDWorkspace PowerShell Module.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
-
-    .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Get-OSDWorkspace.md
+        Displays information about the OSD.Workspace PowerShell Module including upcoming events and links to resources.
 
     .NOTES
         David Segura
@@ -41,19 +24,19 @@ function Get-OSDWorkspace {
     Initialize-OSDWorkspace
     #=================================================
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Team'
-    Write-Host -ForegroundColor DarkGray "David Segura | $($OSDWorkspace.links.david)"
-    Write-Host -ForegroundColor DarkGray "Michael Escamilla | $($OSDWorkspace.links.michael)"
+    Write-Host -ForegroundColor DarkGray "David Segura $($OSDWorkspace.links.david)"
+    Write-Host -ForegroundColor DarkGray "Michael Escamilla $($OSDWorkspace.links.michael)"
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'NWSCUG: OSD 2025 Preview'
-    Write-Host -ForegroundColor DarkGray "March 28, 2025 | $($OSDWorkspace.links.nwscug)"
+    Write-Host -ForegroundColor DarkGray "March 28 2025 $($OSDWorkspace.links.nwscug)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'MMSMOA: OSDWorkspace and OSDCloud 2025'
-    Write-Host -ForegroundColor DarkGray "May 5-8, 2025 | $($OSDWorkspace.links.mmsmoa)"
+    Write-Host -ForegroundColor DarkCyan 'MMSMOA: OSDWorkspace and OSDCloud'
+    Write-Host -ForegroundColor DarkGray "May 5-8 2025 $($OSDWorkspace.links.mmsmoa)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'WPNinjasUK: OSDWorkspace and OSDCloud 2025'
-    Write-Host -ForegroundColor DarkGray "June 16-17, 2025 | $($OSDWorkspace.links.wpninjasuk)"
+    Write-Host -ForegroundColor DarkCyan 'WPNinjasUK: OSDWorkspace and OSDCloud'
+    Write-Host -ForegroundColor DarkGray "June 16-17 2025 $($OSDWorkspace.links.wpninjasuk)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'WPNinjas: OSDWorkspace and OSDCloud 2025'
+    Write-Host -ForegroundColor DarkCyan 'WPNinjas: OSDWorkspace and OSDCloud'
     Write-Host -ForegroundColor DarkGray "September 22-25, 2025 | $($OSDWorkspace.links.wpninjasch)"
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on GitHub'
@@ -87,9 +70,7 @@ function Get-OSDWorkspace {
     #=================================================
     # Read the value from the registry
     # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
-
-
-    #endregion
+    #=================================================
     $null = Get-OSDWSWinRESource -WarningAction SilentlyContinue
     $null = Get-OSDWSWinOSSource -WarningAction SilentlyContinue
     $null = Get-OSDWSWinPEBuild -WarningAction SilentlyContinue
