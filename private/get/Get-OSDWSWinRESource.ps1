@@ -114,7 +114,9 @@ function Get-OSDWSWinRESource {
             if ($Architecture -eq 'arm64') {
                 $WinRESources = $WinRESources | Where-Object { $_.Architecture -eq 'arm64' }
             }
-            return $WinRESources | Sort-Object -Property ModifiedTime -Descending
+
+            $WinRESources = $WinRESources | Sort-Object -Property Name
+            return $WinRESources
         }
         else {
             return $null

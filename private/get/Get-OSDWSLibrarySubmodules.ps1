@@ -13,13 +13,14 @@ function Get-OSDWSLibrarySubmodule {
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    $OSDWSPath = $OSDWorkspace.paths.library_submodule
+    $OSDWSPath = $OSDWorkspace.paths.submodules
 
-    $Results = foreach ($Path in $OSDWSPath) {
+    $results = foreach ($Path in $OSDWSPath) {
         Get-ChildItem -Path $Path -Directory -Depth 0 -ErrorAction SilentlyContinue | Select-Object -Property * | Where-Object { Test-Path $(Join-Path $_.FullName '.git') }
     }
-
-    $Results
+    
+    $results = $results | Sort-Object -Property Name
+    $results
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

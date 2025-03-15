@@ -44,8 +44,10 @@ function Initialize-OSDWorkspace {
     else {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft VS Code is not installed"
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use WinGet to install VS Code:"
-        Write-Host 'winget install Microsoft.VisualStudioCode'
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use WinGet to install VS Code using the following command (saved to clipboard):"
+        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
+        $InstallMessage | Set-Clipboard
+        Write-Host -ForegroundColor DarkGray $InstallMessage
         break
     }
     #=================================================
@@ -228,20 +230,20 @@ function Initialize-OSDWorkspace {
     # Update Default Library
     $DefaultLibraryPath = $OSDWorkspace.paths.default_library
 
-    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Driver\amd64")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-Driver"
-        New-Item -Path "$DefaultLibraryPath\WinPE-Driver\amd64" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\winpe-driver\amd64")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-driver"
+        New-Item -Path "$DefaultLibraryPath\winpe-driver\amd64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Driver\arm64")) {
-        New-Item -Path "$DefaultLibraryPath\WinPE-Driver\arm64" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\winpe-driver\arm64")) {
+        New-Item -Path "$DefaultLibraryPath\winpe-driver\arm64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\WinPE-Script")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-Script"
-        New-Item -Path "$DefaultLibraryPath\WinPE-Script" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\winpe-script")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-script"
+        New-Item -Path "$DefaultLibraryPath\winpe-script" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\WinPE-MediaScript")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\WinPE-MediaScript"
-        New-Item -Path "$DefaultLibraryPath\WinPE-MediaScript" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$DefaultLibraryPath\winpe-mediascript")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-mediascript"
+        New-Item -Path "$DefaultLibraryPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
     }
     #=================================================
 }

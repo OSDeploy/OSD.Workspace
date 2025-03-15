@@ -24,7 +24,7 @@
         },
         {
             "name": "Library (submodules)",
-            "path": "./library-submodule"
+            "path": "./submodules"
         },
         {
             "name": "Windows OS (import)",

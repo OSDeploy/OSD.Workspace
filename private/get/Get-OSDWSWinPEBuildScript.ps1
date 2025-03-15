@@ -21,25 +21,25 @@ function Get-OSDWSWinPEBuildScript {
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = $OSDWorkspace.paths.library_submodule
+    $PublicLibrary = $OSDWorkspace.paths.submodules
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\WinPE-Script") -Recurse -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-script") -Recurse -Depth 1 -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
-            Select-Object @{Name = 'Type'; Expression = { 'WinPE-Script' } },
+            Select-Object @{Name = 'Type'; Expression = { 'winpe-script' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
             
-        Get-ChildItem -Path @("$LibraryPath\WinPE-MediaScript") -Recurse -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-mediascript") -Recurse -Depth 1 -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
-            Select-Object @{Name = 'Type'; Expression = { 'WinPE-MediaScript' } },
+            Select-Object @{Name = 'Type'; Expression = { 'winpe-mediascript' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 
-    $LibraryItems = $LibraryItems | Sort-Object -Property Type, Name
+    $LibraryItems = $LibraryItems | Sort-Object -Property Name, FullName
 
     $LibraryItems
     #=================================================

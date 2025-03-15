@@ -119,7 +119,9 @@ function Get-OSDWSWinOSSource {
             if ($Architecture -eq 'arm64') {
                 $WinOSSources = $WinOSSources | Where-Object { $_.Architecture -eq 'arm64' }
             }
-            return $WinOSSources | Sort-Object -Property ModifiedTime -Descending
+
+            $WinOSSources = $WinOSSources | Sort-Object -Property Name
+            return $WinOSSources
         }
         else {
             return $null

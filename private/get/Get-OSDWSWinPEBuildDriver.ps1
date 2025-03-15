@@ -33,16 +33,17 @@ function Get-OSDWSWinPEBuildDriver {
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = $OSDWorkspace.paths.library_submodule
+    $PublicLibrary = $OSDWorkspace.paths.submodules
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\WinPE-Driver\*\*") -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-driver\*\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.PSIsContainer -eq $true } | `
-            Select-Object Name, @{Name = 'Architecture'; Expression = { $_.Parent } }, FullName, LastWriteTime
+            Select-Object @{Name = 'Type'; Expression = { 'winpe-driver' } },
+            Name, @{Name = 'Architecture'; Expression = { ($_.Parent | Split-Path -Leaf) } }, FullName, LastWriteTime
     }
 
     # Ensure the Driver Repository uses the proper Architecture folder structure
@@ -56,6 +57,8 @@ function Get-OSDWSWinPEBuildDriver {
         $LibraryItems = $LibraryItems | Where-Object { $_.Name -notmatch 'Wireless' }
     }
     
+    $LibraryItems = $LibraryItems | Sort-Object -Property Name, FullName
+
     $LibraryItems
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

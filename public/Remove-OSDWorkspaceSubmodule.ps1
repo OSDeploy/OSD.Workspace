@@ -1,4 +1,4 @@
-function Remove-OSDWorkspaceLibrarySubmodule {
+function Remove-OSDWorkspaceSubmodule {
     [CmdletBinding()]
     param (
         # Force the delete of the OSDWorkspace Remote Library
@@ -42,14 +42,14 @@ function Remove-OSDWorkspaceLibrarySubmodule {
                 $RepositoryName = $Repository.Name
                 Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryName: $RepositoryName"
 
-                $RepositoryPathToDelete = "library-submodule/$RepositoryName"
+                $RepositoryPathToDelete = "submodules/$RepositoryName"
                 Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryPathToDelete: $RepositoryPathToDelete"
 
                 Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule entry from OSDWorkspace .git/config"
                 Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule deinit --force $RepositoryPathToDelete"
                 git submodule deinit --force "$RepositoryPathToDelete"
 
-                $RemoveItemPath = ".git\modules\library-submodule\$RepositoryName"
+                $RemoveItemPath = ".git\modules\submodules\$RepositoryName"
                 Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RemoveItemPath: $RemoveItemPath"
                 if (Test-Path $RemoveItemPath) {
                     Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule from OSDWorkspace .git/modules"

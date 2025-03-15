@@ -19,8 +19,7 @@ function Get-OSDWSWinPEBuildProfile {
         Select-Object @{Name = 'Type'; Expression = { 'WinPE-BuildProfile' } },
         Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
 
-    $LibraryItems = $LibraryItems | Sort-Object -Property LastWriteTime -Descending
-    #TODO Need to Write when using so we know when it was last used
+    $LibraryItems = $LibraryItems | Sort-Object -Property Name, FullName
 
     $LibraryItems
     #=================================================

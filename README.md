@@ -6,6 +6,17 @@ This software is provided "as-is," without any express or implied warranty. In n
 
 ---
 
+## OSDWorkspace Scripts Repository
+
+Scripts for use in OSDWorkspace will additionally be uploaded to the OSDWorkspace Scripts Repository. These scripts are designed to be used with the OSD.Workspace PowerShell Module and for example purposes.
+To use the OSDWorkspace Script Repository, run the following command in PowerShell:
+
+```powershell
+iex "& { $(irm scripts.osdcloud.com) } -Owner OSDeploy -Repo OSDWorkspace.scripts"
+```
+
+---
+
 ## Requirements
 
 ### Windows 11 amd64 24H2
@@ -41,8 +52,20 @@ https://code.visualstudio.com/docs/setup/windows
 This module was developed for use with Visual Studio Code as a Workspace.
 
 ```powershell
-# Install Visual Studio Code
-winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"'
+# Visual Studio Code
+winget install -e --id Microsoft.VisualStudioCode
+```
+```powershell
+# Visual Studio Code (with recommended options)
+winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath"'
+```
+```powershell
+# Visual Studio Code Insiders
+winget install -e --id Microsoft.VisualStudioCodeInsiders
+```
+```powershell
+# Visual Studio Code Insiders (with recommended options)
+winget install -e --id Microsoft.VisualStudioCodeInsiders --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath"'
 ```
 
 ### Microsoft Windows ADK

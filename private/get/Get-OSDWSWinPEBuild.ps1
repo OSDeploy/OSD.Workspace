@@ -138,6 +138,7 @@ function Get-OSDWSWinPEBuild {
                 ContentWinpeshl      = $ClixmlBM.ContentWinpeshl
                 AddOnAzCopy          = $ClixmlBM.AddOnAzCopy
                 AddOnMicrosoftDaRT   = $ClixmlBM.AddOnMicrosoftDaRT
+                AddOnOpenSSH         = $ClixmlBM.AddOnOpenSSH
                 AddOnPwsh            = $ClixmlBM.AddOnPwsh
                 AddOnWirelessConnect = $ClixmlBM.AddOnWirelessConnect
                 AddOnZip             = $ClixmlBM.AddOnZip
@@ -179,7 +180,10 @@ function Get-OSDWSWinPEBuild {
             if ($GridView) {
                 $WinPEBuilds = $WinPEBuilds | Out-GridView -Title 'Select a BootMedia and press OK (Cancel to Exit)' -OutputMode $GridView
             }
-            return $WinPEBuilds | Sort-Object -Property ModifiedTime -Descending
+
+
+            $WinPEBuilds = $WinPEBuilds | Sort-Object -Property ModifiedTime -Descending
+            return $WinPEBuilds
         }
         else {
             return $null

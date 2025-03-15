@@ -21,7 +21,7 @@ function Get-OSDWSWinPEBuildFile {
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = $OSDWorkspace.paths.library_submodule
+    $PublicLibrary = $OSDWorkspace.paths.submodules
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
@@ -47,7 +47,7 @@ function Get-OSDWSWinPEBuildFile {
         Name, @{Name = 'Size'; Expression = { '{0:N2} MB' -f ($_.Length / 1MB) } }, LastWriteTime, FullName
     }
     
-    $LibraryItems = $LibraryItems | Sort-Object -Property Type, Name
+    $LibraryItems = $LibraryItems | Sort-Object -Property Name, FullName
 
     $LibraryItems
     #=================================================
