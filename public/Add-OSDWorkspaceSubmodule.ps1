@@ -1,4 +1,4 @@
-function Add-OSDWorkspaceLibrarySubmodule {
+function Add-OSDWorkspaceSubmodule {
     <#
     .SYNOPSIS
         Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
@@ -6,7 +6,7 @@ function Add-OSDWorkspaceLibrarySubmodule {
     .DESCRIPTION
         This function clones a specified GitHub repository into the OSDWorkspace Library-GitHub directory.
         Performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have already cloned the repository, use the Update-OSDWorkspaceLibrarySubmodule cmdlet to update it.
+        If you have already cloned the repository, use the Update-OSDWorkspaceSubmodule cmdlet to update it.
 
     .INPUTS
         None.
@@ -19,12 +19,12 @@ function Add-OSDWorkspaceLibrarySubmodule {
         This function does not return any output.
 
     .EXAMPLE
-        Add-OSDWorkspaceLibrarySubmodule -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
+        Add-OSDWorkspaceSubmodule -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
         Clones the repository 'OSDWorkspace-MichaelEscamilla' into the OSDWorkspace Library-GitHub directory.
         #TODO Update URL to the OSDWorkspace Template GitHub Repository
 
     .LINK
-    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Add-OSDWorkspaceLibrarySubmodule.md
+    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Add-OSDWorkspaceSubmodule.md
 
     .NOTES
         David Segura
@@ -64,9 +64,9 @@ function Add-OSDWorkspaceLibrarySubmodule {
     #=================================================
     # Get Paths
     $OSDWorkspaceRoot = $OSDWorkspace.path
-    $LibrarySubmodulePath = $OSDWorkspace.paths.library_submodule
+    $LibrarySubmodulePath = $OSDWorkspace.paths.submodules
     #=================================================
-    # Create library-submodule
+    # Create submodules
     if (-not (Test-Path $LibrarySubmodulePath -ErrorAction SilentlyContinue)) {
         New-Item -Path $LibrarySubmodulePath -ItemType Directory -Force | Out-Null
     }
@@ -79,13 +79,13 @@ function Add-OSDWorkspaceLibrarySubmodule {
     $RepositoryName = (Split-Path $Url -Leaf).Replace('.git', '')
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Name to Add: $RepositoryName"
 
-    $Destination = "library-submodule/$RepositoryName"
+    $Destination = "submodules/$RepositoryName"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository Destination: $Destination"
 
     <#
     if (Test-Path -Path "$Destination\.git") {
         Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Destination repository already exists"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceLibrarySubmodule cmdlet to update this repository"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the Update-OSDWorkspaceSubmodule cmdlet to update this repository"
         return
     }
     #>
@@ -99,8 +99,11 @@ function Add-OSDWorkspaceLibrarySubmodule {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location $OSDWorkspaceRoot"
     Push-Location $OSDWorkspaceRoot
 
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule add $Url library-submodule/$RepositoryName"
-    git submodule add $Url library-submodule/$RepositoryName
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule add $Url submodules/$RepositoryName"
+    git submodule add $Url submodules/$RepositoryName
+
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git commit -m `"Add submodule $RepositoryName`""
+    git commit -m "Add submodule $RepositoryName"
 
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Pop-Location"
     Pop-Location

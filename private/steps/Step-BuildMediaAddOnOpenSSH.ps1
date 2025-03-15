@@ -1,25 +1,20 @@
-function Step-BuildMediaLibraryWinPEScript {
+function Step-BuildMediaAddOnOpenSSH {
     [CmdletBinding()]
     param (
         [System.String]
-        $MountPath = $global:BuildMedia.MountPath,
-        $LibraryWinPEScript = $global:BuildMedia.LibraryWinPEScript
+        $MountPath = $global:BuildMedia.MountPath
     )
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LibraryWinPEScript: $LibraryWinPEScript"
     #=================================================
-    foreach ($Item in $LibraryWinPEScript) {
-        if (Test-Path $Item) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] winpe-script: $Item"
-            & "$Item"
-        }
-        else {
-            Write-Warning "BootImage Script $Item (not found)"
-        }
+    # WinRE Add WirelessConnect.exe
+    $global:BuildMedia.AddOnOpenSSH = $false
+    if (Test-Path "$MountPath\Windows\System32\OpenSSH\ssh.exe") {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OpenSSH: OpenSSH is already installed."
+        $global:BuildMedia.AddOnOpenSSH = $true
     }
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

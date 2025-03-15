@@ -90,7 +90,7 @@ WinRE is the abbreviation for Windows Recovery Environment is used to repair a W
 - C:\OSDWorkspace\src\windows-re - Imported Windows 11 WinRE BootImages
 - C:\OSDWorkspace\docs - Reference Documentation
 - C:\OSDWorkspace\library - Contains files and scripts used by the OSD.Workspace PowerShell Module when creating a WinPE BootImage or BootMedia.
-- C:\OSDWorkspace\library-submodule - Contains files and scripts used by the OSD.Workspace PowerShell Module when creating a WinPE BootImage or BootMedia that were imported from a GitHub Repository.
+- C:\OSDWorkspace\submodules - Contains files and scripts used by the OSD.Workspace PowerShell Module when creating a WinPE BootImage or BootMedia that were imported from a GitHub Repository.
 - C:\OSDWorkspace\build\windows-pe - Contains WinPE BootImages and BootMedia created by the OSD.Workspace PowerShell Module.
 
 # Procedures

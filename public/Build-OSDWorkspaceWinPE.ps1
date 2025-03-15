@@ -397,11 +397,11 @@ function Build-OSDWorkspaceWinPE {
         $OSDWorkspaceLibraryWinPEScript = @()
         $OSDWorkspaceLibraryWinPEScript = Select-OSDWSWinPEBuildScript
 
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-Script' }) {
-            $LibraryWinPEScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-Script' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-script' }) {
+            $LibraryWinPEScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-script' } | Select-Object -ExpandProperty FullName)
         }
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-MediaScript' }) {
-            $LibraryMediaScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'WinPE-MediaScript' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' }) {
+            $LibraryMediaScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' } | Select-Object -ExpandProperty FullName)
         }
     }
     #endregion
@@ -450,6 +450,7 @@ function Build-OSDWorkspaceWinPE {
         AddOnAzCopy             = $false
         AddOnMicrosoftDaRT      = $false
         AddOnPwsh               = $false
+        AddOnOpenSSH            = $false
         AddOnWirelessConnect    = $false
         AddOnZip                = $false
         AdkInstallPath          = $WindowsAdkInstallPath
@@ -799,11 +800,12 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaDismSettings
     Step-BuildMediaAddWallpaper
     Step-BuildMediaPowerShellUpdate
-    Step-BuildMediaAddOnWirelessConnect
-    Step-BuildMediaAddOnMicrosoftDaRT
     Step-BuildMediaAddOnAzCopy
+    Step-BuildMediaAddOnMicrosoftDaRT
+    #Step-BuildMediaAddOnOpenSSH
+    #Step-BuildMediaAddOnPwsh
+    Step-BuildMediaAddOnWirelessConnect
     Step-BuildMediaAddOnZip
-    Step-BuildMediaAddOnPwsh
     Step-BuildMediaWindowsImageSave
     Step-BuildMediaRemoveWinpeshl
     Step-BuildMediaConsoleSettings

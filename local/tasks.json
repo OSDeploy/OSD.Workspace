@@ -56,7 +56,7 @@
         "-Verb",
         "RunAs",
         "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceLibrarySubmodule -Url https://github.com/OSDeploy/OSDWSLibrary-OSDCloud-Archive.git'"
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-osdcloud-archive.git'"
       ],
       "problemMatcher": []
     },
@@ -69,7 +69,7 @@
         "-Verb",
         "RunAs",
         "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceLibrarySubmodule'"
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule'"
       ],
       "problemMatcher": []
     },
@@ -82,7 +82,7 @@
         "-Verb",
         "RunAs",
         "-ArgumentList",
-        "'-NoExit -Command Remove-OSDWorkspaceLibrarySubmodule -Force -Verbose'"
+        "'-NoExit -Command Remove-OSDWorkspaceSubmodule -Force -Verbose'"
       ],
       "problemMatcher": []
     },
@@ -95,7 +95,7 @@
         "-Verb",
         "RunAs",
         "-ArgumentList",
-        "'-NoExit -Command Update-OSDWorkspaceLibrarySubmodule'"
+        "'-NoExit -Command Update-OSDWorkspaceSubmodule'"
       ],
       "problemMatcher": []
     },

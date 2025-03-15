@@ -21,7 +21,7 @@ function Get-OSDWSWinPEBuildStartnet {
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = $OSDWorkspace.paths.library_submodule
+    $PublicLibrary = $OSDWorkspace.paths.submodules
     foreach ($Subfolder in $PublicLibrary) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
@@ -35,7 +35,7 @@ function Get-OSDWSWinPEBuildStartnet {
         @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 
-    $LibraryItems = $LibraryItems | Sort-Object -Property Type, Name, FullName
+    $LibraryItems = $LibraryItems | Sort-Object -Property Name, FullName
 
     $LibraryItems
     #=================================================

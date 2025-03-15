@@ -162,7 +162,7 @@ function Import-OSDWorkspaceWinOS {
             #=================================================
             #region Boot
             $RobocopyLog = "$DestinationLogs\os-boot.log"
-            if (Test-Path "$MountDirectory\Windows") {
+            if (Test-Path "$MountDirectory\Windows\Boot") {
                 robocopy "$MountDirectory\Windows\Boot" "$DestinationCore\os-boot" *.* /e /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
             #endregion
@@ -224,6 +224,11 @@ function Import-OSDWorkspaceWinOS {
             $RobocopyLog = "$DestinationLogs\os-files.log"
             foreach ($Item in $BackupOSFiles) {
                 robocopy "$MountDirectory\Windows\System32" "$DestinationCore\os-files\Windows\System32" $Item /s /xd rescache servicing /ndl /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
+            }
+
+            # OpenSSH
+            if (Test-Path "$MountDirectory\Windows\System32\OpenSSH") {
+                robocopy "$MountDirectory\Windows\System32\OpenSSH" "$DestinationCore\os-files\Windows\System32\OpenSSH" *.* /e /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
             #endregion
             #=================================================

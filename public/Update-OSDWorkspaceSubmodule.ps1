@@ -1,4 +1,4 @@
-function Update-OSDWorkspaceLibrarySubmodule {
+function Update-OSDWorkspaceSubmodule {
     <#
     .SYNOPSIS
         Updates a GitHub Repository in C:\OSDWorkspace\Library-GitHub from the GitHub Origin
@@ -7,7 +7,7 @@ function Update-OSDWorkspaceLibrarySubmodule {
         This function updates ALL GitHub repositories in the OSDWorkspace Library-GitHub directory.
         The function will update this Git repository to the latest GitHub commit in the main branch.
         It performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have not cloned the repository, use Add-OSDWorkspaceLibrarySubmodule to clone it.
+        If you have not cloned the repository, use Add-OSDWorkspaceSubmodule to clone it.
 
     .PARAMETER Force
         The -Force switch is Required to update the GitHub repository.
@@ -24,11 +24,11 @@ function Update-OSDWorkspaceLibrarySubmodule {
         This function does not return any output.
 
     .EXAMPLE
-        Update-OSDWorkspaceLibrarySubmodule -Force
+        Update-OSDWorkspaceSubmodule -Force
         Updates all GitHub repositories in the OSDWorkspace Library-GitHub directory to the latest GitHub commit in the main branch.
 
     .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceLibrarySubmodule.md
+        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceSubmodule.md
 
     .NOTES
         David Segura
@@ -57,42 +57,27 @@ function Update-OSDWorkspaceLibrarySubmodule {
 
     process {
         #=================================================
-        #region Get InputObject
-        $InputObject = @()
-        $InputObject = Select-OSDWSRemoteLibrary
-        #endregion
-        #=================================================
-        #region Process foreach
-        foreach ($Repository in $InputObject) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository: $($Repository.FullName)"
+        $RepositoryPath = $OSDWorkspace.Path
+        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace: $RepositoryPath"
 
-            if ($Force -eq $true) {
-                $RepositoryPath = $Repository.FullName
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$RepositoryPath`""
-                Push-Location "$RepositoryPath"
+        if ($Force -eq $true) {
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$RepositoryPath`""
+            Push-Location "$RepositoryPath"
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git fetch --verbose --progress --depth 1 origin"
-                git fetch --verbose --progress --depth 1 origin
-                #TODO Make sure the git configuration is correct!!!!!
-                <#
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --hard origin"
-                git reset --hard origin
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule update --remote --merge"
+            git submodule update --remote --merge
 
-                #Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git reset --mixed"
-                #git reset --mixed
+            # Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git commit -m `"Add submodule Update-OSDWorkspaceSubmodule`""
+            # git commit -m "Add submodule Update-OSDWorkspaceSubmodule"
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git clean -d --force"
-                git clean -d --force
-                #>
-                Pop-Location
-            }
-            else {
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This command will update this Git repository to the latest GitHub commit in the main branch using git fetch."
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force switch when running this command."
-                Write-Host
-            }
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Pop-Location"
+            Pop-Location
         }
-        #endregion
+        else {
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This command will update this Git repository to the latest GitHub commit in the main branch using git fetch."
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force switch when running this command."
+            Write-Host
+        }
         #=================================================
     }
     
