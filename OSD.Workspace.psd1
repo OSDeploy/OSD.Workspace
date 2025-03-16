@@ -23,10 +23,10 @@
     )
     PrivateData          = @{
         PSData = @{
-            IconUri      = 'https://raw.githubusercontent.com/OSDeploy/OSD.Workspace/main/OSD.png'
-            LicenseUri   = 'https://github.com/OSDeploy/OSD.Workspace/blob/main/LICENSE'
-            ProjectUri   = 'https://github.com/OSDeploy/OSD.Workspace'
-            Tags         = @('OSDeploy', 'OSD', 'OSDWorkspace', 'OSDCloud')
+            ProjectUri = 'https://github.com/OSDeploy/OSD.Workspace'
+            LicenseUri = 'https://github.com/OSDeploy/OSD.Workspace/blob/main/LICENSE'
+            IconUri    = 'https://raw.githubusercontent.com/OSDeploy/OSD.Workspace/main/OSD.png'
+            Tags       = @('OSDeploy', 'OSD', 'OSDWorkspace', 'OSDCloud')
         }
     }
 }
