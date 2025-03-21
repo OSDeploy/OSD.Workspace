@@ -1,106 +1,115 @@
-# Coding Guidelines
+# What is OSDWorkspace
+OSDWorkspace is a VS Code Workspace 
+OSDWorkspace is located at C:\OSDWorkspace
+OSDWorkspace is used to build WinPE BootImages and BootMedia.
+OSDWorkspace should only be opened in Visual Studio Code
+OSDWorkspace only runs on Windows 11.
+OSDWorkspace does not work on Windows Server or Windows 10 is not supported.
 
-## Introduction
-
-These are VS Code coding guidelines. Please also review our [Source Code Organisation](https://github.com/microsoft/vscode/wiki/Source-Code-Organization) page.
-
-## Indentation
-
-We use tabs, not spaces.
-
-## Naming Conventions
-
-* Use PascalCase for `type` names
-* Use PascalCase for `enum` values
-* Use camelCase for `function` and `method` names
-* Use camelCase for `property` names and `local variables`
-* Use whole words in names when possible
-
-## Types
-
-* Do not export `types` or `functions` unless you need to share it across multiple components
-* Do not introduce new `types` or `values` to the global namespace
-
-## Comments
-
-* When there are comments for `functions`, `interfaces`, `enums`, and `classes` use JSDoc style comments
-
-## Strings
-
-* Use "double quotes" for strings shown to the user that need to be externalized (localized)
-* Use 'single quotes' otherwise
-* All strings visible to the user need to be externalized
-
-## Style
-
-* Use arrow functions `=>` over anonymous function expressions
-* Only surround arrow function parameters when necessary. For example, `(x) => x + x` is wrong but the following are correct:
-
-```javascript
-x => x + x
-(x, y) => x + y
-<T>(x: T, y: T) => x === y
-```
-
-* Always surround loop and conditional bodies with curly braces
-* Open curly braces always go on the same line as whatever necessitates them
-* Parenthesized constructs should have no surrounding whitespace. A single space follows commas, colons, and semicolons in those constructs. For example:
-
-```javascript
-for (let i = 0, n = str.length; i < 10; i++) {
-    if (x < 10) {
-        foo();
-    }
-}
-
-function f(x: number, y: string): void { }
-```
-
-# OSDWorkspace
-OSDWorkspace is a VS Code Workspace and is located at C:\OSDWorkspace used to build WinPE BootImages and BootMedia.
-OSDWorkspace should be opened in Visual Studio Code and run on Windows 11.
-OSDWorkspace on Windows Server or Windows 10 is not supported.
-
-# OSD.Workspace PowerShell Module
+# What is OSD.Workspace PowerShell Module
 OSDWorkspace is managed by PowerShell functions in the OSD.Workspace PowerShell Module.
 OSD.Workspace functions are documented in C:\OSDWorkspace\docs\powershell-help\OSD.Workspace\*.md files.
 OSD.Workspace functions need to be Run as Administrator.
 OSD.Workspace functions should be run in Windows Terminal.
 
-# Reference Documents
-Additional PowerShell functions are documented in the functions C:\OSDWorkspace\docs\powershell-help\<ModuleName>\*.md files.
-Where <ModuleName> is the name of the PowerShell Module.
+# OSDWorkspace Folder Structure
+OSDWorkspace has the below folder structure:
+- Build
+- Cache
+- Library
+- src
+- Submodules
 
-# Facts
-Commands are functions, and functions are commands.
-Functions should be referenced whenever possible.
-PowerShell functions require Windows PowerShell 5.1 or PowerShell 7.
+# build Folder
+The [Build](/build/) folder is named 'Build'
+The [Build](/build/) folder is located at C:\OSDWorkspace\Build
+The [Build](/build/) folder contains WinPE BootMedia created by the OSD.Workspace PowerShell Module.
+The [Build](/build/) folder contains BootImages created by the OSD.Workspace PowerShell Module.
+The [Build](/build/) folder contains a subfolder [windows-pe](/build/windows-pe/)
+The [windows-pe](/build/windows-pe/) folder is named 'windows-pe'
+The [windows-pe](/build/windows-pe/) is located at C:\OSDWorkspace\Build\windows-pe
+The [windows-pe](/build/windows-pe/) folder contains the BootMedia created by the OSD.Workspace PowerShell Module.
+The [windows-pe](/build/windows-pe/) folder contains subfolders for each BootMedia.
+The subfolders have the named format '<Date>-<Time>-<Architecture>'.
 
-# Best Practices
-Do not reference files that do not exist in the OSDWorkspace.
-Do not edit any *.md files in the OSDWorkspace as they are for reference.
+# cache Folder
+The [Cache](/cache/) folder is named 'Cache'
+The [Cache](/cache/) folder is located at C:\OSDWorkspace\Cache
+The [Cache](/cache/) is managed automatically by the OSDWorkspace.
+The [Cache](/cache/) folder contains offline files that are used to build BootMedia.
+The [Cache](/cache/) folder contains:
+* [adk-versions](/cache/adk-versions/)
+    * Stores offline versions of the Windows ADK.
+* [powershell-modules](/cache/powershell-modules/)
+    * Contains offline copies of required PowerShell modules.
+* [addon-packages](/cache/addon-packages/)
+    * Contains offline copies of required Addon packages
+        * 7-Zip
+        * AzCopy
+        * MicrosoftDaRT
+        * WirelessConnect
+* [winpe-buildprofiles](/cache/winpe-buildprofile/)
+    * BuildProfiles are saved configurations for building BootMedia.
 
-# Definitions
-WinPE is the abbreviation for Windows Preinstallation Environment which is used to boot a computer from a network, CD, DVD, or USB drive for the purpose of installing an operating system or performing maintenance tasks.
+# library Folder
+The [Library](/library/) folder is named 'Library'
+The [Library](/library/) folder is located at C:\OSDWorkspace\Library
+The [Library](/library/) is where you store content that is used by OSDWorkspace to create BootMedia.
+The [Library](/library/) folder contains subfolders of profiles.
+Each subfolder contains Drivers and Scripts used to create BootMedia.
+Each subfolder should have 3 folders named:
+* winpe-driver
+* winpe-mediascript
+* winpe-script
 
-WinRE is the abbreviation for Windows Recovery Environment is used to repair a Windows installation when the operating system fails to boot. It also contains Wireless Network drivers to connect to a network and can be converted to a WinPE BootImage.
+# src Folder
+The [Source](/src/) folder is named 'src'
+The [Source](/src/) folder is located at C:\OSDWorkspace\src
+The [Source](/src/) folder contains a subfolder [windows-re](/src/windows-re/)
+The [windows-re](/src/windows-re/) folder contains imported Windows Recovery Environment (WinRE) images.
+Avaialble Windows RE images are only stored in the [index.json](/build/windows-re/index.json) file.
+The [Source](/src/) folder contains a subfolder [windows-os](/src/windows-os/)
+The [windows-os](/src/windows-os/) folder contains imported Windows OS Media.
+Available Windows OS Media are only stored in the [index.json](/build/windows-os/index.json) file.
 
-# Subfolders
-- C:\OSDWorkspace\src\windows-os - Imported Windows 11 Operating Systems
-- C:\OSDWorkspace\src\windows-re - Imported Windows 11 WinRE BootImages
-- C:\OSDWorkspace\docs - Reference Documentation
-- C:\OSDWorkspace\library - Contains files and scripts used by the OSD.Workspace PowerShell Module when creating a WinPE BootImage or BootMedia.
-- C:\OSDWorkspace\submodules - Contains files and scripts used by the OSD.Workspace PowerShell Module when creating a WinPE BootImage or BootMedia that were imported from a GitHub Repository.
-- C:\OSDWorkspace\build\windows-pe - Contains WinPE BootImages and BootMedia created by the OSD.Workspace PowerShell Module.
+# submodules Folder
+The [Submodules](/submodules/) folder is named 'Submodules'
+The [Submodules](/submodules/) folder is located at C:\OSDWorkspace\Submodules
+The [Submodules](/submodules/) folder contains added Submodules to the OSDWorkspace.
+Submodules are defined in the [.gitmodules](/.gitmodules) file.
+Submodules are Git repositories that are added to the main Git Initialized OSDWorkspace.
+Submodules should only contain subfolders named:
+* winpe-driver
+* winpe-mediascript
+* winpe-script
 
-# Procedures
+# BootMedia
+BootMedia is also referred to as 'Boot Media'.
+Avaialble BootMedia is only stored in the [index.json](/build/windows-pe/index.json) file.
+Default attributes to show from the [index.json](/build/windows-pe/index.json) file are:
+- Id
+- Name
+- Architecture
+- Version
+- Languages
+- Path
+- OSVersion
 
-## Mount the Windows 11 ISO
-Mount a Windows 11 ISO, either amd64 or arm64.
+AddOn attributes are set to true if they are included in the BootMedia.
+AddOn attributes are set to false if they are not included in the BootMedia.
+Show AddOn attributes that true.
+AddOn attributes in the [index.json](/build/windows-pe/index.json) file are:
+- AddOnAzCopy
+- AddOnMicrosoftDaRT
+- AddOnOpenSSH
+- AddOnPwsh
+- AddOnWirelessConnect
+- AddOnZip
 
-## Import-OSDWorkspaceWinOS
-`Import-OSDWorkspaceWinOS` is used to import a Windows 11 Operating System.
-The WinOS Operating System will be stored in the C:\OSDWorkspace\src\windows-os folder.
-Detailed information about the WinOS Operating System will be stored in the C:\OSDWorkspace\src\windows-os\index.json file.
-The WinRE BootImage will be stored in the C:\OSDWorkspace\src\windows-re folder.
-Detailed information about the WinRE BootImage will be stored in the C:\OSDWorkspace\src\windows-re\index.json file.
+# BootImage
+BootImages are also referred to as 'Boot Images'.
+BootImages are imported from a mounted Windows Installation Iso.
+BootImages are used to create BootMedia.
+
+# Indentation
+We use tabs, not spaces.
