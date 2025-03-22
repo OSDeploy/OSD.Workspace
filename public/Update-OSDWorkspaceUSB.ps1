@@ -1,45 +1,33 @@
 function Update-OSDWorkspaceUSB {
     <#
     .SYNOPSIS
-        Creates a new OSDWorkspace USB.
+        Updates an Existing OSDWorkspace USB drive with new BootMedia files.
 
     .DESCRIPTION
-        This function creates a new OSDWorkspace USB by selecting a boot media and performing necessary checks and operations.
-
-    .PARAMETER BootLabel
-        Label for the boot partition. Default is 'WINPE'.
-
-    .PARAMETER DataLabel
-        Label for the data partition. Default is 'USB Data'.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
+        This function updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia.
 
     .EXAMPLE
-        New-OSDWorkspaceUSB
-        Creates a new OSDWorkspace USB with default labels for boot and data partitions.
+        Update-OSDWorkspaceUSB
+        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia and uses default labels for boot and data partitions.
 
     .EXAMPLE
-        New-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
-        Creates a new OSDWorkspace USB with the boot label 'MYBOOT' and data label 'MYDATA'.
+        Update-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
+        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia and uses the boot label 'MYBOOT' and data label 'MYDATA'.
 
     .NOTES
         David Segura
     #>
     [CmdletBinding()]
     param (
+        # Label for the boot partition. Default is 'USB-WinPE'.
         [ValidateLength(0,11)]
-        [string]$BootLabel = 'BootMedia',
+        [string]
+        $BootLabel = 'USB-WinPE',
 
+        # Label for the data partition. Default is 'USB-Data'.
         [ValidateLength(0,32)]
-        [string]$DataLabel = 'USB-Data'
+        [string]
+        $DataLabel = 'USB-Data'
     )
     #=================================================
     $Error.Clear()

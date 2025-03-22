@@ -5,6 +5,7 @@ function Get-OSDWorkspace {
 
     .DESCRIPTION
         Displays information about the OSD.Workspace PowerShell Module including upcoming events and links to resources.
+        This will also initialize the OSDWorkspace module and display the version of various components.
 
     .NOTES
         David Segura

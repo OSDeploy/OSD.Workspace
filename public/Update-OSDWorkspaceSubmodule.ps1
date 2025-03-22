@@ -1,41 +1,23 @@
 function Update-OSDWorkspaceSubmodule {
     <#
     .SYNOPSIS
-        Updates a GitHub Repository in C:\OSDWorkspace\Library-GitHub from the GitHub Origin
+        Updates all submodules in the OSDWorkspace.
 
     .DESCRIPTION
-        This function updates ALL GitHub repositories in the OSDWorkspace Library-GitHub directory.
-        The function will update this Git repository to the latest GitHub commit in the main branch.
-        It performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have not cloned the repository, use Add-OSDWorkspaceSubmodule to clone it.
-
-    .PARAMETER Force
-        The -Force switch is Required to update the GitHub repository.
-        This will overwrite any local changes to the repository.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
+        This function updates all submodules in the OSDWorkspace C:\OSDWorkspace\Submodules directory.
+        Performs a 'git submodule update --remote --merge' to update the submodules to the latest commit in the main branch.
+        If you have not added the repository as a Submodule, use Add-OSDWorkspaceSubmodule.
 
     .EXAMPLE
         Update-OSDWorkspaceSubmodule -Force
         Updates all GitHub repositories in the OSDWorkspace Library-GitHub directory to the latest GitHub commit in the main branch.
-
-    .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Update-OSDWorkspaceSubmodule.md
 
     .NOTES
         David Segura
     #>
     [CmdletBinding()]
     param (
-        # Force the update of the Git Repository, overwriting all content
+        # Force Update all Submodules in the OSDWorkspace
         [System.Management.Automation.SwitchParameter]
         $Force
     )

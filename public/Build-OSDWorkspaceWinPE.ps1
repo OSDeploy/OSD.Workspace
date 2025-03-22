@@ -4,48 +4,8 @@ function Build-OSDWorkspaceWinPE {
         Creates a new OSDWorkspace BootMedia.
 
     .DESCRIPTION
-        This function creates a new OSDWorkspace BootMedia by copying the selected BootImage and adding the Windows ADK Optional Components.
-        The BootMedia is created in the OSDWorkspace BootMedia directory.
-
-    .PARAMETER Name
-        Name to append to the BootMedia Id.
-
-    .PARAMETER Languages
-        Windows ADK Languages to add to the BootImage. Default is en-US.
-
-    .PARAMETER SetAllIntl
-        Sets all International settings in WinPE to the specified language. Default is en-US.
-
-    .PARAMETER SetInputLocale
-        Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
-
-    .PARAMETER SetTimeZone
-        Set the WinPE SetTimeZone. Default is the current SetTimeZone.
-
-    .PARAMETER AdkSelect
-        Select the Windows ADK version to use if multiple versions are present in the cache.
-
-    .PARAMETER SkipAdkPackages
-        Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.
-
-    .PARAMETER UseAdkWinPE
-        Uses the Windows ADK winpe.wim instead of an imported BootImage.
-
-    .PARAMETER Architecture
-        Architecture of the BootImage. This is automatically set when selected a existing BootImage. This is required when using the Windows ADK winpe.wim.
-
-    .PARAMETER UpdateUSB
-        Update a OSDWorkspace USB drive with the new BootMedia.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
+        This function creates a new OSDWorkspace BootMedia using an imported WinRE image and applying desired customizations.
+        The BootMedia is created in the OSDWorkspace build directory.
 
     .EXAMPLE
         Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64'
@@ -56,36 +16,31 @@ function Build-OSDWorkspaceWinPE {
         Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia'.
 
     .EXAMPLE
-        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64' -AdAdAdAdUse
+        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64' -UseAdkWinPE
         Creates a new OSDWorkspace 'amd64' BootMedia using the Windows ADK winpe.wim with the name 'MyBootMedia'.
 
     .EXAMPLE
         Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelect
         Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia' and prompts to select the Windows ADK version to use.
 
-    .EXAMPLE
-        Build-OPE -Name 'MyBootMedia' -Architecture 'amd64' -Languages 'en-US', 'fr-FR'
-        Creates a new OSDWorkspace BootMedia with the name 'MyBootMedia', architecture 'amd64' and languages 'en-US' and 'fr-FR'.
-
-    .LINK
-    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Build-OPE.md
-
     .NOTES
     David Segura
     #>
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
+        # Name to append to the BootMedia Id Test
         [Parameter(Mandatory)]
-        # Name to append to the BootMedia Id
-        [System.String]$Name,
+        [System.String]
+        $Name,
 
+        # Architecture of the BootImage. This is automatically set when selected a existing BootImage. This is required when using the Windows ADK winpe.wim.
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(Mandatory, ParameterSetName = 'ADK')]
         [ValidateSet('amd64', 'arm64')]
         [System.String]
-        #Architecture of the BootImage. This is automatically set when selected a existing BootImage. This is required when using the Windows ADK winpe.wim.
         $Architecture,
 
+        # Windows ADK Languages to add to the BootImage. Default is en-US.
         [ValidateSet (
             '*','ar-sa','bg-bg','cs-cz','da-dk','de-de','el-gr',
             'en-gb','es-es','es-mx','et-ee','fi-fi',
@@ -96,17 +51,17 @@ function Build-OSDWorkspaceWinPE {
             'uk-ua','zh-cn','zh-tw'
         )]
         [System.String[]]
-        #Windows ADK Languages to add to the BootImage. Default is en-US.
         $Languages = 'en-US',
 
+        # Sets all International settings in WinPE to the specified language. Default is en-US.
         [System.String]
-        #Sets all International settings in WinPE to the specified language. Default is en-US.
         $SetAllIntl = 'en-US',
 
-        [System.String]
         # Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
+        [System.String]
         $SetInputLocale = 'en-US',
 
+        # Set the WinPE SetTimeZone. Default is the current SetTimeZone.
         [ValidateScript( {
                 $tz = (tzutil /l)
                 $validoptions = foreach ($t in $tz) { 
@@ -118,24 +73,23 @@ function Build-OSDWorkspaceWinPE {
                 $validoptions -contains $_
             })]
         [System.String]
-        #Set the WinPE SetTimeZone. Default is the current SetTimeZone.
         $SetTimeZone = (tzutil /g),
 
+        # Update a OSDWorkspace USB drive with the new BootMedia.
         [System.Management.Automation.SwitchParameter]
-        #Update a OSDWorkspace USB drive with the new BootMedia.
         $UpdateUSB,
 
+        # Select the Windows ADK version to use if multiple versions are present in the cache.
         [System.Management.Automation.SwitchParameter]
-        #Select the Windows ADK version to use if multiple versions are present in the cache.
         $SelectAdkCacheVersion,
 
         # Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.
         [System.Management.Automation.SwitchParameter]
         $SkipAdkPackages,
 
+        # Uses the Windows ADK winpe.wim instead of an imported BootImage.
         [Parameter(Mandatory, ParameterSetName = 'ADK')]
         [System.Management.Automation.SwitchParameter]
-        #Uses the Windows ADK winpe.wim instead of an imported BootImage.
         $UseAdkWinPE
     )
     #=================================================

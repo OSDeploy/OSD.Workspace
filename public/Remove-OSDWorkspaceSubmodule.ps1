@@ -1,7 +1,18 @@
 function Remove-OSDWorkspaceSubmodule {
+    <#
+    .SYNOPSIS
+        Remove a submodule from OSDWorkspace
+
+    .DESCRIPTION
+        Remove a submodule from OSDWorkspace by removing the submodule entry from .gitmodules and deleting the submodule Directory.
+        Requires the -Force switch to delete the submodule.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param (
-        # Force the delete of the OSDWorkspace Remote Library
+        # Force the deletion of the submodule from OSDWorkspace
         [System.Management.Automation.SwitchParameter]
         $Force
     )
