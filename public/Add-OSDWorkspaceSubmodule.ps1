@@ -1,30 +1,16 @@
 function Add-OSDWorkspaceSubmodule {
     <#
     .SYNOPSIS
-        Clones a GitHub Repository into C:\OSDWorkspace\Library-GitHub
+        Adds a GitHub Repository as a Submodule to C:\OSDWorkspace\Library-GitHub
 
     .DESCRIPTION
-        This function clones a specified GitHub repository into the OSDWorkspace Library-GitHub directory.
-        Performs a fetch and clean operation to ensure the repository is up to date and free of untracked files.
-        If you have already cloned the repository, use the Update-OSDWorkspaceSubmodule cmdlet to update it.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
+        This function adds a GitHub repository as a submodule to the OSDWorkspace Library-GitHub directory.
+        Performs a 'git submodule add' operation and commits the changes to the OSDWorkspace repository.
+        If you have already added the repository as a submodule, use the Update-OSDWorkspaceSubmodule cmdlet to update it.
 
     .EXAMPLE
-        Add-OSDWorkspaceSubmodule -Url 'https://github.com/MichaelEscamilla/OSDWorkspace-MichaelEscamilla.git'
-        Clones the repository 'OSDWorkspace-MichaelEscamilla' into the OSDWorkspace Library-GitHub directory.
-        #TODO Update URL to the OSDWorkspace Template GitHub Repository
-
-    .LINK
-    https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Add-OSDWorkspaceSubmodule.md
+        Add-OSDWorkspaceSubmodule -Url 'https://github.com/OSDeploy/osdsubmod-osdcloud-v1.git'
+        Adds the repository 'osdsubmod-osdcloud-v1' as a submodule to the OSDWorkspace Library-GitHub directory.
 
     .NOTES
         David Segura

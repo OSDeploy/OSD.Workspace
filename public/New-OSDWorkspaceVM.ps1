@@ -4,85 +4,46 @@ function New-OSDWorkspaceVM {
         Creates a Hyper-V VM for use with OSDWorkspace
 
     .DESCRIPTION
-        Creates a Hyper-V VM for use with OSDWorkspace
-
-    .PARAMETER CheckpointVM
-        Specifies whether to create a checkpoint of the VM after creation. Default is $true.
-
-    .PARAMETER Generation
-        Specifies the generation of the VM. Default is 2.
-
-    .PARAMETER MemoryStartupGB
-        Specifies the amount of memory in whole number GB to allocate to the VM. Default is 10. Maximum is 64.
-
-    .PARAMETER NamePrefix
-        Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmm 'NamePrefix' MediaName'.
-
-    .PARAMETER ProcessorCount
-        Specifies the number of processors to allocate to the VM. Default is 2. Maximum is 64.
-
-    .PARAMETER DisplayResolution
-        Specifies the display resolution of the VM. Default is '1440x900'.
-        Allowed values are: '640x480','800x600','1024x768','1152x864','1280x720',
-        '1280x768','1280x800','1280x960','1280x1024','1360x768','1366x768',
-        '1400x1050','1440x900','1600x900','1680x1050','1920x1080','1920x1200',
-        '2560x1440','2560x1600','3840x2160','3840x2400','4096x2160'.
-
-    .PARAMETER StartVM
-        Specifies whether to start the VM after creation. Default is $true.
-
-    .PARAMETER SwitchName
-        Specifies the name of the virtual switch to connect the VM to. If not specified, an Out-GridView will be displayed to select a switch.
-        If no switches are found, the VM will be created without a network connection.
-
-    .PARAMETER VHDSizeGB
-        Specifies the size of the VHD in whole number GB. Default is 64. Maximum is 128.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
+        Creates a Hyper-V VM from the selected OSDWorkspace Build Media.
+        The VM can be customized with various parameters such as memory, processor count, display resolution, and VHD size.
 
     .EXAMPLE
         New-OSDWorkspaceVM
-        Creates a Hyper-V VM for use with OSDWorkspace
+        Creates a Hyper-V VM with the default settings.
 
     .EXAMPLE
         New-OSDWorkspaceVM -CheckpointVM $false -Generation 2 -MemoryStartupGB 8 -NamePrefix 'MyVM' -ProcessorCount 4 -DisplayResolution '1920x1080' -StartVM $false -SwitchName 'MySwitch' -VHDSizeGB 50
         Creates a Generation 2 Hyper-V VM with 8GB of memory, 4 processors, 1920x1080 display resolution, and a 50GB VHD. The VM will not be started and will not have an Initial checkpoint created.
-
-    .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/New-OSDWorkspaceVM.md
     
     .NOTES
     David Segura
     #>
-
     [CmdletBinding()]
     param (
+        # Specifies whether to create a checkpoint of the VM after creation. Default is $true.
         [System.Boolean]
         $CheckpointVM = $true,
 
+        # Specifies the generation of the VM. Default is 2.
         [ValidateSet('1','2')]
         [System.UInt16]
         $Generation = 2,
 
+        # Specifies the amount of memory in whole number GB to allocate to the VM. Default is 10. Maximum is 64.
         [ValidateRange(2, 64)]
         [System.UInt16]
         $MemoryStartupGB = 10,
 
+        # Specifies the prefix to use for the VM name. Default is 'OSDWorkspace'. Full VM name will be in the format 'yyMMdd-HHmm 'NamePrefix' MediaName'.
         [System.String]
         $NamePrefix = 'OSDWorkspace',
 
+        # Specifies the number of processors to allocate to the VM. Default is 2. Maximum is 64.
         [ValidateRange(2, 64)]
         [System.UInt16]
         $ProcessorCount = 2,
 
+        # Specifies the display resolution of the VM. Default is '1440x900'.
         [ValidateSet('640x480','800x600','1024x768','1152x864','1280x720',
         '1280x768','1280x800','1280x960','1280x1024','1360x768','1366x768',
         '1400x1050','1440x900','1600x900','1680x1050','1920x1080','1920x1200',
@@ -90,12 +51,15 @@ function New-OSDWorkspaceVM {
         [System.String]
         $DisplayResolution = '1440x900',
 
+        # Specifies whether to start the VM after creation. Default is $true.
         [System.Boolean]
         $StartVM = $true,
 
+        # Specifies the name of the virtual switch to connect the VM to. If not specified, an Out-GridView will be displayed to select a switch.
         [System.String]
         $SwitchName,
 
+        # Specifies the size of the VHD in whole number GB. Default is 64. Maximum is 128.
         [ValidateRange(8, 128)]
         [System.UInt16]
         $VHDSizeGB = 64

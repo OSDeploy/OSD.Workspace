@@ -1,4 +1,19 @@
 function Initialize-OSDWorkspace {
+    <#
+    .SYNOPSIS
+        Initializes the OSDWorkspace environment by checking for required software, creating necessary directories, and setting up Git configuration.
+
+    .DESCRIPTION
+        This function initializes the OSDWorkspace environment by checking for required software, creating necessary directories, and setting up Git configuration.
+        It verifies the operating system version, checks for the presence of Microsoft VS Code and Git for Windows, and creates the OSDWorkspace directory if it does not exist.
+        It also sets up Git configuration files and updates the default library structure.
+
+    .EXAMPLE
+        Initialize-OSDWorkspace
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param ()
     #=================================================

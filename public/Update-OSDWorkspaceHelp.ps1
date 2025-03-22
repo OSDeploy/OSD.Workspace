@@ -1,4 +1,20 @@
 function Update-OSDWorkspaceHelp {
+    <#
+    .SYNOPSIS
+        Updates the OSDWorkspace PowerShell-Help files.
+
+    .DESCRIPTION
+        This function updates the OSDWorkspace PowerShell-Help files in the OSDWorkspace directory C:\OSDWorkspace\docs\powershell-help.
+        It uses the platyPS module to generate the help files for the OSD.Workspace module and the Dism module.
+        The function checks if the help files already exist and if they do, it will only update them if the -Force parameter is used.
+    
+    .EXAMPLE
+        Update-OSDWorkspaceHelp
+        Updates the OSDWorkspace PowerShell-Help files in the OSDWorkspace paths.
+
+    .NOTES
+        David Segura
+    #>
     [CmdletBinding()]
     param (
         # Force the update of OSDWorkspace PowerShell-Help

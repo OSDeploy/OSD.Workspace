@@ -1,31 +1,19 @@
 function Import-OSDWorkspaceWinOS {
     <#
     .SYNOPSIS
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+        Imports the Windows RE and Windows OS from a mounted Windows Installation Media ISO to the OSDWorkspace source directory.\
 
     .DESCRIPTION
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+        Imports the Windows RE and Windows OS from a mounted Windows Installation Media ISO to the OSDWorkspace source directory C:\OSDWorkspace\src
         Supports both Windows 11 24H2 amd64 and arm64 Windows Installation Media ISO.
         Will display a Out-GridView of the available Indexes for each Mounted Windows Installation Media ISO.
         Select one or multiple Indexes to import.
-        The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmm Architecture".
+        The imported Windows OS will be in a subfolder in  C:\OSDWorkspace\src\windows-os with a name of the format "yyMMdd-HHmm Architecture".
+        The imported Windows RE will be in a subfolder in  C:\OSDWorkspace\src\windows-re with a name of the format "yyMMdd-HHmm Architecture".
 
     .EXAMPLE
         Import-OSDWorkspaceWinOS
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
-
-    .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
-
-    .OUTPUTS
-        None.
-
-        This function does not return any output.
-
-    .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceWinOS.md
+        Imports Window OS and RE from a mounted Windows Installation Media ISO to the OSDWorkspace source directory.
 
     .NOTES
         David Segura
