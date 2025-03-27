@@ -13,10 +13,35 @@ function Step-BuildMediaConsoleSettings {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
     #=================================================
-    $RegConsole = @'
+    # https://learn.microsoft.com/en-us/previous-versions/orphan-topics/ws.11/mt427362(v=ws.11)?redirectedfrom=MSDN
+$RegConsole = @'
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\Default\Console]
+[HKEY_LOCAL_MACHINE\MountedHive\Console]
+"CursorType"=dword:00000000
+"FaceName"="Consolas"
+"FontFamily"=dword:00000036
+"FontSize"=dword:00140000
+"FontWeight"=dword:00000190
+"WindowAlpha"=dword:000000ff
+"WindowPosition"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\MountedHive\Console\%SystemRoot%_System32_cmd.exe]
+"FaceName"="Consolas"
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+
+[HKEY_LOCAL_MACHINE\MountedHive\Console\%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe]
+"FaceName"="Consolas"
+"FontSize"=dword:00120000
+"ScreenBufferSize"=dword:0bb8008c
+"WindowSize"=dword:0028008c
+'@
+
+$RegConsoleBAK = @'
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\MountedHive\Console]
 "ColorTable00"=dword:000c0c0c
 "ColorTable01"=dword:00da3700
 "ColorTable02"=dword:000ea113
@@ -66,7 +91,7 @@ Windows Registry Editor Version 5.00
 "WindowSize"=dword:001e0078
 "WordDelimiters"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\Default\Console\%SystemRoot%_System32_cmd.exe]
+[HKEY_LOCAL_MACHINE\MountedHive\Console\%SystemRoot%_System32_cmd.exe]
 "FaceName"="Consolas"
 "FilterOnPaste"=dword:00000000
 "FontSize"=dword:00100000
@@ -77,7 +102,7 @@ Windows Registry Editor Version 5.00
 "WindowPosition"=dword:00000000
 "WindowSize"=dword:00110054
 
-[HKEY_LOCAL_MACHINE\Default\Console\%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe]
+[HKEY_LOCAL_MACHINE\MountedHive\Console\%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe]
 "ColorTable05"=dword:00562401
 "ColorTable06"=dword:00f0edee
 "FaceName"="Consolas"
@@ -100,7 +125,7 @@ Windows Registry Editor Version 5.00
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This increases the buffer and sets the window metrics and default fonts"
 
     $RegConsole | Out-File "$env:TEMP\RegistryConsole.reg" -Encoding ascii -Width 2000 -Force
-    reg.exe LOAD HKLM\Default "$MountPath\Windows\System32\Config\DEFAULT"
+    reg.exe LOAD HKLM\MountedHive "$MountPath\Windows\System32\Config\DEFAULT"
     reg.exe IMPORT "$env:TEMP\RegistryConsole.reg"
     # reg add "HKLM\Default\Control Panel\Colors" /t REG_SZ /v Background /d "0 99 177" /f
 
@@ -114,7 +139,7 @@ Windows Registry Editor Version 5.00
 
     # Unload Registry
     Start-Sleep -Seconds 3
-    reg.exe UNLOAD HKLM\Default
+    reg.exe UNLOAD HKLM\MountedHive
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
     #=================================================

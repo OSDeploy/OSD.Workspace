@@ -5,7 +5,7 @@
     Copyright            = '(c) 2025 @ osdeploy.com. All rights reserved.'
     Description          = 'OSD.Workspace PowerShell Module for OSDWorkspace'
     GUID                 = '083be276-ac05-4da6-b72b-15a53e68c0c4'
-    ModuleVersion        = '25.3.13.1'
+    ModuleVersion        = '25.3.25.1'
     PowerShellVersion    = '7.5'
     RootModule           = 'OSD.Workspace.psm1'
     FunctionsToExport    = @(
