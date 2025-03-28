@@ -36,7 +36,7 @@ function Remove-OSDWorkspaceSubmodule {
         #=================================================
         #region Get InputObject
         $InputObject = @()
-        $InputObject = Select-OSDWSRemoteLibrary
+        $InputObject = Select-OSDWSSharedLibrary
         #endregion
         #=================================================
         #region Process foreach

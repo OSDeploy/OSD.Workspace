@@ -1,9 +1,9 @@
-function Step-BuildMediaLibraryWinPEDriver {
+function Step-BuildMediaWinPEDriver {
     [CmdletBinding()]
     param (
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
-        $LibraryWinPEDriver = $global:BuildMedia.LibraryWinPEDriver,
+        $WinPEDriver = $global:BuildMedia.WinPEDriver,
         [System.String]
         $LogsPath = $global:BuildMediaLogsPath,
         $WindowsImage = $global:WindowsImage
@@ -13,13 +13,13 @@ function Step-BuildMediaLibraryWinPEDriver {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LibraryWinPEDriver: $LibraryWinPEDriver"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEDriver: $WinPEDriver"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LogsPath: $LogsPath"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WindowsImage: $WindowsImage"
     #=================================================
-    if ($LibraryWinPEDriver) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LibraryWinPEDriver: Add-WindowsDriver"
-        foreach ($DriverPath in $LibraryWinPEDriver) {
+    if ($WinPEDriver) {
+        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEDriver: Add-WindowsDriver"
+        foreach ($DriverPath in $WinPEDriver) {
             if (Test-Path $DriverPath) {
                 # $ArchName = ( $DriverPath.FullName -split '\\' | Select-Object -last 3 ) -join '\'
                 # Write-Host -ForegroundColor DarkGray $ArchName
@@ -40,7 +40,7 @@ function Step-BuildMediaLibraryWinPEDriver {
                 }
             }
             else {
-                Write-Warning "LibraryWinPEDriver $DriverPath (not found)"
+                Write-Warning "WinPEDriver $DriverPath (not found)"
             }
         }
     }

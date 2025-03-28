@@ -1,4 +1,4 @@
-function Select-OSDWSRemoteLibrary {
+function Select-OSDWSSharedLibrary {
     <#
     .SYNOPSIS
         Selects an OSDWorkspace Library GitHub Repository.

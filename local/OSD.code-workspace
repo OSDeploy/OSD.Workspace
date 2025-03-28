@@ -6,40 +6,62 @@
         },
         {
             "name": "Docs",
-            "description": "Documentation",
-            "path": "./docs"
+            "path": "./docs",
+            "description": "Reference Documentation",
+            "subfolders": {
+                "powershell-help": {
+                    "description": "PowerShell module documentation in markdown format"
+                }
+            }
         },
         {
             "name": "Windows ADK (cache)",
-            "description": "Windows Assessment and Deployment Kit (ADK)",
-            "path": "./cache/adk-versions"
+            "path": "./cache/adk-versions",
+            "description": "Contains cashed ADK versions"
         },
         {
-            "name": "AddOn Packages (cache)",
-            "path": "./cache/addon-packages"
+            "name": "WinPE Apps (cache)",
+            "path": "./cache/winpe-apps",
+            "description": "Contains cashed WinPE Apps",
+            "subfolders": {
+                "7zip": "7zip for WinPE",
+                "AzCopy": "AzCopy 10",
+                "MicrosoftDart": "Microsoft DaRT Tools",
+                "Pwsh": "PowerShell 7",
+                "WirelessConnect": "Connects to Wi-Fi networks"
+            }
         },
         {
-            "name": "Library (local)",
-            "path": "./library"
+            "name": "Local Library",
+            "path": "./library",
+            "description": "Contains User defined scripts",
+            "subfolders": {
+                "default": {
+                    "description": "Default scripts and drivers",
+                    "subfolders": {
+                        "winpe-driver": "Default WinPE drivers sorted by architecture (amd64, arm64)",
+                        "winpe-mediascript": "Scripts for building media",
+                        "winpe-script": "Scripts for building WinPE"
+                    }
+                }
+            }
         },
         {
-            "name": "Library (submodules)",
+            "name": "Remote Library (submodules)",
             "path": "./submodules"
         },
         {
-            "name": "Windows OS (import)",
-            "description": "Windows Operating System (WinOS)",
-            "path": "./src/windows-os"
+            "name": "Windows Sources",
+            "path": "./src"
         },
         {
-            "name": "Windows RE (import)",
-            "description": "Windows Recovery Environment (WinRE)",
-            "path": "./src/windows-re"
+            "name": "WinPE Builds",
+            "path": "./build/windows-pe",
+            "indexfile": "./build/windows-pe/index.json",
+            "description": "WinPE, WinPE Builds, WindowsPE, Windows Preinstallation Environment"
         },
         {
-            "name": "Windows PE (build)",
-            "description": "Windows Preinstallation Environment (WinPE)",
-            "path": "./build/windows-pe"
+            "path": "../GitHub/Modules/OSD.Workspace"
         }
     ],
     "settings": {
@@ -87,7 +109,6 @@
             }
         ],
         "powershell.cwd": "C:\\OSDWorkspace",
-        
         "workbench.colorCustomizations": {
             "[GitHub Dark]": {
                 "activityBar.background": "#252A33",

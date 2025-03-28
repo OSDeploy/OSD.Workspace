@@ -1,19 +1,31 @@
 function Import-OSDWorkspaceWinOS {
     <#
     .SYNOPSIS
-        Imports the Windows RE and Windows OS from a mounted Windows Installation Media ISO to the OSDWorkspace source directory.\
+        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
 
     .DESCRIPTION
-        Imports the Windows RE and Windows OS from a mounted Windows Installation Media ISO to the OSDWorkspace source directory C:\OSDWorkspace\src
+        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
         Supports both Windows 11 24H2 amd64 and arm64 Windows Installation Media ISO.
         Will display a Out-GridView of the available Indexes for each Mounted Windows Installation Media ISO.
         Select one or multiple Indexes to import.
-        The imported Windows OS will be in a subfolder in  C:\OSDWorkspace\src\windows-os with a name of the format "yyMMdd-HHmm Architecture".
-        The imported Windows RE will be in a subfolder in  C:\OSDWorkspace\src\windows-re with a name of the format "yyMMdd-HHmm Architecture".
+        The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmm Architecture".
 
     .EXAMPLE
         Import-OSDWorkspaceWinOS
-        Imports Window OS and RE from a mounted Windows Installation Media ISO to the OSDWorkspace source directory.
+        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+
+    .INPUTS
+        None.
+
+        You cannot pipe input to this cmdlet.
+
+    .OUTPUTS
+        None.
+
+        This function does not return any output.
+
+    .LINK
+        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceWinOS.md
 
     .NOTES
         David Segura
@@ -213,6 +225,9 @@ function Import-OSDWorkspaceWinOS {
             foreach ($Item in $BackupOSFiles) {
                 robocopy "$MountDirectory\Windows\System32" "$DestinationCore\os-files\Windows\System32" $Item /s /xd rescache servicing /ndl /b /np /ts /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
             }
+
+            # PowerShell Modules
+            robocopy "$MountDirectory\Program Files\WindowsPowerShell" "$DestinationCore\os-files\Program Files\WindowsPowerShell" *.* /e /tee /r:0 /w:0 /log+:"$RobocopyLog" | Out-Null
 
             # OpenSSH
             if (Test-Path "$MountDirectory\Windows\System32\OpenSSH") {

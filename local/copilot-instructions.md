@@ -42,8 +42,8 @@ The [Cache](/cache/) folder contains:
     * Stores offline versions of the Windows ADK.
 * [powershell-modules](/cache/powershell-modules/)
     * Contains offline copies of required PowerShell modules.
-* [addon-packages](/cache/addon-packages/)
-    * Contains offline copies of required Addon packages
+* [winpe-apps](/cache/winpe-apps/)
+    * Contains offline copies of required WinPE Apps
         * 7-Zip
         * AzCopy
         * MicrosoftDaRT
@@ -94,17 +94,6 @@ Default attributes to show from the [index.json](/build/windows-pe/index.json) f
 - Languages
 - Path
 - OSVersion
-
-AddOn attributes are set to true if they are included in the BootMedia.
-AddOn attributes are set to false if they are not included in the BootMedia.
-Show AddOn attributes that true.
-AddOn attributes in the [index.json](/build/windows-pe/index.json) file are:
-- AddOnAzCopy
-- AddOnMicrosoftDaRT
-- AddOnOpenSSH
-- AddOnPwsh
-- AddOnWirelessConnect
-- AddOnZip
 
 # BootImage
 BootImages are also referred to as 'Boot Images'.

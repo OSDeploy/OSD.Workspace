@@ -5,7 +5,7 @@ function Step-BuildMediaLibraryMediaFile {
         $MediaPath = $global:BuildMedia.MediaPath,
         [System.String]
         $MediaPathEX = $global:BuildMedia.MediaPathEX,
-        $LibraryMediaFile = $global:BuildMedia.LibraryMediaFile,
+        $LibraryMediaFile = $global:BuildMedia.MediaFile,
         [System.String]
         $LogsPath = $global:BuildMediaLogsPath
     )

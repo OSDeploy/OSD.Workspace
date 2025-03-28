@@ -243,22 +243,22 @@ function Initialize-OSDWorkspace {
     }
     #=================================================
     # Update Default Library
-    $DefaultLibraryPath = $OSDWorkspace.paths.default_library
+    $LibraryDefaultPath = $OSDWorkspace.paths.library_default
 
-    if (-not (Test-Path "$DefaultLibraryPath\winpe-driver\amd64")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-driver"
-        New-Item -Path "$DefaultLibraryPath\winpe-driver\amd64" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\amd64")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $LibraryDefaultPath\winpe-driver"
+        New-Item -Path "$LibraryDefaultPath\winpe-driver\amd64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\winpe-driver\arm64")) {
-        New-Item -Path "$DefaultLibraryPath\winpe-driver\arm64" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\arm64")) {
+        New-Item -Path "$LibraryDefaultPath\winpe-driver\arm64" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\winpe-script")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-script"
-        New-Item -Path "$DefaultLibraryPath\winpe-script" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$LibraryDefaultPath\winpe-script")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $LibraryDefaultPath\winpe-script"
+        New-Item -Path "$LibraryDefaultPath\winpe-script" -ItemType Directory -Force | Out-Null
     }
-    if (-not (Test-Path "$DefaultLibraryPath\winpe-mediascript")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $DefaultLibraryPath\winpe-mediascript"
-        New-Item -Path "$DefaultLibraryPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path "$LibraryDefaultPath\winpe-mediascript")) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $LibraryDefaultPath\winpe-mediascript"
+        New-Item -Path "$LibraryDefaultPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
     }
     #=================================================
 }

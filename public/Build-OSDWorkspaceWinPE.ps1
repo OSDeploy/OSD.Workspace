@@ -334,28 +334,32 @@ function Build-OSDWorkspaceWinPE {
     #endregion
     #=================================================
     #region Select-OSDWSWinPEBuildDriver
-    $LibraryWinPEDriver = $null
+    $WinPEDriver = $null
     if (-not $MyBuildProfile) {
-        $OSDWorkspaceLibraryWinPEDriver= Select-OSDWSWinPEBuildDriver -Architecture $Architecture
+        $OSDWorkspaceWinPEDriver= Select-OSDWSWinPEBuildDriver -Architecture $Architecture
 
-        if ($OSDWorkspaceLibraryWinPEDriver) {
-            $LibraryWinPEDriver = ($OSDWorkspaceLibraryWinPEDriver| Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceWinPEDriver) {
+            $WinPEDriver = ($OSDWorkspaceWinPEDriver| Select-Object -ExpandProperty FullName)
         }
     }
     #endregion
     #=================================================
     #region Select-OSDWSWinPEBuildScript
-    $LibraryWinPEScript = $null
-    $LibraryMediaScript = $null
+    $WinPEAppScript = $null
+    $WinPEScript = $null
+    $WinPEMediaScript = $null
     if (-not $MyBuildProfile) {
-        $OSDWorkspaceLibraryWinPEScript = @()
-        $OSDWorkspaceLibraryWinPEScript = Select-OSDWSWinPEBuildScript
+        $OSDWorkspaceWinPEScript = @()
+        $OSDWorkspaceWinPEScript = Select-OSDWSWinPEBuildScript
 
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-script' }) {
-            $LibraryWinPEScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-script' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-appscript' }) {
+            $WinPEAppScript = ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-appscript' } | Select-Object -ExpandProperty FullName)
         }
-        if ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' }) {
-            $LibraryMediaScript = ($OSDWorkspaceLibraryWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' } | Select-Object -ExpandProperty FullName)
+        if ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-script' }) {
+            $WinPEScript = ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-script' } | Select-Object -ExpandProperty FullName)
+        }
+        if ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' }) {
+            $WinPEMediaScript = ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' } | Select-Object -ExpandProperty FullName)
         }
     }
     #endregion
@@ -364,9 +368,10 @@ function Build-OSDWorkspaceWinPE {
     if ($MyBuildProfile) {
         $global:BuildProfile = $null
         $global:BuildProfile = Get-Content $MyBuildProfile.FullName -Raw | ConvertFrom-Json
-        $LibraryWinPEDriver = $global:BuildProfile.LibraryWinPEDriver
-        $LibraryWinPEScript = $global:BuildProfile.LibraryWinPEScript
-        $LibraryMediaScript = $global:BuildProfile.LibraryMediaScript
+        $WinPEDriver = $global:BuildProfile.WinPEDriver
+        $WinPEAppScript = $global:BuildProfile.WinPEAppScript
+        $WinPEScript = $global:BuildProfile.WinPEScript
+        $WinPEMediaScript = $global:BuildProfile.WinPEMediaScript
         [System.String[]]$Languages = $global:BuildProfile.Languages
         $SetAllIntl = $global:BuildProfile.SetAllIntl
         $SetInputLocale = $global:BuildProfile.SetInputLocale
@@ -376,9 +381,10 @@ function Build-OSDWorkspaceWinPE {
     else {
         $global:BuildProfile = $null
         $global:BuildProfile = [ordered]@{
-            LibraryWinPEDriver = $LibraryWinPEDriver
-            LibraryWinPEScript = $LibraryWinPEScript
-            LibraryMediaScript = $LibraryMediaScript
+            WinPEDriver = $WinPEDriver
+            WinPEAppScript = $WinPEAppScript
+            WinPEScript = $WinPEScript
+            WinPEMediaScript = $WinPEMediaScript
             Languages          = [System.String[]]$Languages
             SetAllIntl         = [System.String]$SetAllIntl
             SetInputLocale     = [System.String]$SetInputLocale
@@ -401,12 +407,6 @@ function Build-OSDWorkspaceWinPE {
     #region BuildProfile
     $global:BuildMedia = $null
     $global:BuildMedia = [ordered]@{
-        AddOnAzCopy             = $false
-        AddOnMicrosoftDaRT      = $false
-        AddOnPwsh               = $false
-        AddOnOpenSSH            = $false
-        AddOnWirelessConnect    = $false
-        AddOnZip                = $false
         AdkInstallPath          = $WindowsAdkInstallPath
         AdkInstallVersion       = $WindowsAdkInstallVersion
         AdkRootPath             = $WindowsAdkRootPath
@@ -414,12 +414,14 @@ function Build-OSDWorkspaceWinPE {
         BuildProfile            = $MyBuildProfilePath
         ContentStartnet         = [System.String]$ContentStartnet
         ContentWinpeshl         = [System.String]$ContentWinpeshl
+        InstalledApps           = @()
         ImportImageRootPath     = $ImportImageRootPath
         ImportImageWimPath      = $ImportImageWimPath
         Languages               = [System.String[]]$Languages
-        LibraryMediaScript      = $LibraryMediaScript
-        LibraryWinPEDriver      = $LibraryWinPEDriver
-        LibraryWinPEScript      = $LibraryWinPEScript
+        WinPEAppScript          = $WinPEAppScript
+        WinPEScript             = $WinPEScript
+        WinPEMediaScript        = $WinPEMediaScript
+        WinPEDriver             = $WinPEDriver
         MediaIsoLabel           = $MediaIsoLabel
         MediaIsoName            = $MediaIsoName
         MediaIsoNameEX          = $MediaIsoNameEX
@@ -754,17 +756,18 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaDismSettings
     Step-BuildMediaAddWallpaper
     Step-BuildMediaPowerShellUpdate
-    Step-BuildMediaAddOnAzCopy
-    Step-BuildMediaAddOnMicrosoftDaRT
-    #Step-BuildMediaAddOnOpenSSH
-    #Step-BuildMediaAddOnPwsh
-    Step-BuildMediaAddOnWirelessConnect
-    Step-BuildMediaAddOnZip
+    Step-WinPEAppAzCopy
+    Step-WinPEAppMicrosoftDaRT
+    #Step-WinPEAppOpenSSH
+    #Step-WinPEAppPwsh
+    Step-WinPEAppWirelessConnect
+    Step-WinPEAppZip
     Step-BuildMediaWindowsImageSave
     Step-BuildMediaRemoveWinpeshl
     Step-BuildMediaConsoleSettings
-    Step-BuildMediaLibraryWinPEDriver
-    Step-BuildMediaLibraryWinPEScript
+    Step-BuildMediaWinPEDriver
+    Step-BuildMediaWinPEAppScript
+    Step-BuildMediaWinPEScript
     Step-BuildMediaExportWindowsDriverPE
     Step-BuildMediaExportWindowsPackagePE
     Step-BuildMediaRegCurrentVersionExport
@@ -773,7 +776,7 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaGetContentWinpeshl
     Step-BuildMediaWindowsImageDismount
     Step-BuildMediaWindowsImageExport
-    Step-BuildMediaLibraryMediaScript
+    Step-BuildMediaWinPEMediaScript
     Step-BuildMediaIso
     Step-BuildMediaUpdateUSB
     #=================================================

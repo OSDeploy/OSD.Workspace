@@ -1,12 +1,15 @@
-function Step-BuildMediaAddOnMicrosoftDaRT {
+function Step-WinPEAppMicrosoftDaRT {
     [CmdletBinding()]
     param (
+        [System.String]
+        $AppName = 'Microsoft DaRT',
+
         [System.String]
         $Architecture = $global:BuildMedia.Architecture,
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages)
+        $WinPEAppsPath = $($OSDWorkspace.paths.winpe_apps)
     )
     #=================================================
     $Error.Clear()
@@ -14,10 +17,9 @@ function Step-BuildMediaAddOnMicrosoftDaRT {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppsPath: $WinPEAppsPath"
     #=================================================
-    $global:BuildMedia.AddOnMicrosoftDaRT = $false
-    $CacheMicrosoftDaRT = Join-Path $WSAddOnPackagesPath 'MicrosoftDaRT'
+    $CacheMicrosoftDaRT = Join-Path $WinPEAppsPath 'MicrosoftDaRT'
 
     # MicrosoftDartCab
     $MicrosoftDartCab = "$env:ProgramFiles\Microsoft DaRT\v10\Toolsx64.cab"
@@ -39,7 +41,9 @@ function Step-BuildMediaAddOnMicrosoftDaRT {
         else {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Microsoft DaRT: Using cache content at $MicrosoftDartCab"
             expand.exe "$MicrosoftDartCab" -F:*.* "$MountPath" | Out-Null
-            $global:BuildMedia.AddOnMicrosoftDaRT = $true
+        
+            # Record the installed app
+            $global:BuildMedia.InstalledApps += $AppName
         }
     }
     else {

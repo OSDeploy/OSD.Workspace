@@ -1,12 +1,14 @@
-function Step-BuildMediaAddOnPwsh {
+function Step-WinPEAppPwsh {
     [CmdletBinding()]
     param (
+        [System.String]
+        $AppName = 'PowerShell 7.5',
         [System.String]
         $Architecture = $global:BuildMedia.Architecture,
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages)
+        $WinPEAppsPath = $($OSDWorkspace.paths.winpe_apps)
     )
     #=================================================
     $Error.Clear()
@@ -14,10 +16,9 @@ function Step-BuildMediaAddOnPwsh {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppsPath: $WinPEAppsPath"
     #=================================================
-    $global:BuildMedia.AddOnPwsh = $false
-    $CachePowerShell7 = Join-Path $WSAddOnPackagesPath "Pwsh"
+    $CachePowerShell7 = Join-Path $WinPEAppsPath "Pwsh"
     
     if (-not (Test-Path -Path $CachePowerShell7)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell 7: Adding cache content at $CachePowerShell7"
@@ -29,7 +30,7 @@ function Step-BuildMediaAddOnPwsh {
     }
 
     # Download amd64
-    $DownloadUri = $global:OSDWorkspace.pwsh.amd64
+    $DownloadUri = $global:OSDWorkspace.winpeapps.pwsh.amd64
     $DownloadFile = Split-Path $DownloadUri -Leaf
     if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
         $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7
@@ -39,12 +40,14 @@ function Step-BuildMediaAddOnPwsh {
     if ($Architecture -eq 'amd64') {
         if (Test-Path "$CachePowerShell7\$DownloadFile") {
             Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BuildMedia.AddOnPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
+        
+            # Record the installed app
+            $global:BuildMedia.InstalledApps += $AppName
         }
     }
 
     # Download arm64
-    $DownloadUri = $global:OSDWorkspace.pwsh.arm64
+    $DownloadUri = $global:OSDWorkspace.winpeapps.pwsh.arm64
     $DownloadFile = Split-Path $DownloadUri -Leaf
     if (-not (Test-Path "$CachePowerShell7\$DownloadFile")) {
         $DownloadResult = Save-WebFile -SourceUrl $DownloadUri -DestinationDirectory $CachePowerShell7
@@ -57,7 +60,9 @@ function Step-BuildMediaAddOnPwsh {
     if ($Architecture -eq 'arm64') {
         if (Test-Path "$CachePowerShell7\$DownloadFile") {
             Expand-Archive -Path "$CachePowerShell7\$DownloadFile" -DestinationPath "$MountPath\Program Files\PowerShell\7" -Force
-            $global:BuildMedia.AddOnPwsh = (Get-Item -Path "$CachePowerShell7\$DownloadFile").BaseName
+        
+            # Record the installed app
+            $global:BuildMedia.InstalledApps += $AppName
         }
     }
 

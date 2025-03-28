@@ -1,6 +1,9 @@
-function Step-BuildMediaAddOnOpenSSH {
+function Step-WinPEAppOpenSSH {
     [CmdletBinding()]
     param (
+        [System.String]
+        $AppName = 'OpenSSH',
+
         [System.String]
         $MountPath = $global:BuildMedia.MountPath
     )
@@ -11,10 +14,11 @@ function Step-BuildMediaAddOnOpenSSH {
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
     #=================================================
     # WinRE Add WirelessConnect.exe
-    $global:BuildMedia.AddOnOpenSSH = $false
     if (Test-Path "$MountPath\Windows\System32\OpenSSH\ssh.exe") {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OpenSSH: OpenSSH is already installed."
-        $global:BuildMedia.AddOnOpenSSH = $true
+        
+        # Record the installed app
+        $global:BuildMedia.InstalledApps += $AppName
     }
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

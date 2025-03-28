@@ -1,18 +1,18 @@
-function Step-BuildMediaLibraryMediaScript {
+function Step-BuildMediaWinPEMediaScript {
     [CmdletBinding()]
     param (
-        $LibraryMediaScript = $global:BuildMedia.LibraryMediaScript
+        $WinPEMediaScript = $global:BuildMedia.WinPEMediaScript
     )
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LibraryMediaScript: $LibraryMediaScript"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEMediaScript: $WinPEMediaScript"
     #=================================================
-    if ($LibraryMediaScript) {
-        foreach ($Item in $LibraryMediaScript) {
+    if ($WinPEMediaScript) {
+        foreach ($Item in $WinPEMediaScript) {
             if (Test-Path $Item -ErrorAction SilentlyContinue) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Call BootMedia Script [$Item]"
+                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Call WinPE Media Script [$Item]"
                 & "$Item"
             }
             else {
