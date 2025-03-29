@@ -17,19 +17,19 @@
         "build_windows_os": "C:\\OSDWorkspace\\build\\windows-os",
         "build_windows_pe": "C:\\OSDWorkspace\\build\\windows-pe",
         "cache": "C:\\OSDWorkspace\\cache",
-        "addon_packages": "C:\\OSDWorkspace\\cache\\addon-packages",
+        "winpe_apps": "C:\\OSDWorkspace\\cache\\winpe-apps",
         "adk_versions": "C:\\OSDWorkspace\\cache\\adk-versions",
         "powershell_modules": "C:\\OSDWorkspace\\cache\\powershell-modules",
         "winos_buildprofile": "C:\\OSDWorkspace\\cache\\winos-buildprofile",
         "winpe_buildprofile": "C:\\OSDWorkspace\\cache\\winpe-buildprofile",
         "docs": "C:\\OSDWorkspace\\docs",
         "powershell_help": "C:\\OSDWorkspace\\docs\\powershell-help",
-        "library": "C:\\OSDWorkspace\\library",
-        "default_library": "C:\\OSDWorkspace\\library\\default",
-        "submodules": "C:\\OSDWorkspace\\submodules",
-        "source": "C:\\OSDWorkspace\\src",
-        "import_windows_os": "C:\\OSDWorkspace\\src\\windows-os",
-        "import_windows_re": "C:\\OSDWorkspace\\src\\windows-re"
+        "library_default": "C:\\OSDWorkspace\\library\\default",
+        "library_local": "C:\\OSDWorkspace\\library",
+        "library_submodule": "C:\\OSDWorkspace\\submodules",
+        "source": "C:\\OSDWorkspace\\source",
+        "import_windows_os": "C:\\OSDWorkspace\\source\\windows-os",
+        "import_windows_re": "C:\\OSDWorkspace\\source\\windows-re"
     },
     // Defines the ADK OC Packages that are added by Build-OSDWorkspaceWinPE
     "adkwinpepackages": [
@@ -55,11 +55,25 @@
         "x64-Support",
         "MDAC"
     ],
-    // Download URLs for Microsoft AzCopy10
-    "azcopy": {
-        "amd64": "https://aka.ms/downloadazcopy-v10-windows",
-        "arm64": "https://aka.ms/downloadazcopy-v10-windows-arm64"
+    "winpeapps": {
+        "azcopy": {
+            "amd64": "https://aka.ms/downloadazcopy-v10-windows",
+            "arm64": "https://aka.ms/downloadazcopy-v10-windows-arm64"
+        },
+        "pwsh": {
+            "amd64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-x64.zip",
+            "arm64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-arm64.zip"
+        },
+        "pwshpreview": {
+            "amd64": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.0-preview.3/PowerShell-7.6.0-preview.3-win-x64.zip",
+            "arm64": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.0-preview.3/PowerShell-7.6.0-preview.3-win-arm64.zip"
+        },
+        "sevenzip": {
+            "extra": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-extra.7z",
+            "standalone": "https://github.com/ip7z/7zip/releases/download/24.09/7zr.exe"
+        }
     },
+    // Download URLs for Microsoft AzCopy10
     // Defines the BootMedia used by Build-OSDWorkspaceWinPE
     "bootmedia": {
         "IsoName": "BootMedia.iso",
@@ -75,20 +89,5 @@
         "Info": "https://www.osdeploy.com/",
         "Issues": "https://github.com/OSDeploy/OSD.Workspace/issues",
         "Project": "https://github.com/OSDeploy/OSD.Workspace"
-    },
-    // Download URLs for Microsoft PowerShell 7
-    "pwsh": {
-        "amd64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-x64.zip",
-        "arm64": "https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/PowerShell-7.5.0-win-arm64.zip"
-    },
-    // Download URLs for Microsoft PowerShell 7 Preview 3
-    "pwshpreview": {
-        "amd64": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.0-preview.3/PowerShell-7.6.0-preview.3-win-x64.zip",
-        "arm64": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.0-preview.3/PowerShell-7.6.0-preview.3-win-arm64.zip"
-    },
-    // Download URLs for 7-zip
-    "sevenzip": {
-        "extra": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-extra.7z",
-        "standalone": "https://github.com/ip7z/7zip/releases/download/24.09/7zr.exe"
     }
 }

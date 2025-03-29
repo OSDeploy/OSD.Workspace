@@ -6,40 +6,81 @@
         },
         {
             "name": "Docs",
-            "description": "Documentation",
-            "path": "./docs"
+            "path": "./docs",
+            "description": "Reference Documentation",
+            "subfolders": {
+                "powershell-help": {
+                    "description": "PowerShell module documentation in markdown format"
+                }
+            }
         },
         {
-            "name": "Windows ADK (cache)",
-            "description": "Windows Assessment and Deployment Kit (ADK)",
-            "path": "./cache/adk-versions"
+            "name": "Cache",
+            "path": "./cache",
+            "description": "Contains cached content",
+            "subfolders": {
+                "adk-versions": {
+                    "description": "Windows Assessment and Deployment Kit (ADK) versions"
+                },
+                "powershell-modules": {
+                    "description": "Cached PowerShell modules"
+                },
+                "winpe-apps": {
+                    "description": "Applications for Windows PE environment"
+                },
+                "winpe-buildprofile": {
+                    "description": "WinPE build profiles and configuration"
+                }
+            }
         },
         {
-            "name": "AddOn Packages (cache)",
-            "path": "./cache/addon-packages"
+            "name": "Library",
+            "path": "./library",
+            "description": "Contains User defined scripts",
+            "subfolders": {
+                "default": {
+                    "description": "Default scripts and drivers",
+                    "subfolders": {
+                        "winpe-driver": "Default WinPE drivers sorted by architecture (amd64, arm64)",
+                        "winpe-mediascript": "Scripts for building media",
+                        "winpe-script": "Scripts for building WinPE"
+                    }
+                }
+            }
         },
         {
-            "name": "Library (local)",
-            "path": "./library"
+            "name": "Library Submodules",
+            "path": "./submodules",
+            "description": "Shared libraries added as Git submodules",
+            "subfolders": {
+                "osdcloud": {
+                    "description": "OSDCloud submodule providing cloud-based OS deployment resources"
+                },
+                "osdcloud-archive": {
+                    "description": "Archive of OSDCloud resources (unsupported)"
+                }
+            }
         },
         {
-            "name": "Library (submodules)",
-            "path": "./submodules"
+            "name": "Windows Sources",
+            "path": "./source",
+            "description": "Windows source files for building WinPE images",
+            "subfolders": {
+                "windows-os": {
+                    "description": "Windows Operating System source files",
+                    "indexfile": "./source/windows-os/index.json"
+                },
+                "windows-re": {
+                    "description": "Windows Recovery Environment source files",
+                    "indexfile": "./source/windows-re/index.json"
+                }
+            }
         },
         {
-            "name": "Windows OS (import)",
-            "description": "Windows Operating System (WinOS)",
-            "path": "./src/windows-os"
-        },
-        {
-            "name": "Windows RE (import)",
-            "description": "Windows Recovery Environment (WinRE)",
-            "path": "./src/windows-re"
-        },
-        {
-            "name": "Windows PE (build)",
-            "description": "Windows Preinstallation Environment (WinPE)",
-            "path": "./build/windows-pe"
+            "name": "WinPE Builds",
+            "path": "./build/windows-pe",
+            "indexfile": "./build/windows-pe/index.json",
+            "description": "WinPE, WinPE Builds, WindowsPE, Windows Preinstallation Environment"
         }
     ],
     "settings": {
@@ -87,7 +128,6 @@
             }
         ],
         "powershell.cwd": "C:\\OSDWorkspace",
-        
         "workbench.colorCustomizations": {
             "[GitHub Dark]": {
                 "activityBar.background": "#252A33",

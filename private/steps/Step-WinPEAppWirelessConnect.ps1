@@ -1,12 +1,14 @@
-function Step-BuildMediaAddOnWirelessConnect {
+function Step-WinPEAppWirelessConnect {
     [CmdletBinding()]
     param (
+        [System.String]
+        $AppName = 'WirelessConnect',
         [System.String]
         $Architecture = $global:BuildMedia.Architecture,
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages),
+        $WinPEAppsPath = $($OSDWorkspace.paths.winpe_apps),
         [System.String]
         $WimSourceType = $global:BuildMedia.WimSourceType
     )
@@ -16,17 +18,16 @@ function Step-BuildMediaAddOnWirelessConnect {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppsPath: $WinPEAppsPath"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WimSourceType: $WimSourceType"
     #=================================================
     # WinRE Add WirelessConnect.exe
     # https://oliverkieselbach.com/
     # https://github.com/okieselbach/Helpers
     # https://msendpointmgr.com/2018/03/06/build-a-winpe-with-wireless-support/
-    $global:BuildMedia.AddOnWirelessConnect = $false
 
     if ($WimSourceType -eq 'WinRE') {
-        $CacheWirelessConnect = Join-Path $WSAddOnPackagesPath "WirelessConnect"
+        $CacheWirelessConnect = Join-Path $WinPEAppsPath "WirelessConnect"
         
         $WirelessConnectExe = "$CacheWirelessConnect\WirelessConnect.exe"
         if (-not (Test-Path -Path $CacheWirelessConnect)) {
@@ -40,7 +41,9 @@ function Step-BuildMediaAddOnWirelessConnect {
         if (Test-Path $WirelessConnectExe) {
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Using cache content at $WirelessConnectExe"
             Copy-Item -Path $WirelessConnectExe -Destination "$MountPath\Windows\System32\WirelessConnect.exe" -Force | Out-Null
-            $global:BuildMedia.AddOnWirelessConnect = $true
+            
+            # Record the installed app
+            $global:BuildMedia.InstalledApps += $AppName
         }
     }
     #=================================================

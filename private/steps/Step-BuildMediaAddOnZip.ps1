@@ -1,12 +1,14 @@
-function Step-BuildMediaAddOnZip {
+function Step-WinPEAppZip {
     [CmdletBinding()]
     param (
+        [System.String]
+        $AppName = '7zip',
         [System.String]
         $Architecture = $global:BuildMedia.Architecture,
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
         [System.String]
-        $WSAddOnPackagesPath = $($OSDWorkspace.paths.addon_packages)
+        $WinPEAppsPath = $($OSDWorkspace.paths.winpe_apps)
     )
     #=================================================
     $Error.Clear()
@@ -14,11 +16,10 @@ function Step-BuildMediaAddOnZip {
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSAddOnPackagesPath: $WSAddOnPackagesPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppsPath: $WinPEAppsPath"
     #=================================================
     # Thanks Gary Blok
-    $global:BuildMedia.AddOnZip = $false
-    $CacheZip = Join-Path $WSAddOnPackagesPath "7zip"
+    $CacheZip = Join-Path $WinPEAppsPath "7zip"
     if (-not (Test-Path -Path $CacheZip)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] 7zip: Adding cache content at $CacheZip"
         New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null
@@ -29,23 +30,27 @@ function Step-BuildMediaAddOnZip {
     }
 
     if (-not (Test-Path -Path "$CacheZip\7zr.exe")) {
-        $DownloadStandalone = $global:OSDWorkspace.sevenzip.standalone
+        $DownloadStandalone = $global:OSDWorkspace.winpeapps.sevenzip.standalone
         Save-WebFile -SourceUrl $DownloadStandalone -DestinationDirectory $CacheZip
     }
 
     if (-not (Test-Path -Path "$CacheZip\7za")) {
-        $DownloadExtra = $global:OSDWorkspace.sevenzip.extra
+        $DownloadExtra = $global:OSDWorkspace.winpeapps.sevenzip.extra
         $DownloadExtraResult = Save-WebFile -SourceUrl $DownloadExtra -DestinationDirectory $CacheZip
         $null = & "$CacheZip\7zr.exe" x "$($DownloadExtraResult.FullName)" -o"$CacheZip\7za" -y
     }
 
     if ($Architecture -eq 'amd64') {
         Copy-Item -Path "$CacheZip\7za\x64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BuildMedia.AddOnZip = $true
+        
+        # Record the installed app
+        $global:BuildMedia.InstalledApps += $AppName
     }
     if ($Architecture -eq 'arm64') {
         Copy-Item -Path "$CacheZip\7za\arm64\*" -Destination "$MountPath\Windows\System32" -Recurse -Force
-        $global:BuildMedia.AddOnZip = $true
+        
+        # Record the installed app
+        $global:BuildMedia.InstalledApps += $AppName
     }
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"

@@ -1,24 +1,24 @@
-function Step-BuildMediaLibraryWinPEScript {
+function Step-BuildMediaWinPEAppScript {
     [CmdletBinding()]
     param (
         [System.String]
         $MountPath = $global:BuildMedia.MountPath,
-        $LibraryWinPEScript = $global:BuildMedia.LibraryWinPEScript
+        $WinPEAppScript = $global:BuildMedia.WinPEAppScript
     )
     #=================================================
     $Error.Clear()
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
     #=================================================
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LibraryWinPEScript: $LibraryWinPEScript"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppScript: $WinPEAppScript"
     #=================================================
-    foreach ($Item in $LibraryWinPEScript) {
+    foreach ($Item in $WinPEAppScript) {
         if (Test-Path $Item) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] winpe-script: $Item"
+            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] winpe-app: $Item"
             & "$Item"
         }
         else {
-            Write-Warning "BootImage Script $Item (not found)"
+            Write-Warning "BootImage App $Item (not found)"
         }
     }
     #=================================================

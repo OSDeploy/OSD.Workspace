@@ -50,7 +50,7 @@ function Add-OSDWorkspaceSubmodule {
     #=================================================
     # Get Paths
     $OSDWorkspaceRoot = $OSDWorkspace.path
-    $LibrarySubmodulePath = $OSDWorkspace.paths.submodules
+    $LibrarySubmodulePath = $OSDWorkspace.paths.library_submodule
     #=================================================
     # Create submodules
     if (-not (Test-Path $LibrarySubmodulePath -ErrorAction SilentlyContinue)) {

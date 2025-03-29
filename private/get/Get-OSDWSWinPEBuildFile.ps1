@@ -15,14 +15,14 @@ function Get-OSDWSWinPEBuildFile {
     $LibraryPaths = @()
 
     # Get the OSDWorkspace Library Subfolders
-    $PrivateLibrary = $OSDWorkspace.paths.library
-    foreach ($Subfolder in $PrivateLibrary) {
+    $LibraryLocal = $OSDWorkspace.paths.library_local
+    foreach ($Subfolder in $LibraryLocal) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
 
     # Get the OSDWorkspace Public Subfolders
-    $PublicLibrary = $OSDWorkspace.paths.submodules
-    foreach ($Subfolder in $PublicLibrary) {
+    $LibraryShared = $OSDWorkspace.paths.library_submodule
+    foreach ($Subfolder in $LibraryShared) {
         $LibraryPaths += Get-ChildItem -Path $Subfolder -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     }
     
