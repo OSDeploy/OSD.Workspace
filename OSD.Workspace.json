@@ -27,9 +27,9 @@
         "library_default": "C:\\OSDWorkspace\\library\\default",
         "library_local": "C:\\OSDWorkspace\\library",
         "library_submodule": "C:\\OSDWorkspace\\submodules",
-        "source": "C:\\OSDWorkspace\\src",
-        "import_windows_os": "C:\\OSDWorkspace\\src\\windows-os",
-        "import_windows_re": "C:\\OSDWorkspace\\src\\windows-re"
+        "source": "C:\\OSDWorkspace\\source",
+        "import_windows_os": "C:\\OSDWorkspace\\source\\windows-os",
+        "import_windows_re": "C:\\OSDWorkspace\\source\\windows-re"
     },
     // Defines the ADK OC Packages that are added by Build-OSDWorkspaceWinPE
     "adkwinpepackages": [

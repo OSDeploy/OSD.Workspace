@@ -15,24 +15,26 @@
             }
         },
         {
-            "name": "Windows ADK (cache)",
-            "path": "./cache/adk-versions",
-            "description": "Contains cashed ADK versions"
-        },
-        {
-            "name": "WinPE Apps (cache)",
-            "path": "./cache/winpe-apps",
-            "description": "Contains cashed WinPE Apps",
+            "name": "Cache",
+            "path": "./cache",
+            "description": "Contains cached content",
             "subfolders": {
-                "7zip": "7zip for WinPE",
-                "AzCopy": "AzCopy 10",
-                "MicrosoftDart": "Microsoft DaRT Tools",
-                "Pwsh": "PowerShell 7",
-                "WirelessConnect": "Connects to Wi-Fi networks"
+                "adk-versions": {
+                    "description": "Windows Assessment and Deployment Kit (ADK) versions"
+                },
+                "powershell-modules": {
+                    "description": "Cached PowerShell modules"
+                },
+                "winpe-apps": {
+                    "description": "Applications for Windows PE environment"
+                },
+                "winpe-buildprofile": {
+                    "description": "WinPE build profiles and configuration"
+                }
             }
         },
         {
-            "name": "Local Library",
+            "name": "Library",
             "path": "./library",
             "description": "Contains User defined scripts",
             "subfolders": {
@@ -47,21 +49,38 @@
             }
         },
         {
-            "name": "Remote Library (submodules)",
-            "path": "./submodules"
+            "name": "Library Submodules",
+            "path": "./submodules",
+            "description": "Shared libraries added as Git submodules",
+            "subfolders": {
+                "osdcloud": {
+                    "description": "OSDCloud submodule providing cloud-based OS deployment resources"
+                },
+                "osdcloud-archive": {
+                    "description": "Archive of OSDCloud resources (unsupported)"
+                }
+            }
         },
         {
             "name": "Windows Sources",
-            "path": "./src"
+            "path": "./source",
+            "description": "Windows source files for building WinPE images",
+            "subfolders": {
+                "windows-os": {
+                    "description": "Windows Operating System source files",
+                    "indexfile": "./source/windows-os/index.json"
+                },
+                "windows-re": {
+                    "description": "Windows Recovery Environment source files",
+                    "indexfile": "./source/windows-re/index.json"
+                }
+            }
         },
         {
             "name": "WinPE Builds",
             "path": "./build/windows-pe",
             "indexfile": "./build/windows-pe/index.json",
             "description": "WinPE, WinPE Builds, WindowsPE, Windows Preinstallation Environment"
-        },
-        {
-            "path": "../GitHub/Modules/OSD.Workspace"
         }
     ],
     "settings": {

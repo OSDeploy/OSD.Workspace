@@ -1,14 +1,13 @@
-# Updated 2025.03.11 Segura
+# Updated 2025.03.28 Segura
 
 # VSCodeIgnore/*
 .vs/*
-.vscode/*
 
 # OSDWorkspace Defaults
 # This level is just enough to capture the index files
 build/*/*/
 cache/*/*/
-src/*/*/
+source/*/*/
 
 # OSDWorkspace Files
 # These should be excludes as they can be too large

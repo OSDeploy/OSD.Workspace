@@ -5,113 +5,7 @@
   // https://code.visualstudio.com/docs/reference/tasks-appendix
   "version": "2.0.0",
   "tasks": [
-    {
-      "label": "About: Get OSDWorkspace information",
-      "type": "shell",
-      "command": "Get-OSDWorkspace",
-      "problemMatcher": []
-    },
-    {
-      "label": "GitHub: OSD.Workspace (repo, issues, pull requests)",
-      "type": "shell",
-      "command": "start 'https://github.com/OSDeploy/OSD.Workspace'",
-      "problemMatcher": []
-    },
-    {
-      "label": "PowerShell Gallery: Update OSD.Workspace",
-      "type": "shell",
-      "command": "Update-Module -Name OSD.Workspace -Verbose",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: Update Workspace PowerShell Help for Dism (requires platyPS)",
-      "type": "shell",
-      "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: Update Workspace PowerShell Help for OSD (requires platyPS)",
-      "type": "shell",
-      "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: Update Workspace PowerShell Help for OSD.Workspace (requires platyPS)",
-      "type": "shell",
-      "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
-      "problemMatcher": []
-    },
-    {
-      "label": "GitHub: Search for shared Library Submodules",
-      "type": "shell",
-      "command": "start 'https://github.com/search?q=OSDWSLibrary&type=repositories'",
-      "problemMatcher": []
-    },
-    {
-      "label": "Library (submodules): Add OSDCloud-Archive",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-osdcloud-archive.git'"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Library (submodules): Add a Library Submodule",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceSubmodule'"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Library (submodules): Remove a Library Submodule",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Remove-OSDWorkspaceSubmodule -Force -Verbose'"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Library (submodules): Update a Library Submodule",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Update-OSDWorkspaceSubmodule'"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Import: Add a Windows 11 Operating System and Recovery Environment",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Import-OSDWorkspaceWinOS'"
-      ],
-      "problemMatcher": []
-    },
+    // Default Build Task
     {
       "label": "Build: Select an imported WinRE and create a WinPE build",
       "command": "pwsh",
@@ -131,10 +25,200 @@
         "isDefault": true
       },
       "presentation": {
-        "reveal": "always",
-        "panel": "new"
+        "reveal": "never",
+        "panel": "shared"
       },
       "problemMatcher": []
+    },
+    // Additional Tasks
+    {
+      "label": "About: Get OSDWorkspace information",
+      "type": "shell",
+      "command": "Get-OSDWorkspace",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "About: Get OSDWorkspace information (Admin)",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "-NoExit -Command Get-OSDWorkspace"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "GitHub: OSD.Workspace (repo, issues, pull requests)",
+      "type": "shell",
+      "command": "start 'https://github.com/OSDeploy/OSD.Workspace'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "PowerShell Gallery: Update OSD.Workspace",
+      "type": "shell",
+      "command": "Update-Module -Name OSD.Workspace -Verbose",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for Dism (requires platyPS)",
+      "type": "shell",
+      "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for OSD (requires platyPS)",
+      "type": "shell",
+      "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Docs: Update Workspace PowerShell Help for OSD.Workspace (requires platyPS)",
+      "type": "shell",
+      "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Add a shared library (submodule)",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Add the OSDCloud (submodule) shared library",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-OSDCloud-Archive.git'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Add the OSDCloud Archive (submodule) shared library (unsupported)",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-OSDCloud-Archive.git'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Find a shared library (submodule) on GitHub",
+      "type": "shell",
+      "command": "start 'https://github.com/search?q=osdsubmod&type=repositories'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Remove a shared library (submodule)",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Remove-OSDWorkspaceSubmodule -Force'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Library: Update a shared library (submodule)",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Update-OSDWorkspaceSubmodule'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Import: Add a Windows 11 Operating System and Recovery Environment",
+      "type": "shell",
+      "command": "Start-Process",
+      "args": [
+        "pwsh",
+        "-Verb",
+        "RunAs",
+        "-ArgumentList",
+        "'-NoExit -Command Import-OSDWorkspaceWinOS'"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
     },
     {
       "label": "Virtual Machine: Select a WinPE build and create a Hyper-V VM",
@@ -147,7 +231,11 @@
         "-ArgumentList",
         "'-NoExit -Command New-OSDWorkspaceVM'"
       ],
-      "problemMatcher": []
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
     },
     {
       "label": "USB Drive: Select a WinPE build and create a bootable USB Drive",
@@ -160,7 +248,11 @@
         "-ArgumentList",
         "'-NoExit -Command New-OSDWorkspaceUSB'"
       ],
-      "problemMatcher": []
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
     },
     {
       "label": "USB Drive: Select a WinPE build and update a bootable USB Drive",
@@ -173,7 +265,11 @@
         "-ArgumentList",
         "'-NoExit -Command Update-OSDWorkspaceUSB'"
       ],
-      "problemMatcher": []
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "new"
+      }
     }
   ]
 }

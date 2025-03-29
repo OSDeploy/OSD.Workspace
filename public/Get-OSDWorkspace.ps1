@@ -53,8 +53,6 @@ function Get-OSDWorkspace {
     $RegKey = 'HKCU:\Software\OSDWorkspace'
     $RegName = 'copilot-instructions.md'
     Write-Host -ForegroundColor DarkGray "Copilot       $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    $RegName = 'launch.json'
-    Write-Host -ForegroundColor DarkGray "Debug         $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
     Write-Host -ForegroundColor DarkGray "dism.exe      $((Get-Command dism -ErrorAction Ignore).version.ToString())"
     Write-Host -ForegroundColor DarkGray "git.exe       $((Get-Command git.exe -ErrorAction Ignore).version.ToString())"
     $RegName = '.gitignore'
