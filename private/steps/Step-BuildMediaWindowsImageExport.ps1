@@ -14,15 +14,15 @@ function Step-BuildMediaWindowsImageExport {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildMediaCorePath: $BuildMediaCorePath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildMediaSourcesPath: $BuildMediaSourcesPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildMediaSourcesPathEX: $BuildMediaSourcesPathEX"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] LogsPath: $LogsPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WimSourceType: $WimSourceType"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildMediaCorePath: $BuildMediaCorePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildMediaSourcesPath: $BuildMediaSourcesPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildMediaSourcesPathEX: $BuildMediaSourcesPathEX"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] LogsPath: $LogsPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
     #=================================================
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export-WindowsImage"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export-WindowsImage"
     $BuildMediaSourcesPathBootWim = Join-Path $BuildMediaSourcesPath 'boot.wim'
     $BuildMediaSourcesPathExportWim = Join-Path $BuildMediaSourcesPath 'export.wim'
     if (Test-Path $BuildMediaSourcesPathExportWim) {
@@ -44,6 +44,6 @@ function Step-BuildMediaWindowsImageExport {
 
     Copy-Item -Path $(Join-Path $BuildMediaSourcesPath 'boot.wim') -Destination $(Join-Path $BuildMediaSourcesPathEX 'boot.wim') -Force -ErrorAction Stop | Out-Null
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

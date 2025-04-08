@@ -14,12 +14,12 @@ function Step-WinPEAppWirelessConnect {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEAppsPath: $WinPEAppsPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WimSourceType: $WimSourceType"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinPEAppsPath: $WinPEAppsPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
     #=================================================
     # WinRE Add WirelessConnect.exe
     # https://oliverkieselbach.com/
@@ -31,15 +31,15 @@ function Step-WinPEAppWirelessConnect {
         
         $WirelessConnectExe = "$CacheWirelessConnect\WirelessConnect.exe"
         if (-not (Test-Path -Path $CacheWirelessConnect)) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating WirelessConnect cache at $CacheWirelessConnect"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating WirelessConnect cache at $CacheWirelessConnect"
             New-Item -Path $CacheWirelessConnect -ItemType Directory -Force | Out-Null
         }
         if (-not (Test-Path -Path $WirelessConnectExe)) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Adding cache content at $CacheWirelessConnect"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WirelessConnect: Adding cache content at $CacheWirelessConnect"
             Save-WebFile -SourceUrl 'https://github.com/okieselbach/Helpers/raw/master/WirelessConnect/WirelessConnect/bin/Release/WirelessConnect.exe' -DestinationDirectory $CacheWirelessConnect | Out-Null
         }
         if (Test-Path $WirelessConnectExe) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WirelessConnect: Using cache content at $WirelessConnectExe"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WirelessConnect: Using cache content at $WirelessConnectExe"
             Copy-Item -Path $WirelessConnectExe -Destination "$MountPath\Windows\System32\WirelessConnect.exe" -Force | Out-Null
             
             # Record the installed app
@@ -47,6 +47,6 @@ function Step-WinPEAppWirelessConnect {
         }
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

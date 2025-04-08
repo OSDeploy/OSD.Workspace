@@ -4,15 +4,15 @@ function Update-OSDWorkspaceUSB {
         Updates an Existing OSDWorkspace USB drive with new BootMedia files.
 
     .DESCRIPTION
-        This function updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia.
+        This function updates an existing OSDWorkspace USB drive with the selected OSDWorkspace WinPE Build.
 
     .EXAMPLE
         Update-OSDWorkspaceUSB
-        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia and uses default labels for boot and data partitions.
+        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace WinPE Build and uses default labels for boot and data partitions.
 
     .EXAMPLE
         Update-OSDWorkspaceUSB -BootLabel 'MYBOOT' -DataLabel 'MYDATA'
-        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace BootMedia and uses the boot label 'MYBOOT' and data label 'MYDATA'.
+        Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace WinPE Build and uses the boot label 'MYBOOT' and data label 'MYDATA'.
 
     .NOTES
         David Segura
@@ -31,13 +31,13 @@ function Update-OSDWorkspaceUSB {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     Initialize-OSDWorkspace
     #=================================================
     # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This function must be Run as Administrator"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
         return
     }
     #=================================================
@@ -56,15 +56,15 @@ function Update-OSDWorkspaceUSB {
     $SelectBootMedia = Select-OSDWSWinPEBuild
 
     if ($null -eq $SelectBootMedia) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No OSDWorkspace BootMedia was found or selected"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build was found or selected"
         return
     }
     #=================================================
     # Select a BootMedia Media folder
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)"
-    $BootMediaObject = Get-ChildItem $($SelectBootMedia.Path) -Directory | Where-Object { ($_.Name -eq 'BootMedia') -or ($_.Name -eq 'BootMediaEx') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace BootMedia to use with this USB (Cancel to exit)' -OutputMode Single
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select an OSDWorkspace WinPE Build to use with this USB (Cancel to exit)"
+    $BootMediaObject = Get-ChildItem $($SelectBootMedia.Path) -Directory | Where-Object { ($_.Name -eq 'WinPE-Media') -or ($_.Name -eq 'WinPE-MediaEX') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace WinPE Build to use with this USB (Cancel to exit)' -OutputMode Single
     if ($null -eq $BootMediaObject) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] No BootMedia path was found"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No WinPE-Media or WinPE-MediaEX subfolders were found"
         return
     }
     $BootMediaArch = $SelectBootMedia.Architecture.ToUpper()
@@ -76,9 +76,9 @@ function Update-OSDWorkspaceUSB {
     #	Update WinPE Volume
     #=================================================
     if (Test-Path -Path $BootMediaObject.FullName) {
-        $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'BootMedia' }
+        $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'USB-WinPE' }
         if ($WinpeVolumes) {
-            Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Copying $($BootMediaObject.FullName) to USB BootMedia partitions"
+            Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Copying $($BootMediaObject.FullName) to USB-WinPE partitions"
             foreach ($volume in $WinpeVolumes) {
                 if (Test-Path -Path "$($volume.DriveLetter):\") {
                     robocopy "$($BootMediaObject.FullName)" "$($volume.DriveLetter):\" *.* /e /ndl /r:0 /w:0 /xd '$RECYCLE.BIN' 'System Volume Information' /xj
@@ -87,7 +87,7 @@ function Update-OSDWorkspaceUSB {
             }
         }
         else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unable to find a USB Partition labeled BootMedia to update"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unable to find a USB Partition labeled USB-WinPE to update"
         }
     }
     #=================================================

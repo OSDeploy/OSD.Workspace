@@ -36,16 +36,16 @@ function Import-OSDWorkspaceImageRE {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
         #=================================================
         # Requires Run as Administrator
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This function must be Run as Administrator"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
             return
         }
         #=================================================
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Gathering mounted WindowsImage information"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Gathering mounted WindowsImage information"
         $WindowsMediaImages = Export-PSDriveWindowsImageIndex
         #=================================================
     }
@@ -53,7 +53,7 @@ function Import-OSDWorkspaceImageRE {
         #=================================================
         #region InputObject
         if ($null -eq $WindowsMediaImages) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WindowsImage on Windows Installation Media was not found. Mount a Windows Installation ISO and try again."
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WindowsImage on Windows Installation Media was not found. Mount a Windows Installation ISO and try again."
             Write-Host "Windows 11 x64 Download: https://www.microsoft.com/en-us/software-download/windows11"
             Write-Host "Windows 11 arm64 Download https://www.microsoft.com/en-us/software-download/windows11arm64"
             return
@@ -62,18 +62,18 @@ function Import-OSDWorkspaceImageRE {
         #=================================================
         #region Process foreach WindowsImage
         foreach ($WindowsImageFile in $WindowsMediaImages) {
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] foreach"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] foreach"
             
             # Set the BuildDateTime
             $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildDateTime: $BuildDateTime]"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildDateTime: $BuildDateTime]"
 
             # Set the Source
             $SourceDirectory = $WindowsImageFile.Directory
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SourceDirectory: $SourceDirectory"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] SourceDirectory: $SourceDirectory"
 
             $SourceImagePath = $WindowsImageFile.FullName
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] SourceImagePath: $SourceImagePath"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] SourceImagePath: $SourceImagePath"
 
             # Get the Source Details
             $SourceWindowsImage = Import-Clixml -Path "$SourceDirectory\winos-windowsimage.xml"
@@ -87,13 +87,13 @@ function Import-OSDWorkspaceImageRE {
             if ($SourceWindowsImage.Architecture -eq '6') { $Architecture = 'ia64' }
             if ($SourceWindowsImage.Architecture -eq '9') { $Architecture = 'amd64' }
             if ($SourceWindowsImage.Architecture -eq '12') { $Architecture = 'arm64' }
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture]"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture]"
 
             # Set the Destination
             $DestinationName = "$BuildDateTime $Architecture"
             
             $DestinationDirectory = Join-Path $($OSDWorkspace.paths.import_windows_re) "$DestinationName"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationDirectory: $DestinationDirectory"
 
             New-Item -Path "$DestinationDirectory\.core" -ItemType Directory -Force -ErrorAction Stop | Out-Null
             New-Item -Path "$DestinationDirectory\sources" -ItemType Directory -Force -ErrorAction Stop | Out-Null
@@ -218,7 +218,7 @@ function Import-OSDWorkspaceImageRE {
     }
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

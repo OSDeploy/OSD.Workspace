@@ -5,14 +5,14 @@ function Step-BuildMediaWinPEMediaScript {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinPEMediaScript: $WinPEMediaScript"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinPEMediaScript: $WinPEMediaScript"
     #=================================================
     if ($WinPEMediaScript) {
         foreach ($Item in $WinPEMediaScript) {
             if (Test-Path $Item -ErrorAction SilentlyContinue) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Call WinPE Media Script [$Item]"
+                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Call WinPE Media Script [$Item]"
                 & "$Item"
             }
             else {
@@ -21,6 +21,6 @@ function Step-BuildMediaWinPEMediaScript {
         }
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

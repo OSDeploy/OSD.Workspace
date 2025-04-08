@@ -8,10 +8,10 @@ function Step-BuildMediaConsoleSettings {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
     #=================================================
     # https://learn.microsoft.com/en-us/previous-versions/orphan-topics/ws.11/mt427362(v=ws.11)?redirectedfrom=MSDN
 $RegConsole = @'
@@ -121,8 +121,8 @@ Windows Registry Editor Version 5.00
 "WindowSize"=dword:0020006c
 '@
     #=================================================
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Modifying WinPE CMD and PowerShell Console settings"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This increases the buffer and sets the window metrics and default fonts"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Modifying WinPE CMD and PowerShell Console settings"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This increases the buffer and sets the window metrics and default fonts"
 
     $RegConsole | Out-File "$env:TEMP\RegistryConsole.reg" -Encoding ascii -Width 2000 -Force
     reg.exe LOAD HKLM\MountedHive "$MountPath\Windows\System32\Config\DEFAULT"
@@ -141,6 +141,6 @@ Windows Registry Editor Version 5.00
     Start-Sleep -Seconds 3
     reg.exe UNLOAD HKLM\MountedHive
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

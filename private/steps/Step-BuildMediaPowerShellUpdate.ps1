@@ -10,11 +10,11 @@ function Step-BuildMediaPowerShellUpdate {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WSCachePath: $WSCachePath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WimSourceType: $WimSourceType"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
     #=================================================
 $InfEnvironment = @'
 [Version]
@@ -72,7 +72,17 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     #=================================================
     # Update PowerShell Modules
     $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
+    $CachePSRepository = $OSDWorkspace.paths.psrepository
     $PSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
+
+    # Register PSRepository
+    if (-not (Test-Path -Path $CachePSRepository)) {
+        New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
+    }
+    if (-not (Get-PSRepository -Name OSDWorkspace -ErrorAction Ignore)) {
+        Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
+        # Unregister-PSRepository -Name OSDWorkspace
+    }
 
     # Get Names of the mounted PowerShell modules
     $MountedPSModules = Get-ChildItem -Path $PSModulesPath -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -eq $true } | Select-Object -ExpandProperty Name
@@ -92,6 +102,14 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
             Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
         }
 
+        try {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$PSModulesPath`" -Force"
+            Save-Module -Name $Name -Path "$PSModulesPath" -Force -ErrorAction Stop
+        }
+        catch {
+            Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
+        }
+
         Save-Module -Name $Name -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
     }
 
@@ -100,11 +118,11 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $ModuleNames | ForEach-Object {
         $ModuleName = $_
         if (-not (Test-Path -Path "$CachePowerShellModules\$ModuleName")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Updating PowerShell Module cache at $CachePowerShellModules\$ModuleName"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Updating PowerShell Module cache at $CachePowerShellModules\$ModuleName"
             #Save-Module -Name $ModuleName -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
         }
         if (Test-Path -Path "$CachePowerShellModules\$ModuleName") {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Adding PowerShell Module at $PSModulesPath\$ModuleName"
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding PowerShell Module at $PSModulesPath\$ModuleName"
             #Copy-Item -Path "$CachePowerShellModules\$ModuleName" -Destination $PSModulesPath -Recurse -Force
         }
     }
@@ -112,15 +130,15 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
 
     #=================================================
     # Add Environment Variable INF
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell: Add Environment Variables"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell: Add Environment Variables"
     $InfFile = "$env:Temp\Set-WinPEEnvironment.inf"
     New-Item -Path $InfFile -Force | Out-Null
     Set-Content -Path $InfFile -Value $InfEnvironment -Encoding Unicode -Force
     $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
 
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
     Set-WindowsImageExecutionPolicy -Path $MountPath -ExecutionPolicy Bypass | Out-Null
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

@@ -11,7 +11,7 @@ function Get-OSDWSLibrarySubmodule {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
     $OSDWSPath = $OSDWorkspace.paths.library_submodule
 
@@ -22,6 +22,6 @@ function Get-OSDWSLibrarySubmodule {
     $results = $results | Sort-Object -Property Name
     $results
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

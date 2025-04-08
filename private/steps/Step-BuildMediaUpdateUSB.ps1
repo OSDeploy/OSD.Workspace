@@ -8,14 +8,14 @@ function Step-BuildMediaUpdateUSB {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] MediaPath: $MediaPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] UpdateUSB: $UpdateUSB"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MediaPath: $MediaPath"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] UpdateUSB: $UpdateUSB"
     #=================================================
     if ($UpdateUSB -eq $true) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update USB BootMedia Partition"
-        $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'BootMedia' }
+        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Update USB-WinPE Partition"
+        $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'USB-WinPE' }
         if ($WinpeVolumes) {
             foreach ($volume in $WinpeVolumes) {
                 if (Test-Path -Path "$($volume.DriveLetter):\") {
@@ -24,10 +24,10 @@ function Step-BuildMediaUpdateUSB {
             }
         }
         else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Unable to find a USB Partition labeled BootMedia to update"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unable to find a USB Partition labeled USB-WinPE to update"
         }
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

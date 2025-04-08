@@ -9,12 +9,12 @@ function Get-OSDWSWinOSSource {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
         #=================================================
         $SourcePath = $OSDWorkspace.paths.import_windows_os
 
         $SourceItems = @()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageItems"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ImageItems"
         $SourceItems = Get-ChildItem -Path $SourcePath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'WinOS-Media\sources\install.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
@@ -24,8 +24,8 @@ function Get-OSDWSWinOSSource {
         $IndexJson = (Join-Path $SourcePath 'index.json')
 
         if ($SourceItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace Import WinOS files were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Import-OSDWorkspaceWinOS to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace Import WinOS files were not found"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Run Import-OSDWorkspaceWinOS to resolve this issue"
 
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -46,12 +46,12 @@ function Get-OSDWSWinOSSource {
             #   Import Details
             #=================================================
             $InfoId = "$SourceItemPath\.core\id.json"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Id: $($ImportId.Id)"
 
             $InfoOS = "$SourceItemPath\.core\winos-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
             #=================================================
@@ -130,7 +130,7 @@ function Get-OSDWSWinOSSource {
     }
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

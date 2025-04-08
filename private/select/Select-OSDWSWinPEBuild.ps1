@@ -1,10 +1,10 @@
 function Select-OSDWSWinPEBuild {
     <#
     .SYNOPSIS
-        Selects an OSDWorkspace BootMedia.
+        Selects an OSDWorkspace WinPE Build.
 
     .DESCRIPTION
-        This function displays available OSDWorkspace BootMedia in an Out-GridView and returns the selected BootMedia object.
+        This function displays available OSDWorkspace WinPE Build in an Out-GridView and returns the selected BootMedia object.
         Utilizes the Get-OSDWSWinPEBuild function to retrieve the BootMedia.
 
     .PARAMETER Architecture
@@ -39,7 +39,7 @@ function Select-OSDWSWinPEBuild {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
 
     $results = Get-OSDWSWinPEBuild
@@ -49,12 +49,12 @@ function Select-OSDWSWinPEBuild {
     }
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a WinPE Build and press OK (Cancel to skip)"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a WinPE Build and press OK (Cancel to skip)"
         $results = $results | Out-GridView -Title 'Select a WinPE Build and press OK (Cancel to skip)' -OutputMode Single
     
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

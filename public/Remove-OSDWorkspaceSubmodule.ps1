@@ -20,13 +20,13 @@ function Remove-OSDWorkspaceSubmodule {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
         Initialize-OSDWorkspace
         #=================================================
         # Requires Run as Administrator
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This function must be Run as Administrator"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
             return
         }
         #=================================================
@@ -44,40 +44,40 @@ function Remove-OSDWorkspaceSubmodule {
         $OSDWorkspacePath = Get-OSDWorkspacePath
 
         foreach ($Repository in $InputObject) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Repository: $($Repository.FullName)"
+            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Repository: $($Repository.FullName)"
 
             if ($Force -eq $true) {
-                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Push-Location `"$OSDWorkspacePath`""
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Push-Location `"$OSDWorkspacePath`""
                 Push-Location $OSDWorkspacePath
 
                 $RepositoryName = $Repository.Name
-                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryName: $RepositoryName"
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] RepositoryName: $RepositoryName"
 
                 $RepositoryPathToDelete = "submodules/$RepositoryName"
-                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RepositoryPathToDelete: $RepositoryPathToDelete"
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] RepositoryPathToDelete: $RepositoryPathToDelete"
 
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule entry from OSDWorkspace .git/config"
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git submodule deinit --force $RepositoryPathToDelete"
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Removing submodule entry from OSDWorkspace .git/config"
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] git submodule deinit --force $RepositoryPathToDelete"
                 git submodule deinit --force "$RepositoryPathToDelete"
 
                 $RemoveItemPath = ".git\modules\submodules\$RepositoryName"
-                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] RemoveItemPath: $RemoveItemPath"
+                Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] RemoveItemPath: $RemoveItemPath"
                 if (Test-Path $RemoveItemPath) {
-                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule from OSDWorkspace .git/modules"
-                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Remove-Item $RemoveItemPath -Recurse -Force"
+                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Removing submodule from OSDWorkspace .git/modules"
+                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Remove-Item $RemoveItemPath -Recurse -Force"
                     Remove-Item $RemoveItemPath -Recurse -Force -ErrorAction SilentlyContinue
                 }
 
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Removing submodule from .gitmodules"
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Deleting submodule from $RepositoryPathToDelete"
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] git rm --force $RepositoryPathToDelete"
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Removing submodule from .gitmodules"
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Deleting submodule from $RepositoryPathToDelete"
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] git rm --force $RepositoryPathToDelete"
                 git rm --force "$RepositoryPathToDelete"
 
                 Pop-Location
             }
             else {
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This command will permanently delete this repository from OSDWorkspace."
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force switch when running this command."
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This command will permanently delete this repository from OSDWorkspace."
+                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use the -Force switch when running this command."
                 Write-Host
             }
         }
@@ -87,7 +87,7 @@ function Remove-OSDWorkspaceSubmodule {
     
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

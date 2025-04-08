@@ -28,17 +28,17 @@ function Select-OSDWSWinPEBuildScript {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
     $results = Get-OSDWSWinPEBuildScript
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select BootImage and BootMedia Scripts to run during the build (Cancel to skip)"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select BootImage and BootMedia Scripts to run during the build (Cancel to skip)"
         $results = $results | Out-GridView -PassThru -Title 'Select BootImage and BootMedia Scripts to run during the build (Cancel to skip)'
     
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

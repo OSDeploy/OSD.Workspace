@@ -10,7 +10,7 @@ function Get-OSDWorkspacePath {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
     # Path will always default to C:\OSDWorkspace
     $OSDWorkspacePath = $OSDWorkspace.path
@@ -20,6 +20,6 @@ function Get-OSDWorkspacePath {
 
     return $OSDWorkspacePath
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

@@ -36,13 +36,13 @@ function Import-OSDWorkspaceWinOS {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
         Initialize-OSDWorkspace
         #=================================================
         # Requires Run as Administrator
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] This function must be Run as Administrator"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
             return
         }
         #=================================================
@@ -54,7 +54,7 @@ function Import-OSDWorkspaceWinOS {
         #=================================================
         #region InputObject
         if ($null -eq $WindowsMediaImages) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WindowsImage on Windows Installation Media was not found. Mount a Windows Installation ISO and try again."
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WindowsImage on Windows Installation Media was not found. Mount a Windows Installation ISO and try again."
             Write-Host "Windows 11 x64 Download: https://www.microsoft.com/en-us/software-download/windows11"
             Write-Host "Windows 11 arm64 Download https://www.microsoft.com/en-us/software-download/windows11arm64"
             return
@@ -63,27 +63,27 @@ function Import-OSDWorkspaceWinOS {
         #=================================================
         #region Process foreach WindowsImage
         foreach ($SourceWindowsImage in $WindowsMediaImages) {
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] foreach"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] foreach"
 
             # Set the BuildDateTime
             $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildDateTime: $BuildDateTime"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildDateTime: $BuildDateTime"
 
             # Set the Architecture
             $Architecture = $SourceWindowsImage.Architecture
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Architecture: $Architecture"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture"
 
             # Set the Destination Name
             $DestinationName = "$($BuildDateTime)-$($Architecture)"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationName: $DestinationName"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationName: $DestinationName"
             
             # Set the Destination Path
             $DestinationDirectory = Join-Path $($OSDWorkspace.paths.import_windows_os) "$DestinationName"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] DestinationDirectory: $DestinationDirectory"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationDirectory: $DestinationDirectory"
             
             # Set the Recovery Image Path
             $ImportWinREDirectory = Join-Path $($OSDWorkspace.paths.import_windows_re) "$DestinationName"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageREDirectory: $ImportWinREDirectory"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ImageREDirectory: $ImportWinREDirectory"
 
             $DestinationCore = "$DestinationDirectory\.core"
             $DestinationTemp = "$DestinationDirectory\.temp"
@@ -104,16 +104,16 @@ function Import-OSDWorkspaceWinOS {
 
             $DestinationImagePath = "$DestinationMedia\sources\install.wim"
             $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-windowsimage.log"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] CurrentLog: $CurrentLog"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] CurrentLog: $CurrentLog"
             Export-WindowsImage -SourceImagePath $($SourceWindowsImage.ImagePath) -SourceIndex $($SourceWindowsImage.ImageIndex) -DestinationImagePath $DestinationImagePath -LogPath "$CurrentLog" | Out-Null
             
             # Export the Operating System information
             $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
 
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationCore\winos-windowsimage.xml"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export $DestinationCore\winos-windowsimage.xml"
             $Image | Export-Clixml -Path "$DestinationCore\winos-windowsimage.xml"
             
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Export $DestinationCore\winos-windowsimage.json"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export $DestinationCore\winos-windowsimage.json"
             $Image | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winos-windowsimage.json" -Encoding utf8
 
             # Mount the Windows Image and store the details
@@ -261,7 +261,7 @@ function Import-OSDWorkspaceWinOS {
     }
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

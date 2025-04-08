@@ -20,6 +20,7 @@
         "winpe_apps": "C:\\OSDWorkspace\\cache\\winpe-apps",
         "adk_versions": "C:\\OSDWorkspace\\cache\\adk-versions",
         "powershell_modules": "C:\\OSDWorkspace\\cache\\powershell-modules",
+        "psrepository": "C:\\OSDWorkspace\\cache\\psrepository",
         "winos_buildprofile": "C:\\OSDWorkspace\\cache\\winos-buildprofile",
         "winpe_buildprofile": "C:\\OSDWorkspace\\cache\\winpe-buildprofile",
         "docs": "C:\\OSDWorkspace\\docs",

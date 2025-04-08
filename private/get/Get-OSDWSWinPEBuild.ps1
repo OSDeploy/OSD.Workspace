@@ -9,10 +9,10 @@ function Get-OSDWSWinPEBuild {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
         #=================================================
         $BuildPath = $OSDWorkspace.paths.build_windows_pe
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] BuildPath: $BuildPath"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildPath: $BuildPath"
 
         $BuildItems = @()
         $BuildItems = Get-ChildItem -Path $BuildPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
@@ -26,8 +26,8 @@ function Get-OSDWSWinPEBuild {
         $IndexJson = (Join-Path $BuildPath 'index.json')
 
         if ($BuildItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSDWorkspace WinPE Builds were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Run Build-OSDWorkspaceWinPE to resolve this issue"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace WinPE Builds were not found"
+            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Run Build-OSDWorkspaceWinPE to resolve this issue"
             
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -48,32 +48,32 @@ function Get-OSDWSWinPEBuild {
             #   Import Details
             #=================================================
             $InfoId = "$BuildItemPath\.core\id.json"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoId: $InfoId"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Id: $($ImportId.Id)"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Id: $($ImportId.Id)"
 
             $InfoOS = "$BuildItemPath\.core\winos-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoOS: $InfoOS"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             $ClixmlOS = Import-Clixml -Path $InfoOS
 
             $InfoREG = "$BuildItemPath\.core\winpe-regcurrentversion.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoREG: $InfoREG"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoREG: $InfoREG"
             $ClixmlREG = @()
             $ClixmlREG = Import-Clixml -Path $InfoREG
 
             $InfoPE = "$BuildItemPath\.core\winpe-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoPE: $InfoPE"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE
 
             $InfoRE = "$BuildItemPath\.core\winre-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoRE: $InfoRE"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             $ClixmlRE = Import-Clixml -Path $InfoRE
 
             $InfoBM = "$BuildItemPath\.core\gv-buildmedia.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] InfoBM: $InfoBM"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoBM: $InfoBM"
             $ClixmlBM = @()
             $ClixmlBM = Import-Clixml -Path $InfoBM
             #=================================================
@@ -88,35 +88,35 @@ function Get-OSDWSWinPEBuild {
             if ($OSArchitecture -eq '6') { $OSArchitecture = 'ia64' }
             if ($OSArchitecture -eq '9') { $OSArchitecture = 'amd64' }
             if ($OSArchitecture -eq '12') { $OSArchitecture = 'arm64' }
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSArchitecture: $OSArchitecture"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSArchitecture: $OSArchitecture"
 
             $OSEditionId = $($ClixmlOS.EditionId)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSEditionId: $OSEditionId"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSEditionId: $OSEditionId"
 
             $OSInstallationType = $($ClixmlOS.InstallationType)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] OSInstallationType: $OSInstallationType"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSInstallationType: $OSInstallationType"
             #=================================================
             #   WindowsImageWinRE
             #=================================================
             $WinREVersion = $($ClixmlRE.Version)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREVersion: $WinREVersion"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREVersion: $WinREVersion"
 
             $WinREMajorVersion = $($ClixmlRE.MajorVersion)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREMajorVersion: $WinREMajorVersion"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMajorVersion: $WinREMajorVersion"
 
             $WinREMinorVersion = $($ClixmlRE.MinorVersion)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREMinorVersion: $WinREMinorVersion"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMinorVersion: $WinREMinorVersion"
 
             $WinREBuild = $($ClixmlRE.Build)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinREBuild: $WinREBuild"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREBuild: $WinREBuild"
 
             $WinRESPLevel = $($ClixmlRE.SPLevel)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WinRESPLevel: $WinRESPLevel"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinRESPLevel: $WinRESPLevel"
             #=================================================
             #   Language
             #=================================================
             $WinRELanguages = $($ClixmlRE.Languages)
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Languages: $WinRELanguages"
+            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Languages: $WinRELanguages"
             #=================================================
             #   Create Object
             #=================================================
@@ -188,7 +188,7 @@ function Get-OSDWSWinPEBuild {
     }
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

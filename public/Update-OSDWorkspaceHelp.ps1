@@ -23,7 +23,7 @@ function Update-OSDWorkspaceHelp {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     $ModuleName = $($MyInvocation.MyCommand.Module.Name)
     Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
     $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
@@ -38,11 +38,11 @@ function Update-OSDWorkspaceHelp {
     #=================================================
     # PlatyPS
     if (Get-Module platyPS -ListAvailable -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell Module platyPS is installed"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell Module platyPS is installed"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] PowerShell Module platyPS is not installed"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use PowerShell to resolve this issue:"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell Module platyPS is not installed"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use PowerShell to resolve this issue:"
         Write-Host 'Install-Module -Name platyPS -Scope CurrentUser'
         Write-Host 'Import-Module platyPS'
         return
@@ -52,7 +52,7 @@ function Update-OSDWorkspaceHelp {
     $PowerShellHelpPath = $OSDWorkspace.paths.powershell_help
 
     if (-not (Test-Path $PowerShellHelpPath)) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Creating $PowerShellHelpPath"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $PowerShellHelpPath"
         New-Item -Path $PowerShellHelpPath -ItemType Directory -Force | Out-Null
     }
 
@@ -67,7 +67,7 @@ function Update-OSDWorkspaceHelp {
     $ModuleName = 'OSD.Workspace'
     
     if ((-not (Test-Path "$PowerShellHelpPath\$ModuleName")) -or $Force) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\$ModuleName"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Building $PowerShellHelpPath\$ModuleName"
         New-MarkdownHelp -Module $ModuleName -OutputFolder "$PowerShellHelpPath\$ModuleName" -Force | Out-Null
 
         # Set Registry version information
@@ -81,17 +81,17 @@ function Update-OSDWorkspaceHelp {
         }
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force parameter to update $ModuleName"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use the -Force parameter to update $ModuleName"
     }
     #=================================================
     # Dism Module
     $ModuleName = 'Dism'
     
     if ((-not (Test-Path "$PowerShellHelpPath\$ModuleName")) -or $Force) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Update-Help $ModuleName"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Update-Help $ModuleName"
         Update-Help -Module $ModuleName -Force | Out-Null
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building $PowerShellHelpPath\$ModuleName"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Building $PowerShellHelpPath\$ModuleName"
         New-MarkdownHelp -Module $ModuleName -OutputFolder "$PowerShellHelpPath\$ModuleName" -Force | Out-Null
 
         # Set Registry version information
@@ -105,7 +105,7 @@ function Update-OSDWorkspaceHelp {
         }
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Use the -Force parameter to update $ModuleName"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use the -Force parameter to update $ModuleName"
     }
     #=================================================
 }

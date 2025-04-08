@@ -28,7 +28,7 @@ function Import-OSDWorkspaceBootDriverMDT {
         $ShareName
     )
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     $Error.Clear()
     #=================================================
     #region Impor the Microsoft Deployment Toolkit module
@@ -102,6 +102,6 @@ function Import-OSDWorkspaceBootDriverMDT {
         Remove-PSDrive -Name "$($MDTPSDrive.Name)" -ErrorAction SilentlyContinue
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

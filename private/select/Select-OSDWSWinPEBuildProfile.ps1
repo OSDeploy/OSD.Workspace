@@ -28,17 +28,17 @@ function Select-OSDWSWinPEBuildProfile {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
     $results = Get-OSDWSWinPEBuildProfile
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)"
         $results = $results | Out-GridView -OutputMode Single -Title 'Select a BootMedia Profile to build this BootImage (Cancel to create a new BootMedia Profile)'
     
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

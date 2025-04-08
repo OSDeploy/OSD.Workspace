@@ -32,29 +32,12 @@
     },
     // Additional Tasks
     {
-      "label": "About: Get OSDWorkspace information",
+      "label": "About OSDWorkspace",
       "type": "shell",
       "command": "Get-OSDWorkspace",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "About: Get OSDWorkspace information (Admin)",
-      "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "-NoExit -Command Get-OSDWorkspace"
-      ],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "never",
         "panel": "shared"
       }
     },
@@ -79,7 +62,7 @@
       }
     },
     {
-      "label": "Docs: Update Workspace PowerShell Help for Dism (requires platyPS)",
+      "label": "Docs: Update PowerShell Help for Dism (requires platyPS)",
       "type": "shell",
       "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
       "problemMatcher": [],
@@ -89,7 +72,7 @@
       }
     },
     {
-      "label": "Docs: Update Workspace PowerShell Help for OSD (requires platyPS)",
+      "label": "Docs: Update PowerShell Help for OSD (requires platyPS)",
       "type": "shell",
       "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
       "problemMatcher": [],
@@ -99,7 +82,7 @@
       }
     },
     {
-      "label": "Docs: Update Workspace PowerShell Help for OSD.Workspace (requires platyPS)",
+      "label": "Docs: Update PowerShell Help for OSD.Workspace (requires platyPS)",
       "type": "shell",
       "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
       "problemMatcher": [],
@@ -109,7 +92,7 @@
       }
     },
     {
-      "label": "Library: Add a shared library (submodule)",
+      "label": "Submodule: Add a Library Submodule by URL",
       "type": "shell",
       "command": "Start-Process",
       "args": [
@@ -126,7 +109,7 @@
       }
     },
     {
-      "label": "Library: Add the OSDCloud (submodule) shared library",
+      "label": "Submodule: Add the OSDCloud Archive Submodule",
       "type": "shell",
       "command": "Start-Process",
       "args": [
@@ -134,7 +117,7 @@
         "-Verb",
         "RunAs",
         "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-OSDCloud-Archive.git'"
+        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdeploy-osdcloud-archive.git'"
       ],
       "problemMatcher": [],
       "presentation": {
@@ -143,16 +126,9 @@
       }
     },
     {
-      "label": "Library: Add the OSDCloud Archive (submodule) shared library (unsupported)",
+      "label": "Submodule: Find a Library Submodule on GitHub",
       "type": "shell",
-      "command": "Start-Process",
-      "args": [
-        "pwsh",
-        "-Verb",
-        "RunAs",
-        "-ArgumentList",
-        "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdsubmod-OSDCloud-Archive.git'"
-      ],
+      "command": "start 'https://github.com/search?q=OSDWorkspace%20Submodule&type=repositories'",
       "problemMatcher": [],
       "presentation": {
         "reveal": "never",
@@ -160,17 +136,7 @@
       }
     },
     {
-      "label": "Library: Find a shared library (submodule) on GitHub",
-      "type": "shell",
-      "command": "start 'https://github.com/search?q=osdsubmod&type=repositories'",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "never",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Library: Remove a shared library (submodule)",
+      "label": "Submodule: Remove a Library Submodule",
       "type": "shell",
       "command": "Start-Process",
       "args": [
@@ -187,7 +153,7 @@
       }
     },
     {
-      "label": "Library: Update a shared library (submodule)",
+      "label": "Submodule: Update a Library Submodule",
       "type": "shell",
       "command": "Start-Process",
       "args": [

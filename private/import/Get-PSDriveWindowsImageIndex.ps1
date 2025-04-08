@@ -6,11 +6,11 @@ function Get-PSDriveWindowsImageIndex {
         $GridView
     )
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Start"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
     $Error.Clear()
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] must be run with Administrator privileges"
+        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] must be run with Administrator privileges"
         Break
     }
     #=================================================
@@ -21,11 +21,11 @@ function Get-PSDriveWindowsImageIndex {
         $WindowsMediaImages = $PSDriveWindowsImageFile | ForEach-Object {
             # Set the MediaRoot
             $MediaRoot = $_.MediaRoot
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] WindowsImage: $($_.FullName)"
+            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WindowsImage: $($_.FullName)"
             Get-WindowsImage -ImagePath "$($_.FullName)"
         } | ForEach-Object {
             Get-WindowsImage -ImagePath "$($_.ImagePath)" -Index $($_.ImageIndex) | Select-Object -Property @{Name = 'MediaRoot'; Expression = { $MediaRoot } }, *
-            Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] ImageIndex $($_.ImageIndex): $($_.ImageName)" -ForegroundColor DarkGray
+            Write-Host "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ImageIndex $($_.ImageIndex): $($_.ImageName)" -ForegroundColor DarkGray
         }
 
         # Set Architecture to human readable"
@@ -40,7 +40,7 @@ function Get-PSDriveWindowsImageIndex {
             if ($Image.Architecture -eq '12') { $Image.Architecture = 'arm64' }
         }
 
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] Building results"
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Building results"
         $Results = $WindowsMediaImages | Select-Object -Property MediaRoot, ImagePath, ImageIndex, ImageName, Architecture, Version, EditionId, Languages, `
             InstallationType, CreatedTime, ModifiedTime, `
             DirectoryCount, FileCount, ImageDescription, ImageSize, ImageType, WIMBoot, ProductName, Hal, ProductSuite, ProductType, `
@@ -54,6 +54,6 @@ function Get-PSDriveWindowsImageIndex {
         return $Results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand)] End"
+    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }
