@@ -73,7 +73,30 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     # Update PowerShell Modules
     $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
     $CachePSRepository = $OSDWorkspace.paths.psrepository
-    $PSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
+    $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
+
+    # Nuget
+    if ($(Get-PackageProvider).Name -notcontains "NuGet") {
+        Install-PackageProvider "NuGet" -Force
+    }
+
+    # PackageManagement
+    $PackageManagementLatestLocallyAvailableVersion = $($(Get-Module -ListAvailable | Where-Object {$_.Name -eq"PackageManagement"}).Version | Measure-Object -Maximum).Maximum
+
+
+
+
+
+
+
+
+
+    $PowerShellGetLatestLocallyAvailableVersion = $($(Get-Module -ListAvailable | Where-Object {$_.Name -eq"PowerShellGet"}).Version | Measure-Object -Maximum).Maximum
+
+
+
+
+
 
     # Register PSRepository
     if (-not (Test-Path -Path $CachePSRepository)) {
@@ -85,26 +108,85 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     }
 
     # Get Names of the mounted PowerShell modules
-    $MountedPSModules = Get-ChildItem -Path $PSModulesPath -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -eq $true } | Select-Object -ExpandProperty Name
+    $MountedPSModules = Get-ChildItem -Path $MountedPSModulesPath -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -eq $true } | Select-Object -ExpandProperty Name
 
     foreach ($Name in $MountedPSModules) {
+        if (($Name -eq 'Microsoft.PowerShell.Operation.Validation') -or ($Name -eq 'Pester')) {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] PowerShell Module $Name does not require an update"
+            continue
+        }
+
+        # References
+        # https://github.com/KurtDeGreeff/misc-powershell/blob/3d5c7d3485b01baea5326111b998cc3e3fb05bb1/Update-PackageManagement.ps1#L8
+        # https://github.com/maxisam/misc-powershell/blob/93f9ff390533ddbb13aa991e27613c7a140dab1f/MyModules/WinSSH/WinSSH.psm1#L1140
+
+
+        if ($Name -eq 'PackageManagement') {
+            # Is the required version installed?
+            $InstalledModule = Get-Module -Name PackageManagement -ListAvailable | Where-Object {$_.Version -eq 1.4.8.1}
+            <#
+            if (-not ($InstalledModule)) {
+                Install-Module
+            }
+            #>
+            $FindModule = Find-Module -Name $Name -RequiredVersion '1.4.8.1' -Repository OSDWorkspace -ErrorAction SilentlyContinue
+            if ($FindModule) {
+                $Repository = 'OSDWorkspace'
+            } else {
+                $Repository = 'PSGallery'
+            }
+        }
+        elseif ($Name -eq 'PowerShellGet') {
+            $FindModule = Find-Module -Name $Name -RequiredVersion '2.2.5' -Repository OSDWorkspace -ErrorAction SilentlyContinue
+            if ($FindModule) {
+                $Repository = 'OSDWorkspace'
+            } else {
+                $Repository = 'PSGallery'
+            }
+        }
+        else {
+
+        }
+
+        if ($Repository) {
+            try {
+                Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Repository $Repository -Force"
+                Save-Module -Name $Name -Path "$MountedPSModulesPath" -Repository $Repository -Force -ErrorAction Stop
+            }
+            catch {
+                Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module from $Repository failed: $Name"
+            }
+            continue
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         $FindModule = Find-Module -Name $Name -ErrorAction SilentlyContinue
         if ($null -eq $FindModule) {
-            Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Find-Module failed: $Name"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] PowerShell Module $Name was not found in PSGallery or OSDWorkspace"
             continue
         }
 
         try {
-            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$PSModulesPath`" -Force"
-            Save-Module -Name $Name -Path "$PSModulesPath" -Force -ErrorAction Stop
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Force"
+            Save-Module -Name $Name -Path "$MountedPSModulesPath" -Force -ErrorAction Stop
         }
         catch {
             Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
         }
 
         try {
-            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$PSModulesPath`" -Force"
-            Save-Module -Name $Name -Path "$PSModulesPath" -Force -ErrorAction Stop
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Force"
+            Save-Module -Name $Name -Path "$MountedPSModulesPath" -Force -ErrorAction Stop
         }
         catch {
             Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
@@ -122,8 +204,8 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
             #Save-Module -Name $ModuleName -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
         }
         if (Test-Path -Path "$CachePowerShellModules\$ModuleName") {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding PowerShell Module at $PSModulesPath\$ModuleName"
-            #Copy-Item -Path "$CachePowerShellModules\$ModuleName" -Destination $PSModulesPath -Recurse -Force
+            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding PowerShell Module at $MountedPSModulesPath\$ModuleName"
+            #Copy-Item -Path "$CachePowerShellModules\$ModuleName" -Destination $MountedPSModulesPath -Recurse -Force
         }
     }
     #>

@@ -28,19 +28,22 @@ function Get-OSDWSWinPEBuildScript {
     
     $LibraryItems = @()
     $LibraryItems = foreach ($LibraryPath in $LibraryPaths) {
-        Get-ChildItem -Path @("$LibraryPath\winpe-apps") -Recurse -Depth 1 -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-apps\*\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
             Select-Object @{Name = 'Type'; Expression = { 'winpe-appscript' } },
+            @{Name = 'Library'; Expression = { (Split-Path -Path $LibraryPath -Leaf) } },
             Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
 
-        Get-ChildItem -Path @("$LibraryPath\winpe-script") -Recurse -Depth 1 -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-script\*\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
             Select-Object @{Name = 'Type'; Expression = { 'winpe-script' } },
+            @{Name = 'Library'; Expression = { (Split-Path -Path $LibraryPath -Leaf) } },
             Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
             
-        Get-ChildItem -Path @("$LibraryPath\winpe-mediascript") -Recurse -Depth 1 -ErrorAction SilentlyContinue | `
+        Get-ChildItem -Path @("$LibraryPath\winpe-mediascript\*\*") -ErrorAction SilentlyContinue | `
             Where-Object { $_.Extension -eq '.ps1' } | `
             Select-Object @{Name = 'Type'; Expression = { 'winpe-mediascript' } },
+            @{Name = 'Library'; Expression = { (Split-Path -Path $LibraryPath -Leaf) } },
             Name, @{Name = 'Size'; Expression = { '{0:N2} KB' -f ($_.Length / 1KB) } }, LastWriteTime, FullName
     }
 

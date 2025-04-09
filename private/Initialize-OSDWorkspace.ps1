@@ -188,6 +188,7 @@ function Initialize-OSDWorkspace {
         }
     }
 
+    <#
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\copilot-instructions.md" -Raw
     $Path = "$OSDWorkspacePath\.github\copilot-instructions.md"
     if (-not (Test-Path -Path $Path)) {
@@ -201,6 +202,7 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
+    #>
 
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\tasks.json" -Raw
     $Path = "$OSDWorkspacePath\.vscode\tasks.json"
