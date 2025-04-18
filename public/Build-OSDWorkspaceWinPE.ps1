@@ -757,9 +757,9 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaAddWallpaper
     Step-BuildMediaPowerShellUpdate
     Step-WinPEAppAzCopy
-    Step-WinPEAppMicrosoftDaRT
-    #Step-WinPEAppOpenSSH
-    #Step-WinPEAppPwsh
+    # Step-WinPEAppMicrosoftDaRT
+    # Step-WinPEAppOpenSSH
+    # Step-WinPEAppPwsh
     Step-WinPEAppWirelessConnect
     Step-WinPEAppZip
     Step-BuildMediaWindowsImageSave

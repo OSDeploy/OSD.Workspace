@@ -3,7 +3,6 @@ function Step-WinPEAppMicrosoftDaRT {
     param (
         [System.String]
         $AppName = 'Microsoft DaRT',
-
         [System.String]
         $Architecture = $global:BuildMedia.Architecture,
         [System.String]
