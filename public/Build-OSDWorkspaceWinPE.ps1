@@ -762,11 +762,11 @@ function Build-OSDWorkspaceWinPE {
     # Step-WinPEAppPwsh
     Step-WinPEAppWirelessConnect
     Step-WinPEAppZip
+    Step-BuildMediaWinPEAppScript
     Step-BuildMediaWindowsImageSave
     Step-BuildMediaRemoveWinpeshl
     Step-BuildMediaConsoleSettings
     Step-BuildMediaWinPEDriver
-    Step-BuildMediaWinPEAppScript
     Step-BuildMediaWinPEScript
     Step-BuildMediaExportWindowsDriverPE
     Step-BuildMediaExportWindowsPackagePE

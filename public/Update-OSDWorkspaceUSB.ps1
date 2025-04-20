@@ -24,10 +24,10 @@ function Update-OSDWorkspaceUSB {
         [string]
         $BootLabel = 'USB-WinPE',
 
-        # Label for the data partition. Default is 'USB-Data'.
+        # Label for the data partition. Default is 'USB-DATA'.
         [ValidateLength(0,32)]
         [string]
-        $DataLabel = 'USB-Data'
+        $DataLabel = 'USB-DATA'
     )
     #=================================================
     $Error.Clear()
@@ -83,7 +83,7 @@ function Update-OSDWorkspaceUSB {
                 if (Test-Path -Path "$($volume.DriveLetter):\") {
                     robocopy "$($BootMediaObject.FullName)" "$($volume.DriveLetter):\" *.* /e /ndl /r:0 /w:0 /xd '$RECYCLE.BIN' 'System Volume Information' /xj
                 }
-                $SelectBootMedia | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($volume.DriveLetter):\object.json" -Force
+                $SelectBootMedia | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($volume.DriveLetter):\osdworkspace.json" -Force
             }
         }
         else {

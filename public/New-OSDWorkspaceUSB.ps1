@@ -25,10 +25,10 @@ function New-OSDWorkspaceUSB {
         [string]
         $BootLabel = 'USB-WinPE',
 
-        # Label for the data partition. Default is 'USB-Data'.
+        # Label for the data partition. Default is 'USB-DATA'.
         [ValidateLength(0,32)]
         [string]
-        $DataLabel = 'USB-Data'
+        $DataLabel = 'USB-DATA'
     )
     #=================================================
     $Error.Clear()
