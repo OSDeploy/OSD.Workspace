@@ -58,9 +58,15 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $null = robocopy.exe "$MountPath\Users\Default" "$MountPath\Windows\System32\Config\SystemProfile" *.* /e /b /ndl /nfl /np /ts /r:0 /w:0 /xj /xf NTUSER.*
     #=================================================
     # Get the Paths for this function
+    $WinPEPSRepository = "$MountPath\psrepository"
     $CachePSRepository = $OSDWorkspace.paths.psrepository
     $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
     $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
+    #=================================================
+    # Create WinPE PSRepository folder
+    if (-not (Test-Path -Path $WinPEPSRepository)) {
+        New-Item -Path $WinPEPSRepository -ItemType Directory -Force | Out-Null
+    }
     #=================================================
     # Create CachePSRepository folder
     if (-not (Test-Path -Path $CachePSRepository)) {
@@ -68,8 +74,10 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     }
     #=================================================
     # Is PackageManagement in the Cache?
-    $PSRepositoryModule = Join-Path $CachePSRepository 'packagemanagement.1.4.8.1.nupkg'
-    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1'
+    $PackageName = 'packagemanagement.1.4.8.1.nupkg'
+    $PSRepositoryModule = Join-Path $CachePSRepository $PackageName
+    $PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1/$PackageName"
+    $PSModuleDestination = "$MountedPSModulesPath\PackageManagement\1.4.8.1"
 
     if (-not (Test-Path $PSRepositoryModule)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
@@ -79,17 +87,25 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         else {
             Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
         }
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
     }
     #=================================================
     # Add PackageManagement to WinPE
-    Expand-Archive -Path $PSRepositoryModule -DestinationPath "$MountedPSModulesPath\PackageManagement\1.4.8.1" -Force
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    Expand-Archive -Path $PSRepositoryModule -DestinationPath $PSModuleDestination -Force
+    $folderToDelete = "_rels"
+    Remove-Item -Path "$PSModuleDestination\$folderToDelete" -Recurse -ErrorAction SilentlyContinue
+    $folderToDelete2 = "package"
+    Remove-Item -Path "$PSModuleDestination\$folderToDelete2" -Recurse -ErrorAction SilentlyContinue
+    $fileToDelete = "$PackageName.nuspec"
+    Remove-Item -Path "$PSModuleDestination\$fileToDelete" -Force -ErrorAction SilentlyContinue
+    $fileToDelete2 = "`[Content_Types`].xml"
+    Remove-Item -LiteralPath "$PSModuleDestination\$fileToDelete2" -Force -ErrorAction SilentlyContinue
     #=================================================
     # Is PowerShellGet in the Cache?
-    $PSRepositoryModule = Join-Path $CachePSRepository 'powershellget.2.2.5.nupkg'
-    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5'
+    $PackageName = 'powershellget.2.2.5.nupkg'
+    $PSRepositoryModule = Join-Path $CachePSRepository $PackageName
+    $PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5/$PackageName"
+    $PSModuleDestination = "$MountedPSModulesPath\PowerShellGet\2.2.5"
 
     if (-not (Test-Path $PSRepositoryModule)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
@@ -99,17 +115,25 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         else {
             Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
         }
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
     }
     #=================================================
     # Add PowerShellGet to WinPE
-    Expand-Archive -Path $PSRepositoryModule -DestinationPath "$MountedPSModulesPath\PowerShellGet\2.2.5" -Force
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    Expand-Archive -Path $PSRepositoryModule -DestinationPath $PSModuleDestination -Force
+    $folderToDelete = "_rels"
+    Remove-Item -Path "$PSModuleDestination\$folderToDelete" -Recurse -ErrorAction SilentlyContinue
+    $folderToDelete2 = "package"
+    Remove-Item -Path "$PSModuleDestination\$folderToDelete2" -Recurse -ErrorAction SilentlyContinue
+    $fileToDelete = "$PackageName.nuspec"
+    Remove-Item -Path "$PSModuleDestination\$fileToDelete" -Force -ErrorAction SilentlyContinue
+    $fileToDelete2 = "`[Content_Types`].xml"
+    Remove-Item -LiteralPath "$PSModuleDestination\$fileToDelete2" -Force -ErrorAction SilentlyContinue
     #=================================================
     # Is NuGet.exe in the Cache?
-    $PSRepositoryModule = Join-Path $CachePSRepository 'nuget.exe'
+    $PackageName = 'nuget.exe'
+    $PSRepositoryModule = Join-Path $CachePSRepository $PackageName
     $PSModuleUrl = 'http://aka.ms/psget-nugetexe'
+    $PSModuleDestination = "$MountPath\ProgramData\Microsoft\Windows\PowerShell\PowerShellGet"
 
     if (-not (Test-Path $PSRepositoryModule)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
@@ -119,17 +143,17 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
         else {
             Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
         }
-    }
-    else {
     }
     #=================================================
     # Add NuGet.exe to WinPE
     Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
-    $Destination = "$MountPath\ProgramData\Microsoft\Windows\PowerShell\PowerShellGet"
-    if (-not (Test-Path $Destination)) {
-        New-Item -Path $Destination -ItemType Directory -Force | Out-Null
+    if (-not (Test-Path $PSModuleDestination)) {
+        New-Item -Path $PSModuleDestination -ItemType Directory -Force | Out-Null
     }
-    Copy-Item -Path $PSRepositoryModule -Destination $Destination -Force
+    Copy-Item -Path $PSRepositoryModule -Destination $PSModuleDestination -Force
+    #=================================================
+    # Populate WinPE PSRepository
+    & robocopy.exe "$CachePSRepository" "$WinPEPSRepository" *.* /e /ndl /nfl /np /njh /njs /r:0 /w:0 /xj
     #=================================================
     # Add User Environment Variables to the System Profile
     & reg LOAD HKLM\Mount "$MountPath\Windows\System32\Config\DEFAULT"

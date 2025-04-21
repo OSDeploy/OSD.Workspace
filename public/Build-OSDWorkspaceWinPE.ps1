@@ -766,8 +766,8 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaWindowsImageSave
     Step-BuildMediaRemoveWinpeshl
     Step-BuildMediaConsoleSettings
-    Step-BuildMediaWinPEDriver
     Step-BuildMediaWinPEScript
+    Step-BuildMediaWinPEDriver
     Step-BuildMediaExportWindowsDriverPE
     Step-BuildMediaExportWindowsPackagePE
     Step-BuildMediaRegCurrentVersionExport
