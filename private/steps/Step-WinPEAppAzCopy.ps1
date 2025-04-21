@@ -24,12 +24,11 @@ function Step-WinPEAppAzCopy {
     $CacheAzCopy = Join-Path $WinPEAppsPath 'AzCopy'
 
     if (-not (Test-Path -Path $CacheAzCopy)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] AzCopy: Adding cache content at $CacheAzCopy"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $CacheAzCopy"
         New-Item -Path $CacheAzCopy -ItemType Directory -Force | Out-Null
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] AzCopy: Using cache content at $CacheAzCopy"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] To update AzCopy, delete the $CacheAzCopy directory."
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $CacheAzCopy"
     }
 
     # amd64

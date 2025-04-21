@@ -21,12 +21,11 @@ function Step-WinPEAppZip {
     # Thanks Gary Blok
     $CacheZip = Join-Path $WinPEAppsPath "7zip"
     if (-not (Test-Path -Path $CacheZip)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 7zip: Adding cache content at $CacheZip"
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $CacheZip"
         New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 7zip: Using cache content at $CacheZip"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] To update 7zip, delete the $CacheZip directory."
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $CacheZip"
     }
 
     if (-not (Test-Path -Path "$CacheZip\7zr.exe")) {

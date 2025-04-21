@@ -62,90 +62,74 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
     $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
     #=================================================
-    # Make sure the OSDWorkspace machine has Nuget installed
-    #=================================================
-    <#
-    # Make sure to Unregister-PSRepository -Name OSDWorkspace
-    # PackageManagement
-    $PackageManagementLatestLocallyAvailableVersion = $($(Get-Module -ListAvailable | Where-Object { $_.Name -eq "PackageManagement" }).Version | Measure-Object -Maximum).Maximum
-    
-    # PowerShellGet
-    $PowerShellGetLatestLocallyAvailableVersion = $($(Get-Module -ListAvailable | Where-Object { $_.Name -eq "PowerShellGet" }).Version | Measure-Object -Maximum).Maximum
-
-    # References
-    # https://github.com/KurtDeGreeff/misc-powershell/blob/3d5c7d3485b01baea5326111b998cc3e3fb05bb1/Update-PackageManagement.ps1#L8
-    # https://github.com/maxisam/misc-powershell/blob/93f9ff390533ddbb13aa991e27613c7a140dab1f/MyModules/WinSSH/WinSSH.psm1#L1140
-    #>
-    #=================================================
-    # Get Names of the mounted PowerShell modules
-    $MountedPSModules = Get-ChildItem -Path $MountedPSModulesPath -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -eq $true } | Select-Object -ExpandProperty Name
-
-    foreach ($Name in $MountedPSModules) {
-        if (($Name -eq 'Microsoft.PowerShell.Operation.Validation') -or ($Name -eq 'Pester') -or ($Name -eq 'PSReadLine')) {
-            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] PowerShell Module $Name does not require an update"
-            continue
-        }
-
-        if ($Name -eq 'PackageManagement') {
-            Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
-            
-            try {
-                Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Force"
-                Save-Module -Name $Name -Path "$MountedPSModulesPath" -Repository OSDWorkspace -Force -ErrorAction Stop
-            }
-            catch {
-                Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
-            }
-            Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
-            continue
-        }
-
-        if ($Name -eq 'PowerShellGet') {
-            Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
-            
-            try {
-                Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Force"
-                Save-Module -Name $Name -Path "$MountedPSModulesPath" -Repository OSDWorkspace -Force -ErrorAction Stop
-            }
-            catch {
-                Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
-            }
-            Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
-            continue
-        }
-        
-        Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
-        $FindModule = Find-Module -Name $Name -ErrorAction SilentlyContinue
-        if ($null -eq $FindModule) {
-            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] PowerShell Module $Name was not found in PSGallery or OSDWorkspace"
-            Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
-            continue
-        }
-
-        try {
-            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module -Name $Name -Path `"$MountedPSModulesPath`" -Force"
-            Save-Module -Name $Name -Path "$MountedPSModulesPath" -Force -ErrorAction Stop
-        }
-        catch {
-            Write-Warning "[$(Get-Date -format G)][$($MyInvocation.MyCommand.Name)] Save-Module failed: $Name"
-        }
-        Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
+    # Create CachePSRepository folder
+    if (-not (Test-Path -Path $CachePSRepository)) {
+        New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
     }
+    #=================================================
+    # Is PackageManagement in the Cache?
+    $PSRepositoryModule = Join-Path $CachePSRepository 'packagemanagement.1.4.8.1.nupkg'
+    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1'
 
-    <#
-    $ModuleNames = @('PackageManagement', 'PowerShellGet', 'Microsoft.PowerShell.PSResourceGet')
-    $ModuleNames | ForEach-Object {
-        $ModuleName = $_
-        if (-not (Test-Path -Path "$CachePowerShellModules\$ModuleName")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Updating PowerShell Module cache at $CachePowerShellModules\$ModuleName"
-            #Save-Module -Name $ModuleName -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
+    if (-not (Test-Path $PSRepositoryModule)) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        if (Get-Command 'curl.exe') {
+            & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
         }
-        if (Test-Path -Path "$CachePowerShellModules\$ModuleName") {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding PowerShell Module at $MountedPSModulesPath\$ModuleName"
-            #Copy-Item -Path "$CachePowerShellModules\$ModuleName" -Destination $MountedPSModulesPath -Recurse -Force
+        else {
+            Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
         }
     }
-    #>
+    else {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    }
+    #=================================================
+    # Add PackageManagement to WinPE
+    Expand-Archive -Path $PSRepositoryModule -DestinationPath "$MountedPSModulesPath\PackageManagement\1.4.8.1" -Force
+    #=================================================
+    # Is PowerShellGet in the Cache?
+    $PSRepositoryModule = Join-Path $CachePSRepository 'powershellget.2.2.5.nupkg'
+    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5'
+
+    if (-not (Test-Path $PSRepositoryModule)) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        if (Get-Command 'curl.exe') {
+            & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
+        }
+        else {
+            Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
+        }
+    }
+    else {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    }
+    #=================================================
+    # Add PowerShellGet to WinPE
+    Expand-Archive -Path $PSRepositoryModule -DestinationPath "$MountedPSModulesPath\PowerShellGet\2.2.5" -Force
+    #=================================================
+    # Is NuGet.exe in the Cache?
+    $PSRepositoryModule = Join-Path $CachePSRepository 'nuget.exe'
+    $PSModuleUrl = 'http://aka.ms/psget-nugetexe'
+
+    if (-not (Test-Path $PSRepositoryModule)) {
+        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        if (Get-Command 'curl.exe') {
+            & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
+        }
+        else {
+            Invoke-WebRequest -UseBasicParsing -Uri $PSModuleUrl -OutFile $PSRepositoryModule
+        }
+    }
+    else {
+    }
+    #=================================================
+    # Add NuGet.exe to WinPE
+    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    $Destination = "$MountPath\ProgramData\Microsoft\Windows\PowerShell\PowerShellGet"
+    if (-not (Test-Path $Destination)) {
+        New-Item -Path $Destination -ItemType Directory -Force | Out-Null
+    }
+    Copy-Item -Path $PSRepositoryModule -Destination $Destination -Force
     #=================================================
     # Add User Environment Variables to the System Profile
     & reg LOAD HKLM\Mount "$MountPath\Windows\System32\Config\DEFAULT"

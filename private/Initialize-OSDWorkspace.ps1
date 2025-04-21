@@ -269,29 +269,33 @@ function Initialize-OSDWorkspace {
     }
     #=================================================
     # CachePowerShellModules
-    $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
-    if (-not (Test-Path -Path $CachePowerShellModules)) {
-        New-Item -Path $CachePowerShellModules -ItemType Directory -Force | Out-Null
-        Save-Module -Name PackageManagement -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
-        Save-Module -Name PowerShellGet -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
-    }
+    <#
+        $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
+        if (-not (Test-Path -Path $CachePowerShellModules)) {
+            New-Item -Path $CachePowerShellModules -ItemType Directory -Force | Out-Null
+            Save-Module -Name PackageManagement -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
+            Save-Module -Name PowerShellGet -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
+        }
+    #>
     #=================================================
     # CachePSRepository
-    $CachePSRepository = $OSDWorkspace.paths.psrepository
-    if (-not (Test-Path -Path $CachePSRepository)) {
-        New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
+    <#
+        $CachePSRepository = $OSDWorkspace.paths.psrepository
+        if (-not (Test-Path -Path $CachePSRepository)) {
+            New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
 
-        if (-not (Get-PSRepository -Name OSDWorkspace -ErrorAction Ignore)) {
-            Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
-            Set-PSRepository -Name OSDWorkspace -InstallationPolicy Trusted
+            if (-not (Get-PSRepository -Name OSDWorkspace -ErrorAction Ignore)) {
+                Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
+                Set-PSRepository -Name OSDWorkspace -InstallationPolicy Trusted
+            }
+            $ModuleBase = Get-Module -Name PackageManagement -ListAvailable | Where-Object { $_.Version -ge '1.4.8.1'} | Select-Object -First 1 -ExpandProperty ModuleBase
+            Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
+
+            $ModuleBase = Get-Module -Name PowerShellGet -ListAvailable | Where-Object { $_.Version -ge '2.2.5'} | Select-Object -First 1 -ExpandProperty ModuleBase
+            Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
+
+            Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
         }
-        $ModuleBase = Get-Module -Name PackageManagement -ListAvailable | Where-Object { $_.Version -ge '1.4.8.1'} | Select-Object -First 1 -ExpandProperty ModuleBase
-        Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
-
-        $ModuleBase = Get-Module -Name PowerShellGet -ListAvailable | Where-Object { $_.Version -ge '2.2.5'} | Select-Object -First 1 -ExpandProperty ModuleBase
-        Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
-
-        Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
-    }
+    #>
     #=================================================
 }
