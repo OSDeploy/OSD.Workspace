@@ -58,7 +58,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $null = robocopy.exe "$MountPath\Users\Default" "$MountPath\Windows\System32\Config\SystemProfile" *.* /e /b /ndl /nfl /np /ts /r:0 /w:0 /xj /xf NTUSER.*
     #=================================================
     # Get the Paths for this function
-    $WinPEPSRepository = "$MountPath\psrepository"
+    $WinPEPSRepository = "$MountPath\Windows\Temp\psrepository"
     $CachePSRepository = $OSDWorkspace.paths.psrepository
     $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
     $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
