@@ -18,8 +18,8 @@ function Get-OSDWSWinPEBuild {
         $BuildItems = Get-ChildItem -Path $BuildPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
             Where-Object { Test-Path $(Join-Path $_.FullName 'WinPE-Media\sources\boot.wim') } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\id.json') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\winos-windowsimage.xml') } | `
-            Where-Object { Test-Path $(Join-Path $_.FullName '.core\winre-windowsimage.xml') } | `
+            # Where-Object { Test-Path $(Join-Path $_.FullName '.core\winos-windowsimage.xml') } | `
+            Where-Object { (Test-Path $(Join-Path $_.FullName '.core\winpe-windowsimage.xml')) -or (Test-Path $(Join-Path $_.FullName '.core\winre-windowsimage.xml')) } | `
             Where-Object { Test-Path $(Join-Path $_.FullName '.core\gv-buildmedia.xml') }
 
         $IndexXml = (Join-Path $BuildPath 'index.xml')
@@ -55,7 +55,9 @@ function Get-OSDWSWinPEBuild {
             $InfoOS = "$BuildItemPath\.core\winos-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoOS: $InfoOS"
             $ClixmlOS = @()
-            $ClixmlOS = Import-Clixml -Path $InfoOS
+            if (Test-Path $InfoOS) {
+                $ClixmlOS = Import-Clixml -Path $InfoOS -ErrorAction SilentlyContinue
+            }
 
             $InfoREG = "$BuildItemPath\.core\winpe-regcurrentversion.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoREG: $InfoREG"
@@ -65,21 +67,23 @@ function Get-OSDWSWinPEBuild {
             $InfoPE = "$BuildItemPath\.core\winpe-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoPE: $InfoPE"
             $ClixmlPE = @()
-            $ClixmlPE = Import-Clixml -Path $InfoPE
+            $ClixmlPE = Import-Clixml -Path $InfoPE -ErrorAction SilentlyContinue
 
             $InfoRE = "$BuildItemPath\.core\winre-windowsimage.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoRE: $InfoRE"
             $ClixmlRE = @()
-            $ClixmlRE = Import-Clixml -Path $InfoRE
+            if (Test-Path $InfoRE) {
+                $ClixmlRE = Import-Clixml -Path $InfoRE -ErrorAction SilentlyContinue
+            }
 
             $InfoBM = "$BuildItemPath\.core\gv-buildmedia.xml"
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoBM: $InfoBM"
             $ClixmlBM = @()
             $ClixmlBM = Import-Clixml -Path $InfoBM
+
             #=================================================
-            #   Resolve Architecture
-            #=================================================
-            $OSArchitecture = $ClixmlOS.Architecture
+            # Use ClixmlPE as this exists for WinRE and ADK
+            $OSArchitecture = $ClixmlPE.Architecture
             if ($OSArchitecture -eq '0') { $OSArchitecture = 'x86' }
             if ($OSArchitecture -eq '1') { $OSArchitecture = 'MIPS' }
             if ($OSArchitecture -eq '2') { $OSArchitecture = 'Alpha' }
@@ -90,32 +94,50 @@ function Get-OSDWSWinPEBuild {
             if ($OSArchitecture -eq '12') { $OSArchitecture = 'arm64' }
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSArchitecture: $OSArchitecture"
 
-            $OSEditionId = $($ClixmlOS.EditionId)
+            #=================================================
+            # Alternate method is for ADK compatibility
+            if ($ClixmlOS) {
+                $OSEditionId = $($ClixmlOS.EditionId)
+                $OSInstallationType = $($ClixmlOS.InstallationType)
+                $OSCreatedTime = [datetime]$ClixmlOS.CreatedTime
+                $OSModifiedTime = [datetime]$ClixmlOS.ModifiedTime
+                $OSImageName = $ClixmlOS.ImageName
+                $OSVersion = "$($ClixmlOS.MajorVersion).$($ClixmlOS.MinorVersion).$($ClixmlOS.Build).$($ClixmlOS.SPBuild)"
+            }
+            else {
+                $OSEditionId = $($ClixmlPE.EditionId)
+                $OSInstallationType = $($ClixmlPE.InstallationType)
+                $OSCreatedTime = [datetime]$ClixmlPE.CreatedTime
+                $OSModifiedTime = [datetime]$ClixmlPE.ModifiedTime
+                $OSImageName = $ClixmlPE.ImageName
+                $OSVersion = "$($ClixmlPE.MajorVersion).$($ClixmlPE.MinorVersion).$($ClixmlPE.Build).$($ClixmlPE.SPBuild)"
+            }
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSEditionId: $OSEditionId"
-
-            $OSInstallationType = $($ClixmlOS.InstallationType)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSInstallationType: $OSInstallationType"
+
             #=================================================
-            #   WindowsImageWinRE
-            #=================================================
-            $WinREVersion = $($ClixmlRE.Version)
+            # Alternate method is for ADK compatibility
+            if ($ClixmlRE) {
+                $WinREVersion = $($ClixmlRE.Version)
+                $WinREMajorVersion = $($ClixmlRE.MajorVersion)
+                $WinREMinorVersion = $($ClixmlRE.MinorVersion)
+                $WinREBuild = $($ClixmlRE.Build)
+                $WinRESPLevel = $($ClixmlRE.SPLevel)
+                $WinRELanguages = $($ClixmlRE.Languages)
+            }
+            else {
+                $WinREVersion = $($ClixmlPE.Version)
+                $WinREMajorVersion = $($ClixmlPE.MajorVersion)
+                $WinREMinorVersion = $($ClixmlPE.MinorVersion)
+                $WinREBuild = $($ClixmlPE.Build)
+                $WinRESPLevel = $($ClixmlPE.SPLevel)
+                $WinRELanguages = $($ClixmlPE.Languages)
+            }
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREVersion: $WinREVersion"
-
-            $WinREMajorVersion = $($ClixmlRE.MajorVersion)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMajorVersion: $WinREMajorVersion"
-
-            $WinREMinorVersion = $($ClixmlRE.MinorVersion)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMinorVersion: $WinREMinorVersion"
-
-            $WinREBuild = $($ClixmlRE.Build)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREBuild: $WinREBuild"
-
-            $WinRESPLevel = $($ClixmlRE.SPLevel)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinRESPLevel: $WinRESPLevel"
-            #=================================================
-            #   Language
-            #=================================================
-            $WinRELanguages = $($ClixmlRE.Languages)
             Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Languages: $WinRELanguages"
             #=================================================
             #   Create Object
@@ -150,11 +172,11 @@ function Get-OSDWSWinPEBuild {
                 ImageSize                = $ClixmlPE.ImageSize
                 DirectoryCount           = $ClixmlPE.DirectoryCount
                 FileCount                = $ClixmlPE.FileCount
-                OSCreatedTime            = [datetime]$ClixmlOS.CreatedTime
-                OSModifiedTime           = [datetime]$ClixmlOS.ModifiedTime
-                OSImageName              = $ClixmlOS.ImageName
-                OSEditionId              = $ClixmlOS.EditionId
-                OSVersion                = "$($ClixmlOS.MajorVersion).$($ClixmlOS.MinorVersion).$($ClixmlOS.Build).$($ClixmlOS.SPBuild)"
+                OSCreatedTime            = $OSCreatedTime
+                OSModifiedTime           = $OSModifiedTime
+                OSImageName              = $OSImageName
+                OSEditionId              = $OSEditionId
+                OSVersion                = $OSVersion
                 Path                     = $BuildItemPath
             }
             New-Object -TypeName PSObject -Property $ObjectProperties

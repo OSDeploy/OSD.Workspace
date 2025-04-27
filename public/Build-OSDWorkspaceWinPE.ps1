@@ -476,6 +476,9 @@ function Build-OSDWorkspaceWinPE {
     }
 
     $ImportId = @{id = $MediaName }
+    if (-not (Test-Path $BuildMediaCorePath)) {
+        $null = New-Item -Path $BuildMediaCorePath -ItemType Directory -Force | Out-Null
+    }
     $ImportId | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\id.json" -Encoding utf8 -Force
     #endregion
     #=================================================
@@ -757,9 +760,6 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaAddWallpaper
     Step-BuildMediaPowerShellUpdate
     Step-WinPEAppAzCopy
-    # Step-WinPEAppMicrosoftDaRT
-    # Step-WinPEAppOpenSSH
-    # Step-WinPEAppPwsh
     Step-WinPEAppWirelessConnect
     Step-WinPEAppZip
     Step-BuildMediaWinPEAppScript
