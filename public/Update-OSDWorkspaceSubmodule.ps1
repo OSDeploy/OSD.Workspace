@@ -1,20 +1,58 @@
 function Update-OSDWorkspaceSubmodule {
     <#
     .SYNOPSIS
-        Updates all submodules in the OSDWorkspace.
+        Updates all submodules in the OSDWorkspace repository to their latest commits.
 
     .DESCRIPTION
-        This function updates all submodules in the OSDWorkspace C:\OSDWorkspace\Submodules directory.
-        Performs a 'git submodule update --remote --merge' to update the submodules to the latest commit in the main branch.
-        If you have not added the repository as a Submodule, use Add-OSDWorkspaceSubmodule.
+        The Update-OSDWorkspaceSubmodule function updates all Git submodules in the OSDWorkspace repository
+        (typically located at C:\OSDWorkspace\submodules) to their latest commits from the remote repositories.
+        
+        This function performs the following operations:
+        1. Validates administrator privileges
+        2. Navigates to the OSDWorkspace repository root
+        3. Executes 'git submodule update --remote --merge' to update all submodules to the latest commits
+        4. Returns to the original location
+        
+        The -Force parameter is required to perform the update operation to prevent accidental updates.
+        
+        If you have not added a repository as a submodule yet, use Add-OSDWorkspaceSubmodule first.
+
+    .PARAMETER Force
+        Required switch parameter to confirm that you want to update all submodules.
+        This is a safety measure to prevent accidentally updating submodules.
 
     .EXAMPLE
         Update-OSDWorkspaceSubmodule -Force
-        Updates all GitHub repositories in the OSDWorkspace Library-GitHub directory to the latest GitHub commit in the main branch.
+        
+        Updates all submodules in the OSDWorkspace repository to their latest commits.
+
+    .EXAMPLE
+        Update-OSDWorkspaceSubmodule -Force -Verbose
+        
+        Updates all submodules with detailed output showing each step of the process.
+
+    .OUTPUTS
+        None. This function does not generate any output objects.
 
     .NOTES
-        David Segura
+        Author: David Segura
+        Version: 1.0
+        Date: April 2025
+        
+        Prerequisites:
+            - Git for Windows must be installed and available in the system's PATH. (https://gitforwindows.org/)
+            - PowerShell 7.5 or higher is recommended.
+            - The script must be run with administrator privileges.
+            - The target OSDWorkspace repository must have submodules already added.
+        
+        This function modifies existing submodules by updating them to the latest commit from their respective repositories.
+        
+        For more information about Git submodules, see:
+            https://git-scm.com/docs/git-submodule
+            https://git-scm.com/book/en/v2/Git-Tools-Submodules
     #>
+
+
     [CmdletBinding()]
     param (
         # Force Update all Submodules in the OSDWorkspace

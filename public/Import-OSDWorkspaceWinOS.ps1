@@ -1,35 +1,62 @@
 function Import-OSDWorkspaceWinOS {
     <#
     .SYNOPSIS
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+        Imports Windows Recovery Environment (WinRE) images from mounted Windows installation media to OSDWorkspace.
 
     .DESCRIPTION
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
-        Supports both Windows 11 24H2 amd64 and arm64 Windows Installation Media ISO.
-        Will display a Out-GridView of the available Indexes for each Mounted Windows Installation Media ISO.
-        Select one or multiple Indexes to import.
-        The BootImage will be imported to the OSDWorkspace BootImage directory with a name of the format "yyMMdd-HHmm Architecture".
+        The Import-OSDWorkspaceWinOS function extracts and imports Windows Recovery Environment (WinRE) images 
+        from mounted Windows installation media ISO files to the OSDWorkspace BootImage directory.
+        
+        This function performs the following operations:
+        1. Validates administrator privileges
+        2. Scans for mounted Windows installation media ISO files
+        3. Displays an Out-GridView selection dialog for available installation indexes
+        4. Extracts the winre.wim file from the selected installation image(s)
+        5. Imports the WinRE image(s) to the OSDWorkspace BootImage directory
+        
+        The imported images are stored with a naming convention of "yyMMdd-HHmm Architecture" 
+        (e.g., "250429-1545 amd64") to indicate when they were imported and for which architecture.
+        
+        This function supports both Windows 11 amd64 (x64) and arm64 installation media.
 
     .EXAMPLE
         Import-OSDWorkspaceWinOS
-        Imports the winre.wim from a mounted Windows Installation Media ISO to the OSDWorkspace BootImage directory.
+        
+        Scans for mounted Windows installation media ISO files and presents a selection dialog
+        to choose which Windows version(s) to import WinRE from.
+
+    .EXAMPLE
+        Import-OSDWorkspaceWinOS -Verbose
+        
+        Imports WinRE images with detailed verbose output showing each step of the extraction
+        and import process.
 
     .INPUTS
-        None.
-
-        You cannot pipe input to this cmdlet.
+        None
+        
+        This function does not accept pipeline input.
 
     .OUTPUTS
-        None.
-
-        This function does not return any output.
-
-    .LINK
-        https://github.com/OSDeploy/OSD.Workspace/blob/main/docs/Import-OSDWorkspaceWinOS.md
+        None
+        
+        This function does not generate any output objects.
 
     .NOTES
-        David Segura
+        Author: David Segura
+        Version: 1.0
+        Date: April 29, 2025
+        
+        Prerequisites:
+            - PowerShell 5.0 or higher
+            - Windows 10 or higher
+            - Run as Administrator
+            - Windows installation media ISO mounted (via File Explorer or third-party tools)
+            
+        The WinRE images extracted are used as source images for creating custom WinPE boot media
+        with the Build-OSDWorkspaceWinPE function.
     #>
+
+    
     [CmdletBinding()]
     param ()
 

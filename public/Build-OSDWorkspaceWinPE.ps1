@@ -1,39 +1,80 @@
 function Build-OSDWorkspaceWinPE {
     <#
     .SYNOPSIS
-        Creates a new OSDWorkspace WinPE Build.
+        Creates a new customized WinPE build in the OSDWorkspace environment.
 
     .DESCRIPTION
-        This function creates a new OSDWorkspace WinPE Build using an imported WinRE image and applying desired customizations.
-        The BootMedia is created in the OSDWorkspace build directory.
+        The Build-OSDWorkspaceWinPE function creates a new Windows Preinstallation Environment (WinPE) build 
+        in the OSDWorkspace build directory. The function can use either a WinRE source image or the Windows 
+        Assessment and Deployment Kit (ADK) WinPE image as a base, then applies customizations including drivers,
+        packages, scripts, and other settings.
+        
+        This function performs the following operations:
+        1. Validates administrator privileges
+        2. Creates necessary directory structure for the build
+        3. Sources a base WinPE image (from WinRE or Windows ADK)
+        4. Applies selected customizations (drivers, packages, scripts)
+        5. Generates boot media in various formats (WIM, ISO, USB-ready files)
+        
+        Build output is stored in the C:\OSDWorkspace\Build\WinPE directory by default,
+        organized by architecture and build name.
 
     .EXAMPLE
         Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64'
-        Creates a new OSDWorkspace 'amd64' BootMedia with the name 'MyBootMedia'.
+        
+        Creates a new WinPE build for x64 architecture named 'MyBootMedia' using WinRE as the source.
 
     .EXAMPLE
         Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64'
-        Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia'.
+        
+        Creates a new WinPE build for ARM64 architecture named 'MyBootMedia' using WinRE as the source.
 
     .EXAMPLE
-        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64' -UseAdkWinPE
-        Creates a new OSDWorkspace 'amd64' BootMedia using the Windows ADK winpe.wim with the name 'MyBootMedia'.
+        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64' -AdkUseWinPE
+        
+        Creates a new WinPE build for x64 architecture named 'MyBootMedia' using the Windows ADK WinPE image.
 
     .EXAMPLE
-        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelect
-        Creates a new OSDWorkspace 'arm64' BootMedia with the name 'MyBootMedia' and prompts to select the Windows ADK version to use.
+        Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelectCacheVersion
+        
+        Creates a new WinPE build for ARM64 architecture named 'MyBootMedia' and prompts to select 
+        which Windows ADK version to use as the source.
+        
+    .EXAMPLE
+        Build-OSDWorkspaceWinPE -Name 'DeploymentMedia' -Verbose
+        
+        Creates a new WinPE build with detailed verbose output showing each step of the process.
+
+    .OUTPUTS
+        None. This function does not generate any output objects.
 
     .NOTES
-    David Segura
+        Author: David Segura
+        Version: 1.0
+        Date: April 29, 2025
+        
+        Prerequisites:
+            - PowerShell 5.0 or higher
+            - Windows 10 or higher
+            - Run as Administrator
+            - Windows ADK installed (if using -AdkUseWinPE or -AdkSelectCacheVersion)
+            - WinRE source imported (if not using -AdkUseWinPE)
+            
+        The build process can take several minutes depending on the customizations applied.
     #>
+
+    
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        # Name to append to the BootMedia Id Test
+        # Specifies a friendly name for the WinPE build.
+        # This name will be used in the build directory structure and media labels.
         [Parameter(Mandatory)]
         [System.String]
         $Name,
 
-        # Architecture of the BootImage. This is automatically set when selected a existing BootImage. This is required when using the Windows ADK winpe.wim.
+        # Specifies the processor architecture for the WinPE build.
+        # Valid values are 'amd64' (64-bit x86) and 'arm64' (64-bit ARM).
+        # Default value is 'amd64'.
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(Mandatory, ParameterSetName = 'ADK')]
         [ValidateSet('amd64', 'arm64')]
@@ -81,16 +122,16 @@ function Build-OSDWorkspaceWinPE {
 
         # Select the Windows ADK version to use if multiple versions are present in the cache.
         [System.Management.Automation.SwitchParameter]
-        $SelectAdkCacheVersion,
+        $AdkSelectCacheVersion,
 
         # Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.
         [System.Management.Automation.SwitchParameter]
-        $SkipAdkPackages,
+        $AdkSkipOcPackages,
 
-        # Uses the Windows ADK winpe.wim instead of an imported BootImage.
+        # Uses the Windows ADK winpe.wim instead of an imported winre.wim.
         [Parameter(Mandatory, ParameterSetName = 'ADK')]
         [System.Management.Automation.SwitchParameter]
-        $UseAdkWinPE
+        $AdkUseWinPE
     )
     #=================================================
     $Error.Clear()
@@ -127,11 +168,11 @@ function Build-OSDWorkspaceWinPE {
     else {
         $UpdateUSB = $false
     }
-    if ($SkipAdkPackages.IsPresent) {
-        $SkipAdkPackages = $true
+    if ($AdkSkipOcPackages.IsPresent) {
+        $AdkSkipOcPackages = $true
     }
     else {
-        $SkipAdkPackages = $false
+        $AdkSkipOcPackages = $false
     }
     #endregion
     #=================================================
@@ -187,8 +228,8 @@ function Build-OSDWorkspaceWinPE {
     }
     else {
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Cannot update the ADK cache because the ADK is not installed"
-        $SelectAdkCacheVersion = $true
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] SelectAdkCacheVersion: $SelectAdkCacheVersion"
+        $AdkSelectCacheVersion = $true
+        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] AdkSelectCacheVersion: $AdkSelectCacheVersion"
     }
     #endregion
     #=================================================
@@ -226,11 +267,11 @@ function Build-OSDWorkspaceWinPE {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using ADK cache at $WindowsAdkCacheSelected"
 
         # Can't select an ADK Version if there is only one
-        $SelectAdkCacheVersion = $false
+        $AdkSelectCacheVersion = $false
     }
     elseif ($WindowsAdkCacheOptions.Count -gt 1) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] $($WindowsAdkCacheOptions.Count) Windows ADK options are available to select from the ADK cache"
-        if ($SelectAdkCacheVersion) {
+        if ($AdkSelectCacheVersion) {
             Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a Windows ADK option and press OK (Cancel to Exit)"
             Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] To remove a Windows ADK option, delete one of the ADK cache directories in $WSAdkVersionsPath"
             $WindowsAdkCacheSelected = $WindowsAdkCacheOptions | Select-Object FullName | Sort-Object FullName -Descending | Out-GridView -Title 'Select a Windows ADK to use and press OK (Cancel to Exit)' -OutputMode Single
@@ -243,7 +284,7 @@ function Build-OSDWorkspaceWinPE {
             }
         }
         else {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a different Windows ADK with the -SelectAdkCacheVersion switch"
+            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a different Windows ADK with the -AdkSelectCacheVersion switch"
         }
     }
     else {
@@ -258,7 +299,7 @@ function Build-OSDWorkspaceWinPE {
         This will set the architecture automatically as the bootimage tells us and let that control what ADK architecture is going to be used.
         This way we don't have to prompt the user for the ADK architecture and can remove the parameter.
     #>
-    if ($UseAdkWinPE) {
+    if ($AdkUseWinPE) {
         Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using WinPE from Windows ADK"
         $WimSourceType = 'WinPE'
     }
@@ -409,6 +450,7 @@ function Build-OSDWorkspaceWinPE {
     $global:BuildMedia = [ordered]@{
         AdkInstallPath          = $WindowsAdkInstallPath
         AdkInstallVersion       = $WindowsAdkInstallVersion
+        AdkSkipOcPackages         = $AdkSkipOcPackages
         AdkRootPath             = $WindowsAdkRootPath
         Architecture            = [System.String]$Architecture
         BuildProfile            = $MyBuildProfilePath
@@ -432,13 +474,12 @@ function Build-OSDWorkspaceWinPE {
         MountPath               = $null
         Name                    = [System.String]$Name
         PEVersion               = $GetWindowsImage.Version
-        SelectAdkCacheVersion   = $SelectAdkCacheVersion
+        AdkSelectCacheVersion   = $AdkSelectCacheVersion
         SetAllIntl              = [System.String]$SetAllIntl
         SetInputLocale          = [System.String]$SetInputLocale
         SetTimeZone             = [System.String]$SetTimeZone
-        SkipAdkPackages         = $SkipAdkPackages
         UpdateUSB               = [System.Boolean]$UpdateUSB
-        UseAdkWinPE             = $UseAdkWinPE
+        AdkUseWinPE             = $AdkUseWinPE
         WimSourceType           = $WimSourceType
         WSCachePath             = $WSCachePath
         WSCachePathAdk          = $WSAdkVersionsPath
@@ -601,7 +642,7 @@ function Build-OSDWorkspaceWinPE {
     #endregion
     #=================================================
     #region Add ADK WinPE OCs
-    if ($SkipAdkPackages -eq $false) {
+    if ($AdkSkipOcPackages -eq $false) {
         $WinPEOCs = $WindowsAdkPaths.WinPEOCs
         #=================================================
         #region OSDeploy Install Default en-us Language

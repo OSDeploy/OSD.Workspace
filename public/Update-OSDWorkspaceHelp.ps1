@@ -1,20 +1,61 @@
 function Update-OSDWorkspaceHelp {
     <#
     .SYNOPSIS
-        Updates the OSDWorkspace PowerShell-Help files.
+        Generates and updates PowerShell help documentation for the OSD.Workspace module.
 
     .DESCRIPTION
-        This function updates the OSDWorkspace PowerShell-Help files in the OSDWorkspace directory C:\OSDWorkspace\docs\powershell-help.
-        It uses the platyPS module to generate the help files for the OSD.Workspace module and the Dism module.
-        The function checks if the help files already exist and if they do, it will only update them if the -Force parameter is used.
-    
+        The Update-OSDWorkspaceHelp function generates and updates the PowerShell help documentation 
+        files for the OSD.Workspace module. This includes creating or refreshing Markdown-based help 
+        files in the OSDWorkspace documentation directory (C:\OSDWorkspace\docs\powershell-help).
+        
+        This function performs the following operations:
+        1. Checks if the platyPS module is installed and installs it if needed
+        2. Creates the destination directory for help files if it doesn't exist
+        3. Generates help documentation for the OSD.Workspace module
+        4. Optionally generates help documentation for the DISM module
+        5. Writes the documentation files to the appropriate locations
+        
+        When run without the -Force parameter, this function will only update help files
+        if they don't already exist. Use -Force to regenerate all help files.
+
+    .PARAMETER Force
+        Switch parameter that forces regeneration of all help files, 
+        even if they already exist.
+
     .EXAMPLE
         Update-OSDWorkspaceHelp
-        Updates the OSDWorkspace PowerShell-Help files in the OSDWorkspace paths.
+        
+        Checks if PowerShell help files exist for the OSD.Workspace module and creates them 
+        if they don't exist.
+
+    .EXAMPLE
+        Update-OSDWorkspaceHelp -Force
+        
+        Regenerates all PowerShell help files for the OSD.Workspace module, 
+        overwriting any existing files.
+
+    .EXAMPLE
+        Update-OSDWorkspaceHelp -Verbose
+        
+        Updates PowerShell help files with detailed verbose output showing each step of the process.
+
+    .OUTPUTS
+        None. This function does not generate any output objects.
 
     .NOTES
-        David Segura
+        Author: David Segura
+        Version: 1.0
+        Date: April 29, 2025
+        
+        Prerequisites:
+            - PowerShell 5.0 or higher
+            - Internet connection (to install platyPS module if needed)
+            
+        The platyPS module is used to generate the help documentation.
+        This function may require an internet connection to install the platyPS module if it's not already installed.
     #>
+
+    
     [CmdletBinding()]
     param (
         # Force the update of OSDWorkspace PowerShell-Help

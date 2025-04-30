@@ -1,0 +1,1689 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Add-OSDWorkspaceSubmodule</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>OSDWorkspaceSubmodule</command:noun>
+      <maml:description>
+        <maml:para>Adds a GitHub repository as a submodule to the OSDWorkspace\submodules directory.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Add-OSDWorkspaceSubmodule function adds a GitHub repository as a submodule to the OSDWorkspace submodules directory  (typically located at C:\OSDWorkspace\submodules).</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Checks if the URL is a valid GitHub repository with .git extension 3. Creates the submodules directory if it doesn't exist 4. Executes 'git submodule add' operation to add the repository 5. Commits the changes to the OSDWorkspace parent repository</maml:para>
+      <maml:para>The submodule is added with the repository name extracted from the URL. The destination path will be submodules/[RepositoryName] within the OSDWorkspace root directory.</maml:para>
+      <maml:para>If you need to update an existing submodule, use the Update-OSDWorkspaceSubmodule function instead.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-OSDWorkspaceSubmodule</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="OriginUrl, CloneUrl">
+          <maml:name>Url</maml:name>
+          <maml:description>
+            <maml:para>The HTTPS URL of the GitHub repository to add as a submodule. Must be in the format https://github.com/RepositoryOwner/RepositoryName.git</maml:para>
+            <maml:para>This parameter is mandatory and is validated to ensure it follows the correct GitHub URL pattern. This parameter also supports the aliases 'OriginUrl' and 'CloneUrl'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+          <dev:type>
+            <maml:name>Uri</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="OriginUrl, CloneUrl">
+        <maml:name>Url</maml:name>
+        <maml:description>
+          <maml:para>The HTTPS URL of the GitHub repository to add as a submodule. Must be in the format https://github.com/RepositoryOwner/RepositoryName.git</maml:para>
+          <maml:para>This parameter is mandatory and is validated to ensure it follows the correct GitHub URL pattern. This parameter also supports the aliases 'OriginUrl' and 'CloneUrl'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Uri</command:parameterValue>
+        <dev:type>
+          <maml:name>Uri</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 2025</maml:para>
+        <maml:para>Prerequisites:     - Git for Windows must be installed and available in the system's PATH. (https://gitforwindows.org/)     - PowerShell 7.5 or higher is recommended.     - The script must be run with administrator privileges.     - The target OSDWorkspace repository (typically C:\OSDWorkspace) must be initialized as a Git repository.</maml:para>
+        <maml:para>This function modifies the parent Git repository by adding a submodule and creating a commit. After adding the submodule, you may need to initialize and update it using: git submodule update --init --recursive</maml:para>
+        <maml:para>For more information about Git submodules, see:     https://git-scm.com/docs/git-submodule     https://git-scm.com/book/en/v2/Git-Tools-Submodules</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Add-OSDWorkspaceSubmodule -Url 'https://github.com/OSDeploy/osdws-gallery.git'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the OSDWorkspace Gallery as a submodule to the OSDWorkspace submodules directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Add-OSDWorkspaceSubmodule -Url 'https://github.com/OSDeploy/OSDCloud.git' -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the OSDCloud repository as a submodule with verbose output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Build-OSDWorkspaceWinPE</command:name>
+      <command:verb>Build</command:verb>
+      <command:noun>OSDWorkspaceWinPE</command:noun>
+      <maml:description>
+        <maml:para>Creates a new customized WinPE build in the OSDWorkspace environment.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Build-OSDWorkspaceWinPE function creates a new Windows Preinstallation Environment (WinPE) build  in the OSDWorkspace build directory. The function can use either a WinRE source image or the Windows  Assessment and Deployment Kit (ADK) WinPE image as a base, then applies customizations including drivers, packages, scripts, and other settings.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Creates necessary directory structure for the build 3. Sources a base WinPE image (from WinRE or Windows ADK) 4. Applies selected customizations (drivers, packages, scripts) 5. Generates boot media in various formats (WIM, ISO, USB-ready files)</maml:para>
+      <maml:para>Build output is stored in the C:\OSDWorkspace\Build\WinPE directory by default, organized by architecture and build name.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Build-OSDWorkspaceWinPE</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies a friendly name for the WinPE build. This name will be used in the build directory structure and media labels.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Architecture</maml:name>
+          <maml:description>
+            <maml:para>Specifies the processor architecture for the WinPE build. Valid values are 'amd64' (64-bit x86) and 'arm64' (64-bit ARM). Default value is 'amd64'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Languages</maml:name>
+          <maml:description>
+            <maml:para>Windows ADK Languages to add to the BootImage. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetAllIntl</maml:name>
+          <maml:description>
+            <maml:para>Sets all International settings in WinPE to the specified language. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetInputLocale</maml:name>
+          <maml:description>
+            <maml:para>Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetTimeZone</maml:name>
+          <maml:description>
+            <maml:para>Set the WinPE SetTimeZone. Default is the current SetTimeZone.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(tzutil /g)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UpdateUSB</maml:name>
+          <maml:description>
+            <maml:para>Update a OSDWorkspace USB drive with the new BootMedia.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AdkSelectCacheVersion</maml:name>
+          <maml:description>
+            <maml:para>Select the Windows ADK version to use if multiple versions are present in the cache.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AdkSkipOcPackages</maml:name>
+          <maml:description>
+            <maml:para>Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Build-OSDWorkspaceWinPE</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies a friendly name for the WinPE build. This name will be used in the build directory structure and media labels.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Architecture</maml:name>
+          <maml:description>
+            <maml:para>Specifies the processor architecture for the WinPE build. Valid values are 'amd64' (64-bit x86) and 'arm64' (64-bit ARM). Default value is 'amd64'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Languages</maml:name>
+          <maml:description>
+            <maml:para>Windows ADK Languages to add to the BootImage. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetAllIntl</maml:name>
+          <maml:description>
+            <maml:para>Sets all International settings in WinPE to the specified language. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetInputLocale</maml:name>
+          <maml:description>
+            <maml:para>Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>En-US</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetTimeZone</maml:name>
+          <maml:description>
+            <maml:para>Set the WinPE SetTimeZone. Default is the current SetTimeZone.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(tzutil /g)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UpdateUSB</maml:name>
+          <maml:description>
+            <maml:para>Update a OSDWorkspace USB drive with the new BootMedia.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AdkSelectCacheVersion</maml:name>
+          <maml:description>
+            <maml:para>Select the Windows ADK version to use if multiple versions are present in the cache.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AdkSkipOcPackages</maml:name>
+          <maml:description>
+            <maml:para>Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AdkUseWinPE</maml:name>
+          <maml:description>
+            <maml:para>Uses the Windows ADK winpe.wim instead of an imported winre.wim.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies a friendly name for the WinPE build. This name will be used in the build directory structure and media labels.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Architecture</maml:name>
+        <maml:description>
+          <maml:para>Specifies the processor architecture for the WinPE build. Valid values are 'amd64' (64-bit x86) and 'arm64' (64-bit ARM). Default value is 'amd64'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Languages</maml:name>
+        <maml:description>
+          <maml:para>Windows ADK Languages to add to the BootImage. Default is en-US.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>En-US</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SetAllIntl</maml:name>
+        <maml:description>
+          <maml:para>Sets all International settings in WinPE to the specified language. Default is en-US.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>En-US</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SetInputLocale</maml:name>
+        <maml:description>
+          <maml:para>Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>En-US</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SetTimeZone</maml:name>
+        <maml:description>
+          <maml:para>Set the WinPE SetTimeZone. Default is the current SetTimeZone.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(tzutil /g)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UpdateUSB</maml:name>
+        <maml:description>
+          <maml:para>Update a OSDWorkspace USB drive with the new BootMedia.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AdkSelectCacheVersion</maml:name>
+        <maml:description>
+          <maml:para>Select the Windows ADK version to use if multiple versions are present in the cache.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AdkSkipOcPackages</maml:name>
+        <maml:description>
+          <maml:para>Skip adding the Windows ADK Optional Components. Useful for quick testing of the Library.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AdkUseWinPE</maml:name>
+        <maml:description>
+          <maml:para>Uses the Windows ADK winpe.wim instead of an imported winre.wim.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 29, 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Windows 10 or higher     - Run as Administrator     - Windows ADK installed (if using -AdkUseWinPE or -AdkSelectCacheVersion)     - WinRE source imported (if not using -AdkUseWinPE)
+The build process can take several minutes depending on the customizations applied.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64'</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new WinPE build for x64 architecture named 'MyBootMedia' using WinRE as the source.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64'</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new WinPE build for ARM64 architecture named 'MyBootMedia' using WinRE as the source.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'amd64' -AdkUseWinPE</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new WinPE build for x64 architecture named 'MyBootMedia' using the Windows ADK WinPE image.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Build-OSDWorkspaceWinPE -Name 'MyBootMedia' -Architecture 'arm64' -AdkSelectCacheVersion</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new WinPE build for ARM64 architecture named 'MyBootMedia' and prompts to select  which Windows ADK version to use as the source.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Build-OSDWorkspaceWinPE -Name 'DeploymentMedia' -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new WinPE build with detailed verbose output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-OSDWorkspace</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>OSDWorkspace</command:noun>
+      <maml:description>
+        <maml:para>Displays information about the OSD.Workspace PowerShell Module and initializes the environment.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Get-OSDWorkspace function displays comprehensive information about the OSD.Workspace PowerShell Module,  including module version, team information, upcoming events, and links to resources and documentation.</maml:para>
+      <maml:para>This function performs the following operations: 1. Initializes the OSDWorkspace environment 2. Displays team information and contact links 3. Shows upcoming community events 4. Lists important resources and documentation links 5. Displays version information for various components</maml:para>
+      <maml:para>This function is typically run when first starting to work with OSD.Workspace to verify the module is properly installed and to access important resources.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-OSDWorkspace</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCustomObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Returns the OSDWorkspace configuration object that contains paths, settings, and other information.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 29, 2025</maml:para>
+        <maml:para>This function calls Initialize-OSDWorkspace internally to set up the environment.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-OSDWorkspace</dev:code>
+        <dev:remarks>
+          <maml:para>Displays information about the OSD.Workspace PowerShell Module and initializes the environment.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-OSDWorkspace -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Displays information about the OSD.Workspace PowerShell Module with additional verbose output  showing initialization steps and path information.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Import-OSDWorkspaceWinOS</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>OSDWorkspaceWinOS</command:noun>
+      <maml:description>
+        <maml:para>Imports Windows Recovery Environment (WinRE) images from mounted Windows installation media to OSDWorkspace.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Import-OSDWorkspaceWinOS function extracts and imports Windows Recovery Environment (WinRE) images  from mounted Windows installation media ISO files to the OSDWorkspace BootImage directory.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Scans for mounted Windows installation media ISO files 3. Displays an Out-GridView selection dialog for available installation indexes 4. Extracts the winre.wim file from the selected installation image(s) 5. Imports the WinRE image(s) to the OSDWorkspace BootImage directory</maml:para>
+      <maml:para>The imported images are stored with a naming convention of "yyMMdd-HHmm Architecture"  (e.g., "250429-1545 amd64") to indicate when they were imported and for which architecture.</maml:para>
+      <maml:para>This function supports both Windows 11 amd64 (x64) and arm64 installation media.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-OSDWorkspaceWinOS</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>This function does not accept pipeline input.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 29, 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Windows 10 or higher     - Run as Administrator     - Windows installation media ISO mounted (via File Explorer or third-party tools)
+The WinRE images extracted are used as source images for creating custom WinPE boot media with the Build-OSDWorkspaceWinPE function.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Import-OSDWorkspaceWinOS</dev:code>
+        <dev:remarks>
+          <maml:para>Scans for mounted Windows installation media ISO files and presents a selection dialog to choose which Windows version(s) to import WinRE from.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Import-OSDWorkspaceWinOS -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Imports WinRE images with detailed verbose output showing each step of the extraction and import process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-OSDWorkspaceUSB</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>OSDWorkspaceUSB</command:noun>
+      <maml:description>
+        <maml:para>Creates a new OSDWorkspace USB bootable drive with WinPE boot media.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The New-OSDWorkspaceUSB function creates a new bootable USB drive from a selected  OSDWorkspace WinPE Build. This function prepares the USB drive for booting into WinPE  by partitioning, formatting, and copying necessary boot files.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Prompts for selection of a WinPE Build using Select-OSDWSWinPEBuild 3. Prompts for selection of a Media type (WinPE-Media or WinPE-MediaEX) 4. Disables Autorun for the USB drive 5. Prompts for selection of a USB drive that meets size requirements 6. Clears all data from the selected USB drive (with confirmation) 7. Initializes the disk with MBR partition style 8. Creates and formats a 4GB FAT32 boot partition (active) 9. Creates and formats an NTFS data partition using remaining space 10. Copies the selected WinPE media files to the bootable partition</maml:para>
+      <maml:para>The function creates a dual-partition structure: - A FAT32 bootable partition (4GB) containing WinPE boot files</maml:para>
+      <maml:para>- An NTFS data partition using the remaining space</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-OSDWorkspaceUSB</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>BootLabel</maml:name>
+          <maml:description>
+            <maml:para>Specifies the volume label for the boot partition. Default value is 'USB-WinPE'. Maximum length is 11 characters due to FAT32 filesystem limitations.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>USB-WinPE</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>DataLabel</maml:name>
+          <maml:description>
+            <maml:para>Specifies the volume label for the data partition. Default value is 'USB-DATA'. Maximum length is 32 characters due to NTFS filesystem limitations.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>USB-DATA</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>BootLabel</maml:name>
+        <maml:description>
+          <maml:para>Specifies the volume label for the boot partition. Default value is 'USB-WinPE'. Maximum length is 11 characters due to FAT32 filesystem limitations.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>USB-WinPE</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>DataLabel</maml:name>
+        <maml:description>
+          <maml:para>Specifies the volume label for the data partition. Default value is 'USB-DATA'. Maximum length is 32 characters due to NTFS filesystem limitations.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>USB-DATA</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimInstance#root/Microsoft/Windows/Storage/MSFT_Disk</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Returns the configured USB disk object.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Windows 10 or higher (Windows 11 recommended)     - Windows 10 build 1703 or higher     - Run as Administrator     - At least one WinPE build available in the OSDWorkspace     - USB drive with minimum capacity of 7GB</maml:para>
+        <maml:para>WARNING: This function will erase ALL data on the selected USB drive. A confirmation prompt will be displayed before erasing the drive.</maml:para>
+        <maml:para>For drives larger than 2TB, the current GPT implementation is commented out as it is not working as expected for bootable drives.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceUSB</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new OSDWorkspace USB with default labels for boot and data partitions. Uses 'USB-WinPE' for the boot partition and 'USB-DATA' for the data partition.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceUSB -BootLabel 'BOOT' -DataLabel 'OSDDATA'</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new OSDWorkspace USB with custom labels for boot and data partitions. Uses 'BOOT' for the boot partition and 'OSDDATA' for the data partition.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceUSB -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a new OSDWorkspace USB with detailed verbose output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-OSDWorkspaceVM</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>OSDWorkspaceVM</command:noun>
+      <maml:description>
+        <maml:para>Creates a customized Hyper-V virtual machine from selected OSDWorkspace WinPE build media.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The New-OSDWorkspaceVM function creates a Hyper-V virtual machine that boots from the selected OSDWorkspace WinPE build media. This VM can be used for testing WinPE deployments, scripts,  and other OSD tools in a virtualized environment.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates that Hyper-V is available on the system 2. Prompts for selection of a WinPE build using Select-OSDWSWinPEBuild 3. Prompts for selection of a Media type (WinPE-Media or WinPE-MediaEX) 4. Creates a new Hyper-V VM with specified parameters 5. Configures secure boot, TPM, and other settings based on the VM generation 6. Mounts the selected ISO to the VM's DVD drive 7. Optionally creates an initial checkpoint 8. Optionally starts the VM</maml:para>
+      <maml:para>The VM is highly customizable with options for memory, CPU, networking, display resolution, and storage configuration.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-OSDWorkspaceVM</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>CheckpointVM</maml:name>
+          <maml:description>
+            <maml:para>Specifies whether to create a checkpoint of the VM after creation. Default value is $true.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>True</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Generation</maml:name>
+          <maml:description>
+            <maml:para>Specifies the Hyper-V VM generation to create. Valid values are 1 or 2. Default value is 2. Generation 1 VMs support legacy BIOS, while Generation 2 VMs support UEFI and secure boot.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+          <dev:type>
+            <maml:name>UInt16</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>2</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>MemoryStartupGB</maml:name>
+          <maml:description>
+            <maml:para>Specifies the amount of startup memory for the VM in gigabytes. Default value is 4.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+          <dev:type>
+            <maml:name>UInt16</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>10</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>NamePrefix</maml:name>
+          <maml:description>
+            <maml:para>Specifies a prefix for the VM name. The actual VM name will be in the format "NamePrefix-yyyy-MM-dd-HHmmss". Default value is 'OSDWS'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>OSDWorkspace</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>ProcessorCount</maml:name>
+          <maml:description>
+            <maml:para>Specifies the number of virtual processors to allocate to the VM. Default value is 2.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+          <dev:type>
+            <maml:name>UInt16</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>2</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>DisplayResolution</maml:name>
+          <maml:description>
+            <maml:para>Specifies the display resolution of the VM. Valid values include '1024x768', '1280x720', '1280x768', '1280x800', '1280x960', '1280x1024',  '1360x768', '1366x768', '1600x900', '1600x1200', '1680x1050', '1920x1080', and '1920x1200'. Default value is '1280x720'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>1440x900</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+          <maml:name>StartVM</maml:name>
+          <maml:description>
+            <maml:para>Specifies whether to start the VM after creation. Default value is $true.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>True</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+          <maml:name>SwitchName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of the virtual switch to connect the VM to. Default value is 'Default Switch'.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+          <maml:name>VHDSizeGB</maml:name>
+          <maml:description>
+            <maml:para>Specifies the size of the virtual hard disk in gigabytes. Default value is 20.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+          <dev:type>
+            <maml:name>UInt16</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>64</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>CheckpointVM</maml:name>
+        <maml:description>
+          <maml:para>Specifies whether to create a checkpoint of the VM after creation. Default value is $true.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>True</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Generation</maml:name>
+        <maml:description>
+          <maml:para>Specifies the Hyper-V VM generation to create. Valid values are 1 or 2. Default value is 2. Generation 1 VMs support legacy BIOS, while Generation 2 VMs support UEFI and secure boot.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+        <dev:type>
+          <maml:name>UInt16</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>2</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>MemoryStartupGB</maml:name>
+        <maml:description>
+          <maml:para>Specifies the amount of startup memory for the VM in gigabytes. Default value is 4.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+        <dev:type>
+          <maml:name>UInt16</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>10</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>NamePrefix</maml:name>
+        <maml:description>
+          <maml:para>Specifies a prefix for the VM name. The actual VM name will be in the format "NamePrefix-yyyy-MM-dd-HHmmss". Default value is 'OSDWS'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>OSDWorkspace</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>ProcessorCount</maml:name>
+        <maml:description>
+          <maml:para>Specifies the number of virtual processors to allocate to the VM. Default value is 2.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+        <dev:type>
+          <maml:name>UInt16</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>2</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>DisplayResolution</maml:name>
+        <maml:description>
+          <maml:para>Specifies the display resolution of the VM. Valid values include '1024x768', '1280x720', '1280x768', '1280x800', '1280x960', '1280x1024',  '1360x768', '1366x768', '1600x900', '1600x1200', '1680x1050', '1920x1080', and '1920x1200'. Default value is '1280x720'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>1440x900</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+        <maml:name>StartVM</maml:name>
+        <maml:description>
+          <maml:para>Specifies whether to start the VM after creation. Default value is $true.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+        <dev:type>
+          <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>True</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+        <maml:name>SwitchName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the name of the virtual switch to connect the VM to. Default value is 'Default Switch'.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+        <maml:name>VHDSizeGB</maml:name>
+        <maml:description>
+          <maml:para>Specifies the size of the virtual hard disk in gigabytes. Default value is 20.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">UInt16</command:parameterValue>
+        <dev:type>
+          <maml:name>UInt16</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>64</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Microsoft.HyperV.PowerShell.VirtualMachine</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Returns the created Hyper-V virtual machine object.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 29, 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Windows 10/11 Pro, Enterprise, or Server with Hyper-V role installed     - Run as Administrator     - At least one WinPE build available in the OSDWorkspace
+This function requires the Hyper-V PowerShell module to be installed and available.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceVM</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a Hyper-V VM with default settings (Generation 2, 4GB RAM, 2 CPUs, 20GB VHD), prompting for WinPE build selection.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceVM -NamePrefix 'TestDeploy' -MemoryStartupGB 8 -ProcessorCount 4 -VHDSizeGB 50</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a customized Hyper-V VM with the name prefix 'TestDeploy', 8GB of RAM, 4 processors, and a 50GB virtual hard disk.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>New-OSDWorkspaceVM -CheckpointVM $false -Generation 2 -MemoryStartupGB 8 -NamePrefix 'MyVM' -ProcessorCount 4 -DisplayResolution '1920x1080' -StartVM $false -SwitchName 'MySwitch' -VHDSizeGB 50</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a Generation 2 Hyper-V VM with 8GB of memory, 4 processors, 1920x1080 display resolution, and a 50GB VHD. The VM will not be started automatically and will not have an initial checkpoint created.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-OSDWorkspaceSubmodule</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>OSDWorkspaceSubmodule</command:noun>
+      <maml:description>
+        <maml:para>Removes one or more Git submodules from the OSDWorkspace repository.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Remove-OSDWorkspaceSubmodule function removes selected Git submodules from the OSDWorkspace repository  (typically located at C:\OSDWorkspace\submodules).</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Prompts for selection of submodules to remove using Select-OSDWSSharedLibrary 3. For each selected submodule:    a. Removes the submodule entry from .git/config using 'git submodule deinit'    b. Removes the submodule's files from .git/modules directory    c. Removes the submodule entry from .gitmodules and deletes the submodule directory using 'git rm'</maml:para>
+      <maml:para>The -Force parameter is required to perform the deletion operation as a safety measure.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-OSDWorkspaceSubmodule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Required switch parameter to confirm that you want to delete the selected submodules. This is a safety measure to prevent accidental deletion of submodules.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Required switch parameter to confirm that you want to delete the selected submodules. This is a safety measure to prevent accidental deletion of submodules.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 2025</maml:para>
+        <maml:para>Prerequisites:     - Git for Windows must be installed and available in the system's PATH. (https://gitforwindows.org/)     - PowerShell 7.5 or higher is recommended.     - The script must be run with administrator privileges.     - The target OSDWorkspace repository must have submodules already added.</maml:para>
+        <maml:para>This function permanently removes selected submodules from the OSDWorkspace repository. This is a destructive operation that cannot be undone except by restoring from a backup.</maml:para>
+        <maml:para>For more information about Git submodules, see:     https://git-scm.com/docs/git-submodule     https://git-scm.com/book/en/v2/Git-Tools-Submodules</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Remove-OSDWorkspaceSubmodule -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Prompts for selection of submodules and then removes the selected submodules from the OSDWorkspace repository.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Remove-OSDWorkspaceSubmodule -Force -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Removes selected submodules with detailed output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-OSDWorkspaceHelp</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>OSDWorkspaceHelp</command:noun>
+      <maml:description>
+        <maml:para>Generates and updates PowerShell help documentation for the OSD.Workspace module.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Update-OSDWorkspaceHelp function generates and updates the PowerShell help documentation  files for the OSD.Workspace module. This includes creating or refreshing Markdown-based help  files in the OSDWorkspace documentation directory (C:\OSDWorkspace\docs\powershell-help).</maml:para>
+      <maml:para>This function performs the following operations: 1. Checks if the platyPS module is installed and installs it if needed 2. Creates the destination directory for help files if it doesn't exist 3. Generates help documentation for the OSD.Workspace module 4. Optionally generates help documentation for the DISM module 5. Writes the documentation files to the appropriate locations</maml:para>
+      <maml:para>When run without the -Force parameter, this function will only update help files if they don't already exist. Use -Force to regenerate all help files.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-OSDWorkspaceHelp</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Switch parameter that forces regeneration of all help files,  even if they already exist.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Switch parameter that forces regeneration of all help files,  even if they already exist.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 29, 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Internet connection (to install platyPS module if needed)
+The platyPS module is used to generate the help documentation. This function may require an internet connection to install the platyPS module if it's not already installed.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceHelp</dev:code>
+        <dev:remarks>
+          <maml:para>Checks if PowerShell help files exist for the OSD.Workspace module and creates them  if they don't exist.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceHelp -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Regenerates all PowerShell help files for the OSD.Workspace module,  overwriting any existing files.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceHelp -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Updates PowerShell help files with detailed verbose output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-OSDWorkspaceSubmodule</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>OSDWorkspaceSubmodule</command:noun>
+      <maml:description>
+        <maml:para>Updates all submodules in the OSDWorkspace repository to their latest commits.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Update-OSDWorkspaceSubmodule function updates all Git submodules in the OSDWorkspace repository (typically located at C:\OSDWorkspace\submodules) to their latest commits from the remote repositories.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Navigates to the OSDWorkspace repository root 3. Executes 'git submodule update --remote --merge' to update all submodules to the latest commits 4. Returns to the original location</maml:para>
+      <maml:para>The -Force parameter is required to perform the update operation to prevent accidental updates.</maml:para>
+      <maml:para>If you have not added a repository as a submodule yet, use Add-OSDWorkspaceSubmodule first.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-OSDWorkspaceSubmodule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Required switch parameter to confirm that you want to update all submodules. This is a safety measure to prevent accidentally updating submodules.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Required switch parameter to confirm that you want to update all submodules. This is a safety measure to prevent accidentally updating submodules.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This function does not generate any output objects.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 2025</maml:para>
+        <maml:para>Prerequisites:     - Git for Windows must be installed and available in the system's PATH. (https://gitforwindows.org/)     - PowerShell 7.5 or higher is recommended.     - The script must be run with administrator privileges.     - The target OSDWorkspace repository must have submodules already added.</maml:para>
+        <maml:para>This function modifies existing submodules by updating them to the latest commit from their respective repositories.</maml:para>
+        <maml:para>For more information about Git submodules, see:     https://git-scm.com/docs/git-submodule     https://git-scm.com/book/en/v2/Git-Tools-Submodules</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceSubmodule -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Updates all submodules in the OSDWorkspace repository to their latest commits.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceSubmodule -Force -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Updates all submodules with detailed output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-OSDWorkspaceUSB</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>OSDWorkspaceUSB</command:noun>
+      <maml:description>
+        <maml:para>Updates an existing OSDWorkspace USB drive with new WinPE boot media files.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Update-OSDWorkspaceUSB function refreshes an existing OSDWorkspace bootable USB drive  with updated WinPE boot media files from a selected OSDWorkspace WinPE Build.</maml:para>
+      <maml:para>This function performs the following operations: 1. Validates administrator privileges 2. Prompts for selection of a WinPE Build using Select-OSDWSWinPEBuild 3. Prompts for selection of a Media type (WinPE-Media or WinPE-MediaEX) 4. Disables Autorun for the USB drive 5. Locates existing USB volumes labeled 'USB-WinPE' 6. Copies the selected WinPE media files to the bootable partition 7. Creates a BootMedia.json file with build information</maml:para>
+      <maml:para>No partitioning or formatting is performed, as this function is designed to update  an existing USB drive that was previously created with New-OSDWorkspaceUSB.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-OSDWorkspaceUSB</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>BootLabel</maml:name>
+          <maml:description>
+            <maml:para>Specifies the volume label for the boot partition. Default value is 'USB-WinPE'. Maximum length is 11 characters due to FAT32 filesystem limitations.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>USB-WinPE</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>DataLabel</maml:name>
+          <maml:description>
+            <maml:para>Specifies the volume label for the data partition. Default value is 'USB-DATA'. Maximum length is 32 characters due to NTFS filesystem limitations.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>USB-DATA</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>BootLabel</maml:name>
+        <maml:description>
+          <maml:para>Specifies the volume label for the boot partition. Default value is 'USB-WinPE'. Maximum length is 11 characters due to FAT32 filesystem limitations.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>USB-WinPE</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>DataLabel</maml:name>
+        <maml:description>
+          <maml:para>Specifies the volume label for the data partition. Default value is 'USB-DATA'. Maximum length is 32 characters due to NTFS filesystem limitations.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>USB-DATA</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimInstance#root/Microsoft/Windows/Storage/MSFT_Disk</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Returns the updated USB disk object.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: April 2025</maml:para>
+        <maml:para>Prerequisites:     - PowerShell 5.0 or higher     - Windows 10 or higher     - Run as Administrator     - An existing OSDWorkspace USB drive created with New-OSDWorkspaceUSB     - At least one WinPE build available in the OSDWorkspace</maml:para>
+        <maml:para>The function searches for USB volumes labeled 'USB-WinPE' to update. If no matching  volumes are found, the function will display a warning and exit.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceUSB</dev:code>
+        <dev:remarks>
+          <maml:para>Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace WinPE Build. Uses the default labels 'USB-WinPE' for boot partition and 'USB-DATA' for data partition.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceUSB -BootLabel 'BOOT' -DataLabel 'DATA'</dev:code>
+        <dev:remarks>
+          <maml:para>Updates an existing OSDWorkspace USB drive with the selected OSDWorkspace WinPE Build. Uses the custom labels 'BOOT' for boot partition and 'DATA' for data partition.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceUSB -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Updates an existing OSDWorkspace USB drive with detailed verbose output showing each step of the process.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+</helpItems>

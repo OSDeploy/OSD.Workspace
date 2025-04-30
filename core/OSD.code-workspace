@@ -127,43 +127,6 @@
                 "text": "Be extremely detailed with the file changes and the reason for the change. Add a reference to the issue or pull request that this commit is related to. Add emojis to make the commit message more readable. If you are fixing a bug, add the bug number. If you are adding a new feature, add the feature number. If you are updating a feature, add the feature number. If you are removing a feature, add the feature number. If you are updating the documentation, add the documentation number. If you are updating the tests, add the test number. If you are updating the configuration, add the configuration number. If you are updating the build process, add the build number. If you are updating the deployment process, add the deployment number. If you are updating the code review process, add the code review number. If you are updating the code quality process, add the code quality number. If you are updating the code coverage process, add the code coverage number.",
             }
         ],
-        "powershell.cwd": "C:\\OSDWorkspace",
-        "workbench.colorCustomizations": {
-            "[GitHub Dark]": {
-                "activityBar.background": "#252A33",
-                "activityBar.foreground": "#88C0D0",
-                "activityBarBadge.background": "#4C566A",
-                "activityBarBadge.foreground": "#ECEFF4",
-                "sideBar.background": "#1E2128",
-                "sideBar.foreground": "#D8DEE9",
-                "sideBarTitle.foreground": "#88C0D0",
-                "editor.background": "#1F2430",
-                "editor.foreground": "#D8DEE9",
-                "editorGroupHeader.tabsBackground": "#252A33",
-                "tab.activeBackground": "#2E3440",
-                "tab.inactiveBackground": "#252A33",
-                "statusBar.background": "#252A33",
-                "statusBar.foreground": "#88C0D0",
-                "terminal.background": "#1E2128",
-                "terminal.foreground": "#D8DEE9",
-                "titleBar.activeBackground": "#252A33",
-                "titleBar.activeForeground": "#D8DEE9"
-            }
-        },
-        "editor.tokenColorCustomizations": {
-            "[GitHub Dark]": {
-                "comments": "#616E88",
-                "functions": "#88C0D0",
-                "keywords": "#81A1C1",
-                "strings": "#A3BE8C",
-                "types": "#8FBCBB",
-                "variables": "#D8DEE9"
-            }
-        },
-        "workbench.iconTheme": "vs-seti",
-        "workbench.tree.indent": 16,
-        "window.titleBarStyle": "custom",
-        "editor.fontSize": 13,
-        "terminal.integrated.fontSize": 13
+        "powershell.cwd": "C:\\OSDWorkspace"
     }
 }

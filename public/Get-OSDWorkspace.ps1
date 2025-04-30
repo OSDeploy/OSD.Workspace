@@ -1,15 +1,46 @@
 function Get-OSDWorkspace {
     <#
     .SYNOPSIS
-        Displays information about the OSD.Workspace PowerShell Module.
+        Displays information about the OSD.Workspace PowerShell Module and initializes the environment.
 
     .DESCRIPTION
-        Displays information about the OSD.Workspace PowerShell Module including upcoming events and links to resources.
-        This will also initialize the OSDWorkspace module and display the version of various components.
+        The Get-OSDWorkspace function displays comprehensive information about the OSD.Workspace PowerShell Module, 
+        including module version, team information, upcoming events, and links to resources and documentation.
+        
+        This function performs the following operations:
+        1. Initializes the OSDWorkspace environment
+        2. Displays team information and contact links
+        3. Shows upcoming community events
+        4. Lists important resources and documentation links
+        5. Displays version information for various components
+        
+        This function is typically run when first starting to work with OSD.Workspace to verify
+        the module is properly installed and to access important resources.
+
+    .EXAMPLE
+        Get-OSDWorkspace
+        
+        Displays information about the OSD.Workspace PowerShell Module and initializes the environment.
+
+    .EXAMPLE
+        Get-OSDWorkspace -Verbose
+        
+        Displays information about the OSD.Workspace PowerShell Module with additional verbose output 
+        showing initialization steps and path information.
+
+    .OUTPUTS
+        System.Management.Automation.PSCustomObject
+        Returns the OSDWorkspace configuration object that contains paths, settings, and other information.
 
     .NOTES
-        David Segura
+        Author: David Segura
+        Version: 1.0
+        Date: April 29, 2025
+        
+        This function calls Initialize-OSDWorkspace internally to set up the environment.
     #>
+
+    
     [CmdletBinding()]
     param ()
     #=================================================

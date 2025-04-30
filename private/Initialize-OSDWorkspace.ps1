@@ -148,18 +148,20 @@ function Initialize-OSDWorkspace {
     # Read the value from the registry
     # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
     #=================================================
-    # Add Git Configuration
+    # Add .github
     if (-not (Test-Path "$OSDWorkspacePath\.github")) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
         New-Item -Path "$OSDWorkspacePath\.github" -ItemType Directory -Force | Out-Null
     }
+    #=================================================
+    # Add .vscode
     if (-not (Test-Path "$OSDWorkspacePath\.vscode")) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
         New-Item -Path "$OSDWorkspacePath\.vscode" -ItemType Directory -Force | Out-Null
     }
-
-    <#
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\.gitattributes" -Raw
+    #=================================================
+    # Add .gitattributes
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitattributes" -Raw
     $Path = "$OSDWorkspacePath\.gitattributes"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
@@ -172,9 +174,9 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
-    #>
-
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\.gitignore" -Raw
+    #=================================================
+    # Add .gitignore
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitignore" -Raw
     $Path = "$OSDWorkspacePath\.gitignore"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
@@ -187,8 +189,9 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
-
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\copilot-instructions.md" -Raw
+    #=================================================
+    # Add copilot-instructions.md
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\copilot-instructions.md" -Raw
     $Path = "$OSDWorkspacePath\.github\copilot-instructions.md"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
@@ -201,8 +204,9 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
-
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\tasks.json" -Raw
+    #=================================================
+    # Add tasks.json
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
     $Path = "$OSDWorkspacePath\.vscode\tasks.json"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
@@ -215,8 +219,9 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
-
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\local\OSD.code-workspace" -Raw
+    #=================================================
+    # Add OSD.code-workspace
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\OSD.code-workspace" -Raw
     $Path = "$OSDWorkspacePath\OSD.code-workspace"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
