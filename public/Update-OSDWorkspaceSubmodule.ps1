@@ -63,13 +63,13 @@ function Update-OSDWorkspaceSubmodule {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
         Initialize-OSDWorkspace
         #=================================================
         # Requires Run as Administrator
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
             return
         }
         #=================================================
@@ -78,24 +78,24 @@ function Update-OSDWorkspaceSubmodule {
     process {
         #=================================================
         $RepositoryPath = $OSDWorkspace.Path
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace: $RepositoryPath"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace: $RepositoryPath"
 
         if ($Force -eq $true) {
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Push-Location `"$RepositoryPath`""
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Push-Location `"$RepositoryPath`""
             Push-Location "$RepositoryPath"
 
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] git submodule update --remote --merge"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] git submodule update --remote --merge"
             git submodule update --remote --merge
 
-            # Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] git commit -m `"Add submodule Update-OSDWorkspaceSubmodule`""
+            # Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] git commit -m `"Add submodule Update-OSDWorkspaceSubmodule`""
             # git commit -m "Add submodule Update-OSDWorkspaceSubmodule"
 
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Pop-Location"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Pop-Location"
             Pop-Location
         }
         else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This command will update this Git repository to the latest GitHub commit in the main branch using git fetch."
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use the -Force switch when running this command."
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This command will update this Git repository to the latest GitHub commit in the main branch using git fetch."
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use the -Force switch when running this command."
             Write-Host
         }
         #=================================================
@@ -103,7 +103,7 @@ function Update-OSDWorkspaceSubmodule {
     
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

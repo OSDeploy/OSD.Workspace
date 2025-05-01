@@ -135,13 +135,13 @@ function Build-OSDWorkspaceWinPE {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     Initialize-OSDWorkspace
     #=================================================
     # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
         return
     }
     #=================================================
@@ -154,7 +154,7 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     # Start Main
     $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Starting $($MyInvocation.MyCommand.Name)"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Starting $($MyInvocation.MyCommand.Name)"
     Block-WinPE
     Block-StandardUser
     Block-WindowsVersionNe10
@@ -204,14 +204,14 @@ function Build-OSDWorkspaceWinPE {
     
     if ($IsWindowsAdkInstalled) {
         if ($WindowsAdkInstallVersion) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK install version is $WindowsAdkInstallVersion"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK install version is $WindowsAdkInstallVersion"
         }
         if ($WindowsAdkInstallPath) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK install path is $WindowsAdkInstallPath"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK install path is $WindowsAdkInstallPath"
         }
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK is not installed."
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK is not installed."
     }
     #endregion
     #=================================================
@@ -223,13 +223,13 @@ function Build-OSDWorkspaceWinPE {
     #region If ADK is installed then we need to update the cache
     if ($IsWindowsAdkInstalled) {
         $WindowsAdkRootPath = Join-Path $WSAdkVersionsPath $WindowsAdkInstallVersion
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK cache content is $WindowsAdkRootPath"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK cache content is $WindowsAdkRootPath"
         $null = robocopy.exe "$WindowsAdkInstallPath" "$WindowsAdkRootPath" *.* /e /z /ndl /nfl /np /r:0 /w:0 /xj /mt:128
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Cannot update the ADK cache because the ADK is not installed"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Cannot update the ADK cache because the ADK is not installed"
         $AdkSelectCacheVersion = $true
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] AdkSelectCacheVersion: $AdkSelectCacheVersion"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] AdkSelectCacheVersion: $AdkSelectCacheVersion"
     }
     #endregion
     #=================================================
@@ -242,10 +242,10 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     #region ADK is not installed and not present in the cache
     if (($IsWindowsAdkInstalled -eq $false) -and (-not $WindowsAdkCacheOptions)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK is not installed"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ADK cache does not contain an offline Windows ADK"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK will need to be installed before using this function"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK is not installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ADK cache does not contain an offline Windows ADK"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK will need to be installed before using this function"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
         return
     }
     #endregion
@@ -253,8 +253,8 @@ function Build-OSDWorkspaceWinPE {
     #region There is no usable ADK in the cache
     if ($WindowsAdkCacheOptions.Count -eq 0) {
         # Something is wrong, there should always be at least one ADK in the cache
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ADK cache does not contain an offline Windows ADK"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows ADK will need to be installed before using this function"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ADK cache does not contain an offline Windows ADK"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows ADK will need to be installed before using this function"
         return
     }
     #endregion
@@ -263,32 +263,32 @@ function Build-OSDWorkspaceWinPE {
     if ($WindowsAdkCacheOptions.Count -eq 1) {
         # Only one version of the ADK is present in the cache, so this must be used
         $WindowsAdkRootPath = $WindowsAdkCacheOptions.FullName
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ADK cache contains 1 offline Windows ADK option"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using ADK cache at $WindowsAdkCacheSelected"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ADK cache contains 1 offline Windows ADK option"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using ADK cache at $WindowsAdkCacheSelected"
 
         # Can't select an ADK Version if there is only one
         $AdkSelectCacheVersion = $false
     }
     elseif ($WindowsAdkCacheOptions.Count -gt 1) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] $($WindowsAdkCacheOptions.Count) Windows ADK options are available to select from the ADK cache"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] $($WindowsAdkCacheOptions.Count) Windows ADK options are available to select from the ADK cache"
         if ($AdkSelectCacheVersion) {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a Windows ADK option and press OK (Cancel to Exit)"
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] To remove a Windows ADK option, delete one of the ADK cache directories in $WSAdkVersionsPath"
+            Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select a Windows ADK option and press OK (Cancel to Exit)"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] To remove a Windows ADK option, delete one of the ADK cache directories in $WSAdkVersionsPath"
             $WindowsAdkCacheSelected = $WindowsAdkCacheOptions | Select-Object FullName | Sort-Object FullName -Descending | Out-GridView -Title 'Select a Windows ADK to use and press OK (Cancel to Exit)' -OutputMode Single
             if ($WindowsAdkCacheSelected) {
                 $WindowsAdkRootPath = $WindowsAdkCacheSelected.FullName
             }
             else {
-                Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unable to set the ADK cache path"
+                Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Unable to set the ADK cache path"
                 return
             }
         }
         else {
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a different Windows ADK with the -AdkSelectCacheVersion switch"
+            Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select a different Windows ADK with the -AdkSelectCacheVersion switch"
         }
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Something is wrong you should not be here"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Something is wrong you should not be here"
         return
     }
     #endregion
@@ -300,11 +300,11 @@ function Build-OSDWorkspaceWinPE {
         This way we don't have to prompt the user for the ADK architecture and can remove the parameter.
     #>
     if ($AdkUseWinPE) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using WinPE from Windows ADK"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using WinPE from Windows ADK"
         $WimSourceType = 'WinPE'
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using WinRE from Select-OSDWSWinRESource"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using WinRE from Select-OSDWSWinRESource"
         $WimSourceType = 'WinRE'
         if ($Architecture) {
             $GetWindowsImage = Select-OSDWSWinRESource -Architecture $Architecture
@@ -322,23 +322,23 @@ function Build-OSDWorkspaceWinPE {
         $ImportImageCorePath = $GetWindowsImage.Path + '\.core'
         $ImportImageOSFilesPath = $GetWindowsImage.Path + '\.core\os-files'
 
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using Recovery Image at $($GetWindowsImage.ImagePath)"
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture"
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ImportImageCorePath: $ImportImageCorePath"
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ImportImageOSFilesPath: $ImportImageOSFilesPath"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using Recovery Image at $($GetWindowsImage.ImagePath)"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Architecture: $Architecture"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ImportImageCorePath: $ImportImageCorePath"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ImportImageOSFilesPath: $ImportImageOSFilesPath"
     }
     #endregion
     #=================================================
     #region Get ADK Paths
     if (($Architecture -notmatch 'amd64') -and ($Architecture -notmatch 'arm64')) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unknown architecture $Architecture"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Unknown architecture $Architecture"
         return
     }
 
     $WindowsAdkPaths = Get-WindowsAdkPaths -Architecture $Architecture -AdkRoot $WindowsAdkRootPath -WarningAction SilentlyContinue
 
     if (-not $WindowsAdkPaths) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Something is wrong you should not be here"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Something is wrong you should not be here"
         return
     }
     if ($WimSourceType -eq 'WinPE') {
@@ -440,7 +440,7 @@ function Build-OSDWorkspaceWinPE {
 
         $MyBuildProfilePath = "$BuildProfilePath\$Name.json"
 
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Exporting BootMedia Profile to $MyBuildProfilePath"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Exporting BootMedia Profile to $MyBuildProfilePath"
         $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File $MyBuildProfilePath -Encoding utf8 -Force
     }
     #endregion
@@ -488,9 +488,9 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     #   Point of No Return
     #=================================================
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use the `$global:BuildMedia variable in your PowerShell Scripts for this BootMedia configuration"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use the `$global:BuildMedia variable in your PowerShell Scripts for this BootMedia configuration"
     $global:BuildMedia | Out-Host
-    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Press CTRL+C to cancel"
+    Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Press CTRL+C to cancel"
     pause
     $BuildStartTime = Get-Date
     #=================================================
@@ -507,10 +507,10 @@ function Build-OSDWorkspaceWinPE {
     #endregion
     #=================================================
     #region BuildMediaCorePath
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildMediaCorePath: $BuildMediaCorePath"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] BuildMediaCorePath: $BuildMediaCorePath"
     if ($ImportImageCorePath) {
         if (Test-Path $ImportImageCorePath) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hydrate $BuildMediaCorePath"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hydrate $BuildMediaCorePath"
             $null = robocopy.exe "$ImportImageCorePath" "$BuildMediaCorePath" *.json /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BuildMediaLogsPath\core.log
             $null = robocopy.exe "$ImportImageCorePath" "$BuildMediaCorePath" *.xml /nfl /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BuildMediaLogsPath\core.log
         }
@@ -525,20 +525,20 @@ function Build-OSDWorkspaceWinPE {
     #=================================================
     #region Build Media
     $MediaPath = $global:BuildMedia.MediaPath
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MediaPath: $MediaPath"
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hydrate $MediaPath"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MediaPath: $MediaPath"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hydrate $MediaPath"
     $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPath" *.* /mir /b /ndl /np /r:0 /w:0 /xj /njs /mt:128 /LOG+:$BuildMediaLogsPath\media.log
 
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys.bin"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys.bin"
     Copy-Item -Path "$ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys.bin" -Destination "$MediaPath\EFI\Microsoft\Boot\efisys.bin" -Force -ErrorAction SilentlyContinue
 
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys_noprompt.bin"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys_noprompt.bin"
     Copy-Item -Path "$ImportImageCorePath\os-boot\DVD\EFI\en-US\efisys_noprompt.bin" -Destination "$MediaPath\EFI\Microsoft\Boot\efisys_noprompt.bin" -Force -ErrorAction SilentlyContinue
 
     $Fonts = @('malgunn_boot.ttf', 'meiryon_boot.ttf', 'msjhn_boot.ttf', 'msyhn_boot.ttf', 'segoen_slboot.ttf')
     foreach ($Font in $Fonts) {
         if (Test-Path "$ImportImageCorePath\os-boot\Fonts\$Font") {
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\Fonts\$Font"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Copying $ImportImageCorePath\os-boot\Fonts\$Font"
             Copy-Item -Path "$ImportImageCorePath\os-boot\Fonts\$Font" -Destination "$MediaPath\EFI\Microsoft\Boot\Fonts\$Font" -Force -ErrorAction SilentlyContinue
         }
     }
@@ -548,11 +548,11 @@ function Build-OSDWorkspaceWinPE {
     if (Test-Path "$ImportImageCorePath\os-boot\EFI_EX") {
         $global:BuildMedia.MediaPathEX = Join-Path $MediaRootPath 'WinPE-MediaEX'
         $MediaPathEX = $global:BuildMedia.MediaPathEX
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MediaPathEX: $MediaPathEX"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hydrate $MediaPathEX"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MediaPathEX: $MediaPathEX"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hydrate $MediaPathEX"
         $null = robocopy.exe "$($WindowsAdkPaths.PathWinPEMedia)" "$MediaPathEX" *.* /mir /b /ndl /np /r:0 /w:0 /xj /mt:128 /LOG+:$BuildMediaLogsPath\mediaex.log
 
-        Write-Host -ForegroundColor DarkGreen "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Mitigate CVE-2022-21894 Secure Boot Security Feature Bypass Vulnerability aka BlackLotus"
+        Write-Host -ForegroundColor DarkGreen "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Mitigate CVE-2022-21894 Secure Boot Security Feature Bypass Vulnerability aka BlackLotus"
         Remove-Item -Path "$MediaPathEX\EFI\Microsoft\Boot\Fonts" -Recurse -Force
         if (-not (Test-Path "$MediaPathEX\EFI\Microsoft\Boot\Fonts")) {
             New-Item -Path "$MediaPathEX\EFI\Microsoft\Boot\Fonts" -ItemType Directory -Force | Out-Null
@@ -580,7 +580,7 @@ function Build-OSDWorkspaceWinPE {
         Copy-Item -Path "$ImportImageCorePath\os-boot\DVD_EX\EFI\en-US\efisys_noprompt_EX.bin" -Destination "$MediaPathEX\EFI\Microsoft\Boot\efisys_noprompt.bin" -Force -ErrorAction SilentlyContinue
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Does not exist $ImportImageCorePath\os-boot\EFI_EX"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Does not exist $ImportImageCorePath\os-boot\EFI_EX"
         $MediaPathEX = $null
     }
     #endregion
@@ -591,11 +591,11 @@ function Build-OSDWorkspaceWinPE {
         New-Item -Path "$BuildMediaSourcesPath" -ItemType Directory -Force -ErrorAction Stop | Out-Null
     }
     $buildMediaSourcesBootwimPath = Join-Path $BuildMediaSourcesPath 'boot.wim'
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hydrate $buildMediaSourcesBootwimPath"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hydrate $buildMediaSourcesBootwimPath"
     Copy-Item -Path $WindowsAdkPaths.WimSourcePath -Destination $buildMediaSourcesBootwimPath -Force -ErrorAction Stop | Out-Null
 
     if (!(Test-Path $buildMediaSourcesBootwimPath)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unknown issue copying $buildMediaSourcesBootwimPath"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Unknown issue copying $buildMediaSourcesBootwimPath"
         Stop-Transcript
         Break
     }
@@ -615,17 +615,17 @@ function Build-OSDWorkspaceWinPE {
     $global:WindowsImage = Mount-MyWindowsImage $buildMediaSourcesBootwimPath
     $MountPath = $WindowsImage.Path
     $global:BuildMedia.MountPath = $MountPath
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
     #endregion
     #=================================================
     #region BootImage Registry Information
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Get WinPE HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Get WinPE HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
     $RegKeyCurrentVersion = Get-RegCurrentVersion -Path $MountPath
     $RegKeyCurrentVersion | Out-Host
     #endregion
     #=================================================
     #region Export Get-WindowsPackage
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export $BuildMediaCorePath\winpe-windowspackage.xml"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Export $BuildMediaCorePath\winpe-windowspackage.xml"
     $WindowsPackage = $WindowsImage | Get-WindowsPackage
     if ($WindowsPackage) {
         $WindowsPackage | Select-Object * | Export-Clixml -Path "$BuildMediaCorePath\winpe-windowspackage.xml" -Force
@@ -635,7 +635,7 @@ function Build-OSDWorkspaceWinPE {
     #region Adding OS Files
     if ($ImportImageOSFilesPath) {
         if (Test-Path $ImportImageOSFilesPath) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding OS Files from $ImportImageOSFilesPath"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding OS Files from $ImportImageOSFilesPath"
             $null = robocopy.exe "$ImportImageOSFilesPath" "$MountPath" *.* /s /b /ndl /nfl /np /ts /r:0 /w:0 /xf bcp47*.dll /xx /xj /mt:128 /LOG+:$BuildMediaLogsPath\os-files.log
         }
     }
@@ -646,7 +646,7 @@ function Build-OSDWorkspaceWinPE {
         $WinPEOCs = $WindowsAdkPaths.WinPEOCs
         #=================================================
         #region OSDeploy Install Default en-us Language
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding ADK Packages for Language en-us"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding ADK Packages for Language en-us"
         $Lang = 'en-us'
 
         foreach ($Package in $WindowsAdkWinpePackages) {
@@ -661,15 +661,15 @@ function Build-OSDWorkspaceWinPE {
                 }
                 catch {
                     if ($_.Exception.ErrorCode -eq '-2148468766') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
                     }
                     if ($_.Exception.ErrorCode -eq '-2146498512') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
                     }
                     <#
-                    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] If this package is not essential, it is recommended to try again without this package as the Windows Image may now be unserviceable"
-                    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Log: $CurrentLog"
-                    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ErrorCode: $($_.Exception.ErrorCode)"
+                    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] If this package is not essential, it is recommended to try again without this package as the Windows Image may now be unserviceable"
+                    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Log: $CurrentLog"
+                    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ErrorCode: $($_.Exception.ErrorCode)"
                     #>
                 }
             }
@@ -680,9 +680,9 @@ function Build-OSDWorkspaceWinPE {
 
         # Bail if the PowerShell package did not install
         if (-NOT ($WindowsImage | Get-WindowsPackage | Where-Object { $_.PackageName -match 'PowerShell' })) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Powershell Optional Component is not installed. Required ADK Packages did not install properly"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Make sure the Windows ADK version you are using supports the WinRE version you are trying to service"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Build will continue so you can review the logs for more information"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Powershell Optional Component is not installed. Required ADK Packages did not install properly"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Make sure the Windows ADK version you are using supports the WinRE version you are trying to service"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Build will continue so you can review the logs for more information"
             Start-Sleep -Seconds 15
         }
 
@@ -697,10 +697,10 @@ function Build-OSDWorkspaceWinPE {
             }
             catch {
                 if ($_.Exception.ErrorCode -eq '-2148468766') {
-                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
+                    Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
                 }
                 if ($_.Exception.ErrorCode -eq '-2146498512') {
-                    Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
+                    Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
                 }
             }
         }
@@ -721,10 +721,10 @@ function Build-OSDWorkspaceWinPE {
                 }
                 catch {
                     if ($_.Exception.ErrorCode -eq '-2148468766') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
                     }
                     if ($_.Exception.ErrorCode -eq '-2146498512') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
                     }
                 }
             }
@@ -742,7 +742,7 @@ function Build-OSDWorkspaceWinPE {
         }
         foreach ($Lang in $Languages) {
             if ($Lang -eq 'en-us') { Continue }
-            Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Lang ADK Packages"
+            Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Lang ADK Packages"
             $PackageFile = "$WinPEOCs\$Lang\lp.cab"
             if (Test-Path $PackageFile) {
                 Write-Host -ForegroundColor Gray "$PackageFile"
@@ -753,10 +753,10 @@ function Build-OSDWorkspaceWinPE {
                 }
                 catch {
                     if ($_.Exception.ErrorCode -eq '-2148468766') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
                     }
                     if ($_.Exception.ErrorCode -eq '-2146498512') {
-                        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
+                        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
                     }
                 }
             }
@@ -774,10 +774,10 @@ function Build-OSDWorkspaceWinPE {
                     }
                     catch {
                         if ($_.Exception.ErrorCode -eq '-2148468766') {
-                            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
+                            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f081e CBS_E_NOT_APPLICABLE The Windows ADK version you are using does not seem to support the WinPE version you are trying to service"
                         }
                         if ($_.Exception.ErrorCode -eq '-2146498512') {
-                            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
+                            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] 0x800f0830 CBS_E_IMAGE_UNSERVICEABLE The specified image is no longer serviceable and may be corrupted. Discard the modified image and start again"
                         }
                     }
                 }
@@ -787,7 +787,7 @@ function Build-OSDWorkspaceWinPE {
             }
             # Generates a new Lang.ini file which is used to define the language packs inside the image
             if ( (Test-Path -Path "$MountPath\sources\lang.ini") ) {
-                Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Updating lang.ini"
+                Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Updating lang.ini"
                 $CurrentLog = "$BuildMediaLogsPath\$((Get-Date).ToString('yyMMdd-HHmmss'))-Gen-LangINI.log"
                 dism.exe /image:"$MountPath" /Gen-LangINI /distribution:"$MountPath" /LogPath:"$CurrentLog"
             }
@@ -828,11 +828,11 @@ function Build-OSDWorkspaceWinPE {
     # Add the final WinPE information to the bootmedia object
     $global:BuildMedia.PEInfo = $GetWindowsImage
 
-    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Exporting BootMedia Profile to $BuildMediaCorePath\gv-buildprofile.json"
+    Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Exporting BootMedia Profile to $BuildMediaCorePath\gv-buildprofile.json"
     $global:BuildProfile | Export-Clixml -Path "$BuildMediaCorePath\gv-buildprofile.xml" -Force
     $global:BuildProfile | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-buildprofile.json" -Encoding utf8 -Force
 
-    Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Exporting BootMedia Properties to $BuildMediaCorePath\gv-buildmedia.json"
+    Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Exporting BootMedia Properties to $BuildMediaCorePath\gv-buildmedia.json"
     $global:BuildMedia | Export-Clixml -Path "$BuildMediaCorePath\gv-buildmedia.xml" -Force
     $global:BuildMedia | ConvertTo-Json -Depth 5 -WarningAction SilentlyContinue | Out-File "$BuildMediaCorePath\gv-buildmedia.json" -Encoding utf8 -Force
 
@@ -845,10 +845,10 @@ function Build-OSDWorkspaceWinPE {
 
     $buildEndTime = Get-Date
     $buildTimeSpan = New-TimeSpan -Start $BuildStartTime -End $buildEndTime
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand.Name) completed in $($buildTimeSpan.ToString("mm' minutes 'ss' seconds'"))"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand.Name) completed in $($buildTimeSpan.ToString("mm' minutes 'ss' seconds'"))"
     Stop-Transcript
     #endregion
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

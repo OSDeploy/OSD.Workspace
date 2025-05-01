@@ -15,12 +15,12 @@ function Test-IsWindowsAdkInstalled {
     $WindowsKitsInstallPath = Get-WindowsKitsInstallPath
 
     if ($WindowsKitsInstallPath) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows Assessment and Deployment Kit is installed"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows Assessment and Deployment Kit is installed"
         return $true
 
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Windows Assessment and Deployment Kit is not installed"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Windows Assessment and Deployment Kit is not installed"
         return $false
     }
 }

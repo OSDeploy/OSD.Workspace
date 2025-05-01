@@ -39,7 +39,7 @@ function Select-OSDWSWinOSSource {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
 
     $results = Get-OSDWSWinOSSource
@@ -49,12 +49,12 @@ function Select-OSDWSWinOSSource {
     }
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a Windows Operating System and press OK (Cancel to skip)"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select a Windows Operating System and press OK (Cancel to skip)"
         $results = $results | Out-GridView -Title 'Select a Windows Operating System and press OK (Cancel to skip)' -OutputMode Single
         
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

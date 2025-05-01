@@ -54,7 +54,7 @@ function Select-OSDWSWinPEBuildDriver {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
 
     if ($Architecture) {
@@ -70,12 +70,12 @@ function Select-OSDWSWinPEBuildDriver {
 
     # Display the OSDWorkspace WinPEDriver in an Out-GridView to Select
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select WinPEDriver to add to this BootImage (Cancel to skip)"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select WinPEDriver to add to this BootImage (Cancel to skip)"
         $results = $results | Out-GridView -PassThru -Title 'Select WinPEDriver to add to this BootImage (Cancel to skip)'
 
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

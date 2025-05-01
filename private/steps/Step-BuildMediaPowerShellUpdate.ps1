@@ -10,11 +10,11 @@ function Step-BuildMediaPowerShellUpdate {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WSCachePath: $WSCachePath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MountPath: $MountPath"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WSCachePath: $WSCachePath"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
     #=================================================
 $InfEnvironment = @'
 [Version]
@@ -80,7 +80,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $PSModuleDestination = "$MountedPSModulesPath\PackageManagement\1.4.8.1"
 
     if (-not (Test-Path $PSRepositoryModule)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
         if (Get-Command 'curl.exe') {
             & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
         }
@@ -90,7 +90,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     }
     #=================================================
     # Add PackageManagement to WinPE
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
     Expand-Archive -Path $PSRepositoryModule -DestinationPath $PSModuleDestination -Force
     $folderToDelete = "_rels"
     Remove-Item -Path "$PSModuleDestination\$folderToDelete" -Recurse -ErrorAction SilentlyContinue
@@ -108,7 +108,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $PSModuleDestination = "$MountedPSModulesPath\PowerShellGet\2.2.5"
 
     if (-not (Test-Path $PSRepositoryModule)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
         if (Get-Command 'curl.exe') {
             & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
         }
@@ -118,7 +118,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     }
     #=================================================
     # Add PowerShellGet to WinPE
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
     Expand-Archive -Path $PSRepositoryModule -DestinationPath $PSModuleDestination -Force
     $folderToDelete = "_rels"
     Remove-Item -Path "$PSModuleDestination\$folderToDelete" -Recurse -ErrorAction SilentlyContinue
@@ -136,7 +136,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     $PSModuleDestination = "$MountPath\ProgramData\Microsoft\Windows\PowerShell\PowerShellGet"
 
     if (-not (Test-Path $PSRepositoryModule)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $PSRepositoryModule"
         if (Get-Command 'curl.exe') {
             & curl.exe -L -o $PSRepositoryModule $PSModuleUrl
         }
@@ -146,7 +146,7 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     }
     #=================================================
     # Add NuGet.exe to WinPE
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using cache content $PSRepositoryModule"
     if (-not (Test-Path $PSModuleDestination)) {
         New-Item -Path $PSModuleDestination -ItemType Directory -Force | Out-Null
     }
@@ -166,15 +166,15 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     Start-Sleep -Seconds 3
     #=================================================
     # Add Environment Variable INF
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell: Add Environment Variables"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Add Environment Variables"
     $InfFile = "$env:Temp\Set-WinPEEnvironment.inf"
     New-Item -Path $InfFile -Force | Out-Null
     Set-Content -Path $InfFile -Value $InfEnvironment -Encoding Unicode -Force
     $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
 
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
     Set-WindowsImageExecutionPolicy -Path $MountPath -ExecutionPolicy Bypass | Out-Null
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

@@ -9,10 +9,10 @@ function Get-OSDWSWinPEBuild {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
         #=================================================
         $BuildPath = $OSDWorkspace.paths.build_windows_pe
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildPath: $BuildPath"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] BuildPath: $BuildPath"
 
         $BuildItems = @()
         $BuildItems = Get-ChildItem -Path $BuildPath -Directory -ErrorAction SilentlyContinue | Select-Object -Property * | `
@@ -26,8 +26,8 @@ function Get-OSDWSWinPEBuild {
         $IndexJson = (Join-Path $BuildPath 'index.json')
 
         if ($BuildItems.Count -eq 0) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace WinPE Builds were not found"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Run Build-OSDWorkspaceWinPE to resolve this issue"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace WinPE Builds were not found"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Run Build-OSDWorkspaceWinPE to resolve this issue"
             
             if (Test-Path $IndexXml) {
                 Remove-Item -Path $IndexXml -Force -ErrorAction SilentlyContinue | Out-Null
@@ -48,36 +48,36 @@ function Get-OSDWSWinPEBuild {
             #   Import Details
             #=================================================
             $InfoId = "$BuildItemPath\.core\id.json"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoId: $InfoId"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoId: $InfoId"
             $ImportId = Get-Content $InfoId -Raw | ConvertFrom-Json
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Id: $($ImportId.Id)"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Id: $($ImportId.Id)"
 
             $InfoOS = "$BuildItemPath\.core\winos-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoOS: $InfoOS"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoOS: $InfoOS"
             $ClixmlOS = @()
             if (Test-Path $InfoOS) {
                 $ClixmlOS = Import-Clixml -Path $InfoOS -ErrorAction SilentlyContinue
             }
 
             $InfoREG = "$BuildItemPath\.core\winpe-regcurrentversion.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoREG: $InfoREG"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoREG: $InfoREG"
             $ClixmlREG = @()
             $ClixmlREG = Import-Clixml -Path $InfoREG
 
             $InfoPE = "$BuildItemPath\.core\winpe-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoPE: $InfoPE"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoPE: $InfoPE"
             $ClixmlPE = @()
             $ClixmlPE = Import-Clixml -Path $InfoPE -ErrorAction SilentlyContinue
 
             $InfoRE = "$BuildItemPath\.core\winre-windowsimage.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoRE: $InfoRE"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoRE: $InfoRE"
             $ClixmlRE = @()
             if (Test-Path $InfoRE) {
                 $ClixmlRE = Import-Clixml -Path $InfoRE -ErrorAction SilentlyContinue
             }
 
             $InfoBM = "$BuildItemPath\.core\gv-buildmedia.xml"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] InfoBM: $InfoBM"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] InfoBM: $InfoBM"
             $ClixmlBM = @()
             $ClixmlBM = Import-Clixml -Path $InfoBM
 
@@ -92,7 +92,7 @@ function Get-OSDWSWinPEBuild {
             if ($OSArchitecture -eq '6') { $OSArchitecture = 'ia64' }
             if ($OSArchitecture -eq '9') { $OSArchitecture = 'amd64' }
             if ($OSArchitecture -eq '12') { $OSArchitecture = 'arm64' }
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSArchitecture: $OSArchitecture"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSArchitecture: $OSArchitecture"
 
             #=================================================
             # Alternate method is for ADK compatibility
@@ -112,8 +112,8 @@ function Get-OSDWSWinPEBuild {
                 $OSImageName = $ClixmlPE.ImageName
                 $OSVersion = "$($ClixmlPE.MajorVersion).$($ClixmlPE.MinorVersion).$($ClixmlPE.Build).$($ClixmlPE.SPBuild)"
             }
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSEditionId: $OSEditionId"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSInstallationType: $OSInstallationType"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSEditionId: $OSEditionId"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSInstallationType: $OSInstallationType"
 
             #=================================================
             # Alternate method is for ADK compatibility
@@ -133,12 +133,12 @@ function Get-OSDWSWinPEBuild {
                 $WinRESPLevel = $($ClixmlPE.SPLevel)
                 $WinRELanguages = $($ClixmlPE.Languages)
             }
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREVersion: $WinREVersion"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMajorVersion: $WinREMajorVersion"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREMinorVersion: $WinREMinorVersion"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinREBuild: $WinREBuild"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] WinRESPLevel: $WinRESPLevel"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Languages: $WinRELanguages"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinREVersion: $WinREVersion"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinREMajorVersion: $WinREMajorVersion"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinREMinorVersion: $WinREMinorVersion"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinREBuild: $WinREBuild"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinRESPLevel: $WinRESPLevel"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Languages: $WinRELanguages"
             #=================================================
             #   Create Object
             #=================================================
@@ -210,7 +210,7 @@ function Get-OSDWSWinPEBuild {
     }
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

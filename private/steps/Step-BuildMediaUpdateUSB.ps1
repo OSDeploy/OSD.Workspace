@@ -8,13 +8,13 @@ function Step-BuildMediaUpdateUSB {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MediaPath: $MediaPath"
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] UpdateUSB: $UpdateUSB"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MediaPath: $MediaPath"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] UpdateUSB: $UpdateUSB"
     #=================================================
     if ($UpdateUSB -eq $true) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Update USB-WinPE Partition"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Update USB-WinPE Partition"
         $WinpeVolumes = Get-USBVolume | Where-Object { $_.FileSystemLabel -eq 'USB-WinPE' }
         if ($WinpeVolumes) {
             foreach ($volume in $WinpeVolumes) {
@@ -24,10 +24,10 @@ function Step-BuildMediaUpdateUSB {
             }
         }
         else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Unable to find a USB Partition labeled USB-WinPE to update"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Unable to find a USB Partition labeled USB-WinPE to update"
         }
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

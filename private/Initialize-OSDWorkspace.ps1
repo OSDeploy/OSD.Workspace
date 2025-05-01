@@ -18,48 +18,48 @@ function Initialize-OSDWorkspace {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     $ModuleName = $($MyInvocation.MyCommand.Module.Name)
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
     $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
     $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
     #=================================================
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     #=================================================
     # Test Win32_OperatingSystem ProductType
     $osInfo = Get-CimInstance Win32_OperatingSystem
     if ($osInfo.ProductType -eq 1) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace is not running on a Windows Client OS"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is not running on a Windows Client OS"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
         break
     }
     #=================================================
     # Test Win32_OperatingSystem BuildNumber
     $osInfo = Get-CimInstance Win32_OperatingSystem
     if ($osInfo.BuildNumber -ge 26100) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS with BuildNumber $($osInfo.BuildNumber)"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS with BuildNumber $($osInfo.BuildNumber)"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace requires a Windows Client OS with BuildNumber 26100 or higher"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires a Windows Client OS with BuildNumber 26100 or higher"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
         break
     }
     #=================================================
     # VS Code
     if (Get-Command 'code' -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Microsoft VS Code is installed"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is installed"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Microsoft VS Code is not installed"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use WinGet to install VS Code using the following command (saved to clipboard):"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is not installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install VS Code using the following command (saved to clipboard):"
         $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
         $InstallMessage | Set-Clipboard
         Write-Host -ForegroundColor DarkGray $InstallMessage
@@ -68,7 +68,7 @@ function Initialize-OSDWorkspace {
     #=================================================
     # Git for Windows - Reload environment
     if (-not (Get-Command 'git' -ErrorAction SilentlyContinue)) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Updating environment variables"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Updating environment variables"
         $RegPath = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'HKCU:\Environment'
         $RegPath | ForEach-Object {   
             $k = Get-Item $_
@@ -82,12 +82,12 @@ function Initialize-OSDWorkspace {
     #=================================================
     # Git for Windows
     if (Get-Command 'git' -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Git for Windows is installed"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is installed"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
         Write-Host 'winget install -e --id Git.Git'
         break
     }
@@ -95,36 +95,36 @@ function Initialize-OSDWorkspace {
     # Make sure we can get the path from the Global Variable
     $OSDWorkspacePath = $OSDWorkspace.path
     if ($OSDWorkspacePath) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace will be located at $OSDWorkspacePath"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace will be located at $OSDWorkspacePath"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace encountered an unknown error"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace encountered an unknown error"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
         break
     }
     #=================================================
     # Test if OSDWorkspace exists without Git
     if ((Test-Path -Path $OSDWorkspacePath) -and (-not (Test-Path -Path "$OSDWorkspacePath\.git"))) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace exists but is not git initialized"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Remove $OSDWorkspacePath to continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace exists but is not git initialized"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Remove $OSDWorkspacePath to continue"
         break
     }
     #=================================================
     # Create OSDWorkspace if it does not exist
     if (Test-Path -Path $OSDWorkspacePath) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace exists at $OSDWorkspacePath"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace exists at $OSDWorkspacePath"
     }
     else {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace does not exist at $OSDWorkspacePath"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace does not exist at $OSDWorkspacePath"
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] OSDWorkspace first run requires Administrator rights"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Restart in PowerShell with Administrator rights"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace first run requires Administrator rights"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Restart in PowerShell with Administrator rights"
             Break
         }
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath"
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] git init $OSDWorkspacePath"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] git init $OSDWorkspacePath"
         $null = git init "$OSDWorkspacePath"
     }
     #=================================================
@@ -150,13 +150,13 @@ function Initialize-OSDWorkspace {
     #=================================================
     # Add .github
     if (-not (Test-Path "$OSDWorkspacePath\.github")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
         New-Item -Path "$OSDWorkspacePath\.github" -ItemType Directory -Force | Out-Null
     }
     #=================================================
     # Add .vscode
     if (-not (Test-Path "$OSDWorkspacePath\.vscode")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
         New-Item -Path "$OSDWorkspacePath\.vscode" -ItemType Directory -Force | Out-Null
     }
     #=================================================
@@ -164,7 +164,7 @@ function Initialize-OSDWorkspace {
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitattributes" -Raw
     $Path = "$OSDWorkspacePath\.gitattributes"
     if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
         
         # Set the value in the registry
@@ -179,7 +179,7 @@ function Initialize-OSDWorkspace {
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitignore" -Raw
     $Path = "$OSDWorkspacePath\.gitignore"
     if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
         
         # Set the value in the registry
@@ -194,7 +194,7 @@ function Initialize-OSDWorkspace {
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\copilot-instructions.md" -Raw
     $Path = "$OSDWorkspacePath\.github\copilot-instructions.md"
     if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
         
         # Set the value in the registry
@@ -209,7 +209,7 @@ function Initialize-OSDWorkspace {
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
     $Path = "$OSDWorkspacePath\.vscode\tasks.json"
     if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
         
         # Set the value in the registry
@@ -224,7 +224,7 @@ function Initialize-OSDWorkspace {
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\OSD.code-workspace" -Raw
     $Path = "$OSDWorkspacePath\OSD.code-workspace"
     if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Adding $Path"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
         Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
         
         # Set the value in the registry
@@ -239,18 +239,18 @@ function Initialize-OSDWorkspace {
     $LibraryDefaultPath = $OSDWorkspace.paths.library_default
 
     if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\amd64")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-driver"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-driver"
         New-Item -Path "$LibraryDefaultPath\winpe-driver\amd64" -ItemType Directory -Force | Out-Null
     }
     if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\arm64")) {
         New-Item -Path "$LibraryDefaultPath\winpe-driver\arm64" -ItemType Directory -Force | Out-Null
     }
     if (-not (Test-Path "$LibraryDefaultPath\winpe-script")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-script"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-script"
         New-Item -Path "$LibraryDefaultPath\winpe-script" -ItemType Directory -Force | Out-Null
     }
     if (-not (Test-Path "$LibraryDefaultPath\winpe-mediascript")) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-mediascript"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-mediascript"
         New-Item -Path "$LibraryDefaultPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
     }
     #=================================================

@@ -10,7 +10,7 @@ function Get-OSDWSWinPEBuildProfile {
     param ()
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
     $LibraryPath = $OSDWorkspace.paths.winpe_buildprofile
 
@@ -23,6 +23,6 @@ function Get-OSDWSWinPEBuildProfile {
 
     $LibraryItems
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }
