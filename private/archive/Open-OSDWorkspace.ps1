@@ -45,7 +45,7 @@ function Open-OSDWorkspace {
         $Application = 'code'
     )
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     $Error.Clear()
     #=================================================
     $Params = @{
@@ -63,25 +63,25 @@ function Open-OSDWorkspace {
             $Params.FilePath = "$env:LocalAppData\Programs\Microsoft VS Code\Code.exe"
         }
         else {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Visual Studio Code is not installed.  WinGet install:"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Visual Studio Code is not installed.  WinGet install:"
             Write-Host 'winget install -e --id Microsoft.VisualStudioCode'
             Break
         }
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Visual Studio Code"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Visual Studio Code"
         #Start-Process @Params -ErrorAction SilentlyContinue
         Start-Process -FilePath "$env:LocalAppData\Programs\Microsoft VS Code\Code.exe" -WindowStyle Maximized -Verb RunAs -ArgumentList "$(Get-OSDWorkspacePath)"
     }
 
     if ($Application -eq 'Explorer') {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Windows Explorer"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Windows Explorer"
         explorer.exe $(Get-OSDWorkspacePath)
     }
 
     if ($Application -eq 'Terminal') {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Windows Terminal"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Opening OSDWorkspace in Windows Terminal"
         Start-Process -FilePath wt.exe -Verb RunAs -ArgumentList "-d $(Get-OSDWorkspacePath)"
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

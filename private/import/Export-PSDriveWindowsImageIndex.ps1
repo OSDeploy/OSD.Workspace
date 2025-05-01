@@ -8,11 +8,11 @@ function Export-PSDriveWindowsImageIndex {
     begin {
         #=================================================
         $Error.Clear()
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
         #=================================================
         $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         if (-not $IsAdmin ) {
-            Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
             return
         }
         #=================================================
@@ -24,23 +24,23 @@ function Export-PSDriveWindowsImageIndex {
     process {
         #=================================================
         foreach ($SourceWindowsImage in $WindowsMediaImages) {
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] foreach"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] foreach"
 
             # Set the BuildDateTime
             $BuildDateTime = $((Get-Date).ToString('yyMMdd-HHmm'))
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] BuildDateTime: $BuildDateTime]"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] BuildDateTime: $BuildDateTime]"
 
             # Set the Architecture
             $Architecture = $SourceWindowsImage.Architecture
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture: $Architecture]"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Architecture: $Architecture]"
 
             # Set the Destination Name
             $DestinationName = "$BuildDateTime $Architecture"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationName: $DestinationName]"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] DestinationName: $DestinationName]"
             
             # Set the Destination Path
             $DestinationDirectory = Join-Path $env:Temp "$DestinationName"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationDirectory: $DestinationDirectory"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] DestinationDirectory: $DestinationDirectory"
 
             $DestinationCore = "$DestinationDirectory\.core"
             $DestinationTemp = "$DestinationDirectory\.temp"
@@ -65,24 +65,24 @@ function Export-PSDriveWindowsImageIndex {
             $FileName = (Split-Path $SourceWindowsImage.ImagePath -Leaf).ToLower()
 
             $DestinationPath = $env:TEMP + "\$Guid"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationPath: $DestinationPath"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] DestinationPath: $DestinationPath"
 
             $DestinationImagePath = "$DestinationPath\$FileName"
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DestinationImagePath: $DestinationImagePath"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] DestinationImagePath: $DestinationImagePath"
 
             try {
                 # Export the Operating System install.wim
                 $NewItem = New-Item -Path $DestinationPath -ItemType Directory -Force -ErrorAction Stop
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export WindowsImage to $DestinationImagePath"
+                Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Export WindowsImage to $DestinationImagePath"
                 $ExportWindowsImage = Export-WindowsImage -SourceImagePath $SourceWindowsImage.ImagePath -SourceIndex $SourceWindowsImage.ImageIndex -DestinationImagePath $DestinationImagePath -ErrorAction Stop
 
                 # Export the Operating System information
                 $Image = Get-WindowsImage -ImagePath $DestinationImagePath -Index 1
 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export $DestinationPath\winos-windowsimage.xml"
+                Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Export $DestinationPath\winos-windowsimage.xml"
                 $Image | Export-Clixml -Path "$DestinationPath\winos-windowsimage.xml"
                 
-                Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Export $DestinationPath\winos-windowsimage.json"
+                Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Export $DestinationPath\winos-windowsimage.json"
                 $Image | ConvertTo-Json -Depth 5 | Out-File "$DestinationPath\winos-windowsimage.json" -Encoding utf8 -Force
             }
             catch {
@@ -90,7 +90,7 @@ function Export-PSDriveWindowsImageIndex {
             }
 
             
-            Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Output: Get-Item -Path $DestinationImagePath"
+            Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Output: Get-Item -Path $DestinationImagePath"
             $(Get-Item -Path $DestinationImagePath)
         }
         #=================================================
@@ -98,7 +98,7 @@ function Export-PSDriveWindowsImageIndex {
     
     end {
         #=================================================
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
         #=================================================
     }
 }

@@ -43,7 +43,7 @@ function Import-OSDWorkspaceBootDriverCM {
         $Architecture
     )
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand) Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand) Start"
     $Error.Clear()
     #=================================================
     #region Import the Configuration Manager module
@@ -78,7 +78,7 @@ function Import-OSDWorkspaceBootDriverCM {
     $WinPEDriver = Select-OSDWSWinPEBuildDriver -Architecture $Architecture
 
     foreach ($Driver in $WinPEDriver) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Boot Driver: [$($Driver.FullName)]"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Boot Driver: [$($Driver.FullName)]"
         #=================================================
         #region Build Driver Source Path
         if ($Driver.FullName -match '\\BootDriver-Repos\\') {
@@ -89,13 +89,13 @@ function Import-OSDWorkspaceBootDriverCM {
         }        
         $DriverSourceFolder = Join-Path "$($SourcePath)" "$($DriverSourceFolder)"
         if (! (Test-Path "$($DriverSourceFolder)")) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating Source Directory: [$($DriverSourceFolder)]"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating Source Directory: [$($DriverSourceFolder)]"
             New-Item -Path "$($DriverSourceFolder)" -ItemType Directory | Out-Null
         }
         #endregion
         #=================================================
         #region Copy Drivers to Source Directory
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Copying Drivers to Source Directory"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Copying Drivers to Source Directory"
         Copy-Item -Path $($Driver.FullName) -Destination "$($DriverSourceFolder)" -Recurse -Force | Out-Null
         #endregion
         #=================================================
@@ -103,7 +103,7 @@ function Import-OSDWorkspaceBootDriverCM {
         try {
             # Set Location to site
             Push-Location "$($SiteCode):\"
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Successfully connected to the Configuration Manager site: [$SiteCode]"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Successfully connected to the Configuration Manager site: [$SiteCode]"
         }
         catch {
             Write-Error "Failed to connect to the Configuration Manager site"
@@ -114,7 +114,7 @@ function Import-OSDWorkspaceBootDriverCM {
         #region Create CM Category
         $CMCategory = Get-CMCategory -CategoryType DriverCategories -Name "OSDWorkspace"
         if ($null -eq $CMCategory) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating CM Category: [OSDWorkspace]"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating CM Category: [OSDWorkspace]"
             $CMCategory = New-CMCategory -CategoryType DriverCategories -Name "OSDWorkspace"
         }
         #endregion
@@ -122,7 +122,7 @@ function Import-OSDWorkspaceBootDriverCM {
         #region Create CM Root Driver Folder
         $CMRootFolder = Get-CMFolder -ParentFolderPath Driver -Name "OSDWorkspace"
         if ($null -eq $CMRootFolder) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating CM Driver Folder: [OSDWorkspace]"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating CM Driver Folder: [OSDWorkspace]"
             $CMRootFolder = New-CMFolder -ParentFolderPath Driver -Name "OSDWorkspace"
         }
         #endregion
@@ -130,13 +130,13 @@ function Import-OSDWorkspaceBootDriverCM {
         #region Create CM Sub Driver Folder
         $CMSubFolder = Get-CMFolder -FolderPath "Driver\$($CMRootFolder.Name)\$($Architecture)"
         if ($null -eq $CMSubFolder) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Creating CM Sub Driver Folder: [$($($Architecture))]"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating CM Sub Driver Folder: [$($($Architecture))]"
             $CMSubFolder = New-CMFolder -ParentFolderPath "Driver\$($CMRootFolder.Name)" -Name "$($($Architecture))"
         }
         #endregion
         #=================================================
         #region Import Drivers
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Importing Drivers from: [$(Join-Path $DriverSourceFolder $Driver.Name)]"
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Importing Drivers from: [$(Join-Path $DriverSourceFolder $Driver.Name)]"
         $ImportedDrivers = $null
         try {
             $ImportedDrivers = Import-CMDriver -Path "$(Join-Path $DriverSourceFolder $Driver.Name)" -ImportFolder -AdministrativeCategory $CMCategory -ImportDuplicateDriverOption AppendCategory
@@ -144,7 +144,7 @@ function Import-OSDWorkspaceBootDriverCM {
             # Move Drivers to CM Folder
             Move-CMObject -InputObject $ImportedDrivers -FolderPath "$($SiteCode):\Driver\$($CMRootFolder.Name)\$($CMSubFolder.Name)"
             
-            Write-Host -ForegroundColor Green "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Successfully Imported Drivers"
+            Write-Host -ForegroundColor Green "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Successfully Imported Drivers"
         }
         catch {
             Write-Error "Failed to Import Drivers: [$($DriverFile.FullName)]"
@@ -156,6 +156,6 @@ function Import-OSDWorkspaceBootDriverCM {
         Pop-Location
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand) End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] $($MyInvocation.MyCommand) End"
     #=================================================
 }

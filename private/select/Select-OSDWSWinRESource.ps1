@@ -39,7 +39,7 @@ function Select-OSDWSWinRESource {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     #=================================================
 
     $results = Get-OSDWSWinRESource
@@ -49,12 +49,12 @@ function Select-OSDWSWinRESource {
     }
 
     if ($results) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a Windows Recovery Image and press OK (Cancel to skip)"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select a Windows Recovery Image and press OK (Cancel to skip)"
         $results = $results | Out-GridView -Title 'Select a Windows Recovery Image and press OK (Cancel to skip)' -OutputMode Single
 
         return $results
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }

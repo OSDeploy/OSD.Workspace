@@ -146,37 +146,37 @@ function New-OSDWorkspaceVM {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     Initialize-OSDWorkspace
     #=================================================
     # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
         return
     }
     #=================================================
     # Is Hyper-V enabled?
     if (Test-IsHyperVEnabled) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hyper-V is enabled"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hyper-V is enabled"
     }
     else {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Hyper-V is not enabled, or may not be compatible with this version of Windows. Try running the following elevated Admin command:"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Enable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V-All' -NoRestart"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Hyper-V is not enabled, or may not be compatible with this version of Windows. Try running the following elevated Admin command:"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Enable-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V-All' -NoRestart"
         return
     }
     #=================================================
     # Can only make a VM matching the architecture of the running OS
     $Architecture = $Env:PROCESSOR_ARCHITECTURE
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Architecture = $Architecture"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Architecture = $Architecture"
     #=================================================
     # Do we have a Boot Media?
     $SelectWinPEBuild = $null
     $SelectWinPEBuild = Select-OSDWSWinPEBuild -Architecture $Architecture
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] SelectWinPEBuild: $SelectWinPEBuild"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] SelectWinPEBuild: $SelectWinPEBuild"
 
     if ($null -eq $SelectWinPEBuild) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build was found or selected"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build was found or selected"
         return
     }
     #=================================================
@@ -185,10 +185,10 @@ function New-OSDWorkspaceVM {
     $VMManagementServiceSettingData = Get-WmiObject -Namespace root\virtualization\v2 Msvm_VirtualSystemManagementServiceSettingData
     #=================================================
     # Set the Boot ISO
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select a OSDWorkspace WinPE Build ISO to use with this Virtual Machine (Cancel to exit)"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select a OSDWorkspace WinPE Build ISO to use with this Virtual Machine (Cancel to exit)"
     $SelectDvdDrive = Get-ChildItem "$($SelectWinPEBuild.Path)\iso" *.iso | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select a OSDWorkspace WinPE Build ISO to use with this Virtual Machine' -OutputMode Single
     if ($null -eq $SelectDvdDrive) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build ISO was found"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build ISO was found"
         return
     }
     $DvdDrivePath = $SelectDvdDrive.FullName
@@ -197,12 +197,12 @@ function New-OSDWorkspaceVM {
     if (-not ($SwitchName)) {
         $GetVMSwitch = Get-VMSwitch -ErrorAction SilentlyContinue
         if ($GetVMSwitch.Count -ge 1) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Virtual Switch Name was not specified with the SwitchName parameter"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Virtual Switch Name was not specified with the SwitchName parameter"
             $SwitchName = Get-VMSwitch | Select-Object Name, SwitchType, Id | Out-GridView -Title 'Select a Virtual Switch to use with this Virtual Machine (Cancel = Not connected)' -OutputMode Single | Select-Object -ExpandProperty Name
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] SwitchName: $SwitchName"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] SwitchName: $SwitchName"
         }
         else {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No Virtual Switches found with Get-VMSwitch, you will have to create a Virtual Switch. Setting to Not connected"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No Virtual Switches found with Get-VMSwitch, you will have to create a Virtual Switch. Setting to Not connected"
             $SwitchName = $null
         }
     }
@@ -222,12 +222,12 @@ function New-OSDWorkspaceVM {
     $VHDPath = [System.String](Join-Path $VMManagementServiceSettingData.DefaultVirtualHardDiskPath "$VmName.vhdx")            
     $VHDSizeBytes = ($VHDSizeGB * 1GB)
     $VHDSizeGB = [System.Int64]$VHDSizeGB
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MemoryStartupGB: $MemoryStartupGB"
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] The -MemoryStartupGB parameter is used to specify the amount of memory in GB to allocate to the VM"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MemoryStartupGB: $MemoryStartupGB"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] The -MemoryStartupGB parameter is used to specify the amount of memory in GB to allocate to the VM"
     $MemoryStartupBytes = ($MemoryStartupGB * 1GB)
     #=================================================
     # Create VM VHD
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] New-VM: Creating Virtual Machine in (5 second delay)"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] New-VM: Creating Virtual Machine in (5 second delay)"
     Start-Sleep -Seconds 5
     if ($SwitchName) {
         $vm = New-VM -Name $VmName -Generation $Generation -MemoryStartupBytes $MemoryStartupBytes -NewVHDPath $VHDPath -NewVHDSizeBytes $VHDSizeBytes -SwitchName $SwitchName -ErrorAction Stop
@@ -237,83 +237,83 @@ function New-OSDWorkspaceVM {
     }
     #=================================================
     # Add DVD Drive
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Add-VMDvdDrive -Path $DvdDrivePath"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Add-VMDvdDrive -Path $DvdDrivePath"
     $DvdDrive = $vm | Add-VMDvdDrive -Path $DvdDrivePath -Passthru
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Get-VMHardDiskDrive"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Get-VMHardDiskDrive"
     $HardDiskDrive = $vm | Get-VMHardDiskDrive
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Get-VMNetworkAdapter"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Get-VMNetworkAdapter"
     $NetworkAdapter = $vm | Get-VMNetworkAdapter
     #=================================================
     # Generation
     if ($Generation -eq 2) {
         # First Boot Device
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMFirmware -FirstBootDevice"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMFirmware -FirstBootDevice"
         $vm | Set-VMFirmware -FirstBootDevice $DvdDrive
 
         # Firmware
         #$vm | Set-VMFirmware -BootOrder $DvdDrive, $vmHardDiskDrive, $vmNetworkAdapter -Verbose
 
         # Security
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMFirmware -EnableSecureBoot On"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMFirmware -EnableSecureBoot On"
         $vm | Set-VMFirmware -EnableSecureBoot On
         if ((Get-TPM).TpmPresent -eq $true -and (Get-TPM).TpmReady -eq $true) {
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMSecurity -VirtualizationBasedSecurityOptOut:`$false"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMSecurity -VirtualizationBasedSecurityOptOut:`$false"
             $vm | Set-VMSecurity -VirtualizationBasedSecurityOptOut:$false
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMKeyProtector -NewLocalKeyProtector"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMKeyProtector -NewLocalKeyProtector"
             $vm | Set-VMKeyProtector -NewLocalKeyProtector
-            Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Enable-VMTPM"
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Enable-VMTPM"
             $vm | Enable-VMTPM
         }
     }
     #=================================================
     # Memory
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMMemory -DynamicMemoryEnabled False"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMMemory -DynamicMemoryEnabled False"
     $vm | Set-VMMemory -DynamicMemoryEnabled $false
     #=================================================
     # Processor
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] ProcessorCount: $ProcessorCount"
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] The -ProcessorCount parameter is used to set the number of processors to allocate to the VM. Default is 2"
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMProcessor -Count $($ProcessorCount)"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ProcessorCount: $ProcessorCount"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] The -ProcessorCount parameter is used to set the number of processors to allocate to the VM. Default is 2"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMProcessor -Count $($ProcessorCount)"
     $vm | Set-VMProcessor -Count $ProcessorCount
     #=================================================
     # Display Resolution
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] DisplayResolution: $DisplayResolution"
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] The -DisplayResolution parameter is used to set the resolution of the Virtual Machine. Default is 1440x900"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] DisplayResolution: $DisplayResolution"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] The -DisplayResolution parameter is used to set the resolution of the Virtual Machine. Default is 1440x900"
     $HorizontalResolution = $DisplayResolution.Split('x')[0]
     $VerticalResolution = $DisplayResolution.Split('x')[1]
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VMVideo -HorizontalResolution $($HorizontalResolution) -VerticalResolution $($VerticalResolution) -ResolutionType Single"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VMVideo -HorizontalResolution $($HorizontalResolution) -VerticalResolution $($VerticalResolution) -ResolutionType Single"
     $vm | Set-VMVideo -HorizontalResolution $HorizontalResolution -VerticalResolution $VerticalResolution -ResolutionType Single
     #=================================================
     # Integration Services
     # Thanks Andreas Landry
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Enable-VMIntegrationService"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Enable-VMIntegrationService"
     $IntegrationService = Get-VMIntegrationService -VMName $vm.Name | Where-Object { $_ -match 'Microsoft:[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\\6C09BB55-D683-4DA0-8931-C9BF705F6480' }
     $vm | Get-VMIntegrationService -Name $IntegrationService.Name | Enable-VMIntegrationService
     #=================================================
     # Checkpoints Start Stop
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Set-VM -AutomaticCheckpointsEnabled `$false -AutomaticStartAction Nothing -AutomaticStartDelay 3 -AutomaticStopAction Shutdown"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Set-VM -AutomaticCheckpointsEnabled `$false -AutomaticStartAction Nothing -AutomaticStartDelay 3 -AutomaticStopAction Shutdown"
     $vm | Set-VM -AutomaticCheckpointsEnabled $false -AutomaticStartAction Nothing -AutomaticStartDelay 3 -AutomaticStopAction Shutdown
     #=================================================
     # Create a Snapshot
     if ($CheckpointVM -eq $true) {
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Checkpoint-VM -SnapshotName 'New-VM'"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Checkpoint-VM -SnapshotName 'New-VM'"
         $vm | Checkpoint-VM -SnapshotName 'New-VM'
     }
     #=================================================
     # Export Final Configuration
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Exporting current configuration to $($SelectWinPEBuild.Path)\vm.json"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Exporting current configuration to $($SelectWinPEBuild.Path)\vm.json"
     $vm | ConvertTo-Json -Depth 5 | Out-File -FilePath "$($SelectWinPEBuild.Path)\vm.json" -Force
     #=================================================
     # Start VM
     if ($StartVM -eq $true) {
-        Write-Host -ForegroundColor DarkCyan "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] vmconnect.exe `"$($env:ComputerName) $VmName`""
+        Write-Host -ForegroundColor DarkCyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] vmconnect.exe `"$($env:ComputerName) $VmName`""
         vmconnect.exe $env:ComputerName $VmName
         Start-Sleep -Seconds 10
-        Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start-VM"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start-VM"
         $vm | Start-VM
     }
     #=================================================
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] End"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================
 }
 Register-ArgumentCompleter -CommandName New-OSDWorkspaceVM -ParameterName 'SwitchName' -ScriptBlock {Get-VMSwitch | Select-Object -ExpandProperty Name | ForEach-Object {if ($_.Contains(' ')) {"'$_'"} else {$_}}}

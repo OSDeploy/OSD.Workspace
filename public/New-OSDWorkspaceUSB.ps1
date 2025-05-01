@@ -90,13 +90,13 @@ function New-OSDWorkspaceUSB {
     )
     #=================================================
     $Error.Clear()
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Start"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
     Initialize-OSDWorkspace
     #=================================================
     # Requires Run as Administrator
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $IsAdmin ) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This function must be Run as Administrator"
         return
     }
     #=================================================
@@ -115,15 +115,15 @@ function New-OSDWorkspaceUSB {
     $SelectWinPEMedia = Select-OSDWSWinPEBuild
 
     if ($null -eq $SelectWinPEMedia) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build was found or selected"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No OSDWorkspace WinPE Build was found or selected"
         return
     }
     #=================================================
     # Select a BootMedia Media folder
-    Write-Host -ForegroundColor DarkGray "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Select an OSDWorkspace WinPE Build to use with this USB (Cancel to exit)"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Select an OSDWorkspace WinPE Build to use with this USB (Cancel to exit)"
     $BootMediaObject = Get-ChildItem $($SelectWinPEMedia.Path) -Directory | Where-Object { ($_.Name -eq 'WinPE-Media') -or ($_.Name -eq 'WinPE-MediaEX') } | Sort-Object Name, FullName | Select-Object Name, FullName | Out-GridView -Title 'Select an OSDWorkspace WinPE Build to use with this USB (Cancel to exit)' -OutputMode Single
     if ($null -eq $BootMediaObject) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No WinPE-Media or WinPE-MediaEX subfolders were found"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No WinPE-Media or WinPE-MediaEX subfolders were found"
         return
     }
     $BootMediaArch = $SelectWinPEMedia.Architecture.ToUpper()
@@ -137,22 +137,22 @@ function New-OSDWorkspaceUSB {
     $SelectDisk = Invoke-SelectUSBDisk -MinimumSizeGB $MinimumSizeGB -MaximumSizeGB $MaximumSizeGB
 
     if (-NOT ($SelectDisk)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] No USB Drives that met the required criteria were detected"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MinimumSizeGB: $MinimumSizeGB"
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] MaximumSizeGB: $MaximumSizeGB"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] No USB Drives that met the required criteria were detected"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MinimumSizeGB: $MinimumSizeGB"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] MaximumSizeGB: $MaximumSizeGB"
         Break
     }
     #=================================================
     # Get-OSDDisk -BusType USB
     # At this point I have the Disk object in $GetUSBDisk
-    Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] `$GetUSBDisk = Get-OSDDisk -BusType USB -Number `$SelectDisk.Number"
+    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] `$GetUSBDisk = Get-OSDDisk -BusType USB -Number `$SelectDisk.Number"
     $GetUSBDisk = Get-OSDDisk -BusType USB -Number $SelectDisk.Number
 
     $GetUSBDisk | Select-Object -Property * -ExcludeProperty Cim*,PS*,Pass*
     #=================================================
     # Clear-Disk Prompt for Confirmation
     if ($GetUSBDisk.NumberOfPartitions -eq 0) {
-        Write-Verbose "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Disk does not have any partitions.  This is a good thing!"
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Disk does not have any partitions.  This is a good thing!"
     }
     else {
         Write-Verbose '$GetUSBDisk | Clear-Disk -RemoveData -RemoveOEM -Confirm:$true'
@@ -164,7 +164,7 @@ function New-OSDWorkspaceUSB {
     $GetUSBDisk = Get-OSDDisk -BusType USB -Number $SelectDisk.Number | Where-Object {$_.NumberOfPartitions -eq 0}
 
     if (-NOT ($GetUSBDisk)) {
-        Write-Warning "[$((Get-Date).ToString('HH:mm:ss'))][$($MyInvocation.MyCommand.Name)] Something went very very wrong in this process"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Something went very very wrong in this process"
         Break
     }
     #=================================================
