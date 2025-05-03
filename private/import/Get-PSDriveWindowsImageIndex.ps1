@@ -25,7 +25,7 @@ function Get-PSDriveWindowsImageIndex {
             Get-WindowsImage -ImagePath "$($_.FullName)"
         } | ForEach-Object {
             Get-WindowsImage -ImagePath "$($_.ImagePath)" -Index $($_.ImageIndex) | Select-Object -Property @{Name = 'MediaRoot'; Expression = { $MediaRoot } }, *
-            Write-Host -ForegroundColor Gray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ImageIndex $($_.ImageIndex): $($_.ImageName)" -ForegroundColor DarkGray
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ImageIndex $($_.ImageIndex): $($_.ImageName)"
         }
 
         # Set Architecture to human readable"
