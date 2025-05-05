@@ -129,7 +129,7 @@ function New-OSDWorkspaceVM {
         '1400x1050','1440x900','1600x900','1680x1050','1920x1080','1920x1200',
         '2560x1440','2560x1600','3840x2160','3840x2400','4096x2160')]
         [System.String]
-        $DisplayResolution = '1440x900',
+        $DisplayResolution = '1600x900',
 
         # Specifies whether to start the VM after creation. Default is $true.
         [System.Boolean]
