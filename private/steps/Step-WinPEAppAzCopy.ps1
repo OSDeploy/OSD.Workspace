@@ -21,7 +21,7 @@ function Step-WinPEAppAzCopy {
     # Get started with AzCopy
     # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf
 
-    $CacheAzCopy = Join-Path $WinPEAppsPath 'AzCopy'
+    $CacheAzCopy = Join-Path $WinPEAppsPath 'microsoft-azcopy'
 
     if (-not (Test-Path -Path $CacheAzCopy)) {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $CacheAzCopy"

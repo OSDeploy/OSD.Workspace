@@ -27,7 +27,7 @@ function Step-WinPEAppWirelessConnect {
     # https://msendpointmgr.com/2018/03/06/build-a-winpe-with-wireless-support/
 
     if ($WimSourceType -eq 'WinRE') {
-        $CacheWirelessConnect = Join-Path $WinPEAppsPath "WirelessConnect"
+        $CacheWirelessConnect = Join-Path $WinPEAppsPath "wireless-connect"
         
         $WirelessConnectExe = "$CacheWirelessConnect\WirelessConnect.exe"
         if (-not (Test-Path -Path $CacheWirelessConnect)) {
