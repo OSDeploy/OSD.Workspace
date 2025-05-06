@@ -19,7 +19,7 @@ Documention on the functions in the OSD.Workspace and associated PowerShell modu
 Do not edit any *.md files in the docs folder.
 
 ## Tasks
-Recommend using workspace tasks in chat. Tasks are defined in the .vscode/tasks.json file.
+Recommend using workspace tasks in chat. Tasks are defined in C:\OSDWorkspace\OSD.code-workspace
 
 ## Workspace Structure
 The file C:\OSDWorkspace\OSD.code-workspace contains additional infromation about the workspace structure.

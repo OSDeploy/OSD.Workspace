@@ -16,6 +16,7 @@
         "build": "C:\\OSDWorkspace\\build",
         "build_windows_os": "C:\\OSDWorkspace\\build\\windows-os",
         "build_windows_pe": "C:\\OSDWorkspace\\build\\windows-pe",
+        "build_windows_re": "C:\\OSDWorkspace\\build\\windows-re",
         "cache": "C:\\OSDWorkspace\\cache",
         "winpe_apps": "C:\\OSDWorkspace\\cache\\winpe-apps",
         "adk_versions": "C:\\OSDWorkspace\\cache\\adk-versions",

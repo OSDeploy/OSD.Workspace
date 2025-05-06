@@ -206,6 +206,7 @@ function Initialize-OSDWorkspace {
     }
     #=================================================
     # Add tasks.json
+    <#
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
     $Path = "$OSDWorkspacePath\.vscode\tasks.json"
     if (-not (Test-Path -Path $Path)) {
@@ -219,6 +220,7 @@ function Initialize-OSDWorkspace {
             catch {}
         }
     }
+    #>
     #=================================================
     # Add OSD.code-workspace
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\OSD.code-workspace" -Raw
