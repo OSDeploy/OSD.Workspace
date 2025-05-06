@@ -1,132 +1,337 @@
 {
-    "folders": [
-        {
-            "name": "OSDWorkspace",
-            "path": "."
-        },
-        {
-            "name": "Docs",
-            "path": "./docs",
-            "description": "Reference Documentation",
-            "subfolders": {
-                "powershell-help": {
-                    "description": "PowerShell module documentation in markdown format"
-                }
-            }
-        },
-        {
-            "name": "Cache",
-            "path": "./cache",
-            "description": "Contains cached content",
-            "subfolders": {
-                "adk-versions": {
-                    "description": "Windows Assessment and Deployment Kit (ADK) versions"
-                },
-                "powershell-modules": {
-                    "description": "Cached PowerShell modules"
-                },
-                "winpe-apps": {
-                    "description": "Applications for Windows PE environment"
-                },
-                "winpe-buildprofile": {
-                    "description": "WinPE build profiles and configuration"
-                }
-            }
-        },
-        {
-            "name": "Library",
-            "path": "./library",
-            "description": "Contains User defined scripts",
-            "subfolders": {
-                "default": {
-                    "description": "Default scripts and drivers",
-                    "subfolders": {
-                        "winpe-driver": "Default WinPE drivers sorted by architecture (amd64, arm64)",
-                        "winpe-mediascript": "Scripts for building media",
-                        "winpe-script": "Scripts for building WinPE"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Library Submodules",
-            "path": "./submodules",
-            "description": "Shared libraries added as Git submodules",
-            "subfolders": {
-                "osdcloud": {
-                    "description": "OSDCloud submodule providing cloud-based OS deployment resources"
-                },
-                "osdcloud-archive": {
-                    "description": "Archive of OSDCloud resources (unsupported)"
-                }
-            }
-        },
-        {
-            "name": "Windows Sources",
-            "path": "./source",
-            "description": "Windows source files for building WinPE images",
-            "subfolders": {
-                "windows-os": {
-                    "description": "Windows Operating System source files",
-                    "indexfile": "./source/windows-os/index.json"
-                },
-                "windows-re": {
-                    "description": "Windows Recovery Environment source files",
-                    "indexfile": "./source/windows-re/index.json"
-                }
-            }
-        },
-        {
-            "name": "WinPE Builds",
-            "path": "./build/windows-pe",
-            "indexfile": "./build/windows-pe/index.json",
-            "description": "WinPE, WinPE Builds, WindowsPE, Windows Preinstallation Environment"
+  "folders": [
+    {
+      "name": "c:\\osdworkspace",
+      "path": "."
+    },
+    {
+      "name": "docs",
+      "path": "./docs",
+      "description": "Reference Documentation",
+      "subfolders": {
+        "powershell-help": {
+          "description": "PowerShell module documentation in markdown format"
         }
-    ],
-    "settings": {
-        "explorer.compactFolders": false,
-        "explorer.sortOrder": "type",
-        "files.exclude": {
-            "**/.git": true,
-            "**/.DS_Store": true,
-            "**/Thumbs.db": true
+      }
+    },
+    {
+      "name": "cache",
+      "path": "./cache",
+      "description": "Contains cached content",
+      "subfolders": {
+        "adk-versions": {
+          "description": "Windows Assessment and Deployment Kit (ADK) versions"
         },
-        "files.associations": {
-            "*.ps1": "powershell",
-            "*.psm1": "powershell",
-            "*.psd1": "powershell",
-            "*.json": "jsonc",
-            "*.esd": "binary",
-            "*.iso": "binary",
-            "*.wim": "binary"
+        "psrepository": {
+          "description": "Cached PowerShell modules"
         },
-        "git.confirmSync": true,
-        "git.enableSmartCommit": true,
-        "powershell.codeFormatting.preset": "OTBS",
-        "powershell.scriptAnalysis.enable": true,
-        "powershell.integratedConsole.focusConsoleOnExecute": false,
-        "scm.alwaysShowRepositories": true,
-        "scm.alwaysShowActions": true,
-        "search.exclude": {
-            "**/node_modules": true,
-            "**/*.wim": true,
-            "**/*.iso": true,
-            "cache/**": true
+        "winpe-apps": {
+          "description": "Applications for Windows PE environment"
         },
-        "workbench.editorLargeFileConfirmation": 1,
-        "[powershell]": {
-            "files.encoding": "utf8bom",
-            "files.eol": "\r\n",
-            "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?"
+        "winpe-buildprofile": {
+          "description": "WinPE build profiles and configuration"
+        }
+      }
+    },
+    {
+      "name": "Library",
+      "path": "./library",
+      "description": "Contains User defined scripts",
+      "subfolders": {
+        "default": {
+          "description": "Default scripts and drivers",
+          "subfolders": {
+            "winpe-driver": "Default WinPE drivers sorted by architecture (amd64, arm64)",
+            "winpe-mediascript": "Scripts for building media",
+            "winpe-script": "Scripts for building WinPE"
+          }
+        }
+      }
+    },
+    {
+      "name": "Library Submodules",
+      "path": "./submodules",
+      "description": "Shared libraries added as Git submodules"
+    },
+    {
+      "name": "Windows Sources",
+      "path": "./source",
+      "description": "Windows source files for building WinPE images",
+      "subfolders": {
+        "windows-os": {
+          "description": "Windows Operating System source files",
+          "indexfile": "./source/windows-os/index.json"
         },
-        "githubPullRequests.experimental.chat": true,
-        "githubPullRequests.experimental.useQuickChat": true,
-        "github.copilot.chat.edits.temporalContext.enabled": true,
-        "github.copilot.chat.commitMessageGeneration.instructions": [
-            {
-                "text": "Be extremely detailed with the file changes and the reason for the change. Add a reference to the issue or pull request that this commit is related to. Add emojis to make the commit message more readable. If you are fixing a bug, add the bug number. If you are adding a new feature, add the feature number. If you are updating a feature, add the feature number. If you are removing a feature, add the feature number. If you are updating the documentation, add the documentation number. If you are updating the tests, add the test number. If you are updating the configuration, add the configuration number. If you are updating the build process, add the build number. If you are updating the deployment process, add the deployment number. If you are updating the code review process, add the code review number. If you are updating the code quality process, add the code quality number. If you are updating the code coverage process, add the code coverage number.",
-            }
-        ],
-        "powershell.cwd": "C:\\OSDWorkspace"
+        "windows-re": {
+          "description": "Windows Recovery Environment source files",
+          "indexfile": "./source/windows-re/index.json"
+        }
+      }
+    },
+    {
+      "name": "WinPE Builds",
+      "path": "./build/windows-pe",
+      "indexfile": "./build/windows-pe/index.json",
+      "description": "WinPE, WinPE Builds, WindowsPE, Windows Preinstallation Environment"
     }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true
+    },
+    "files.associations": {
+      "*.ps1": "powershell",
+      "*.psm1": "powershell",
+      "*.psd1": "powershell",
+      "*.json": "jsonc",
+      "*.esd": "binary",
+      "*.iso": "binary",
+      "*.wim": "binary"
+    },
+    "powershell.integratedConsole.focusConsoleOnExecute": false,
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/*.wim": true,
+      "**/*.iso": true,
+      "cache/**": true
+    },
+    "powershell.cwd": "{{workspaceFolder}}"
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build: Select an imported WinRE and create a WinPE build",
+        "command": "pwsh",
+        "type": "shell",
+        "windows": {
+          "command": "Start-Process",
+          "args": [
+            "pwsh",
+            "-Verb",
+            "RunAs",
+            "-ArgumentList",
+            "'-NoExit -Command Build-OSDWorkspaceWinPE'"
+          ]
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "never",
+          "panel": "shared"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "About OSDWorkspace",
+        "type": "shell",
+        "command": "Get-OSDWorkspace",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "GitHub: OSD.Workspace (repo, issues, pull requests)",
+        "type": "shell",
+        "command": "start 'https://github.com/OSDeploy/OSD.Workspace'",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "PowerShell Gallery: Update OSD.Workspace",
+        "type": "shell",
+        "command": "Update-Module -Name OSD.Workspace -Verbose",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Docs: Update PowerShell Help for Dism (requires platyPS)",
+        "type": "shell",
+        "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Docs: Update PowerShell Help for OSD (requires platyPS)",
+        "type": "shell",
+        "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Docs: Update PowerShell Help for OSD.Workspace (requires platyPS)",
+        "type": "shell",
+        "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Submodule: Add a Library Submodule by URL",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Add-OSDWorkspaceSubmodule'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Submodule: Add the OSDCloud Archive Submodule",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdeploy-osdcloud-archive.git'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "GitHub: Find an OSDWorkspace Library Submodule",
+        "type": "shell",
+        "command": "start 'https://github.com/search?q=OSDWorkspace+Library&type=repositories'",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Submodule: Remove a Library Submodule",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Remove-OSDWorkspaceSubmodule -Force'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Submodule: Update a Library Submodule",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Update-OSDWorkspaceSubmodule'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Import: Add a Windows 11 Operating System and Recovery Environment",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Import-OSDWorkspaceWinOS'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Virtual Machine: Select a WinPE build and create a Hyper-V VM",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command New-OSDWorkspaceVM'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "USB Drive: Select a WinPE build and create a bootable USB Drive",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command New-OSDWorkspaceUSB'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "USB Drive: Select a WinPE build and update a bootable USB Drive",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Update-OSDWorkspaceUSB'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      }
+    ]
+  }
 }

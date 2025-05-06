@@ -93,10 +93,6 @@ function Get-OSDWorkspace {
     $RegName = 'Initialize-OSDWorkspace'
     Write-Host -ForegroundColor DarkGray "Initialize    $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
     Write-Host -ForegroundColor DarkGray "Module        $ModuleVersion"
-    $RegName = 'tasks.json'
-    Write-Host -ForegroundColor DarkGray "Tasks         $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    $RegName = 'OSD.code-workspace'
-    Write-Host -ForegroundColor DarkGray "Workspace     $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
     #=================================================
     # Read the value from the registry
     # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
