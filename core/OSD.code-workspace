@@ -127,7 +127,7 @@
         "problemMatcher": []
       },
       {
-        "label": "About OSDWorkspace",
+        "label": "Run: Get-OSDWorkspace",
         "type": "shell",
         "command": "Get-OSDWorkspace",
         "problemMatcher": [],
@@ -137,7 +137,7 @@
         }
       },
       {
-        "label": "GitHub: OSD.Workspace (repo, issues, pull requests)",
+        "label": "Open: GitHub OSD.Workspace (repo, issues, pull requests)",
         "type": "shell",
         "command": "start 'https://github.com/OSDeploy/OSD.Workspace'",
         "problemMatcher": [],
@@ -147,7 +147,17 @@
         }
       },
       {
-        "label": "PowerShell Gallery: Update OSD.Workspace",
+        "label": "Open: GitHub Library Submodules",
+        "type": "shell",
+        "command": "start 'https://github.com/search?q=OSDWorkspace+Library&type=repositories'",
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Run: Update the OSD.Workspace PowerShell Module",
         "type": "shell",
         "command": "Update-Module -Name OSD.Workspace -Verbose",
         "problemMatcher": [],
@@ -157,7 +167,7 @@
         }
       },
       {
-        "label": "Docs: Update PowerShell Help for Dism (requires platyPS)",
+        "label": "docs: Update PowerShell Help for Dism (requires platyPS)",
         "type": "shell",
         "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
         "problemMatcher": [],
@@ -167,7 +177,7 @@
         }
       },
       {
-        "label": "Docs: Update PowerShell Help for OSD (requires platyPS)",
+        "label": "docs: Update PowerShell Help for OSD (requires platyPS)",
         "type": "shell",
         "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
         "problemMatcher": [],
@@ -177,7 +187,7 @@
         }
       },
       {
-        "label": "Docs: Update PowerShell Help for OSD.Workspace (requires platyPS)",
+        "label": "docs: Update PowerShell Help for OSD.Workspace (requires platyPS)",
         "type": "shell",
         "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
         "problemMatcher": [],
@@ -187,7 +197,7 @@
         }
       },
       {
-        "label": "Submodule: Add a Library Submodule by URL",
+        "label": "Library Submodules: Add a Library Submodule by URL",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -204,7 +214,7 @@
         }
       },
       {
-        "label": "Submodule: Add the OSDCloud Archive Submodule",
+        "label": "Library Submodules: Add the OSDWorkspace Gallery",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -212,7 +222,7 @@
           "-Verb",
           "RunAs",
           "-ArgumentList",
-          "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdeploy-osdcloud-archive.git'"
+          "'-NoExit -Command Add-OSDWorkspaceSubmodule -Url https://github.com/OSDeploy/osdws-gallery.git'"
         ],
         "problemMatcher": [],
         "presentation": {
@@ -221,17 +231,7 @@
         }
       },
       {
-        "label": "GitHub: Find an OSDWorkspace Library Submodule",
-        "type": "shell",
-        "command": "start 'https://github.com/search?q=OSDWorkspace+Library&type=repositories'",
-        "problemMatcher": [],
-        "presentation": {
-          "reveal": "never",
-          "panel": "new"
-        }
-      },
-      {
-        "label": "Submodule: Remove a Library Submodule",
+        "label": "Library Submodules: Remove a Library Submodule",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -248,7 +248,7 @@
         }
       },
       {
-        "label": "Submodule: Update a Library Submodule",
+        "label": "Library Submodules: Update a Library Submodule",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -265,7 +265,7 @@
         }
       },
       {
-        "label": "Import: Add a Windows 11 Operating System and Recovery Environment",
+        "label": "Windows Sources: Import a Windows 11 Operating System and Recovery Environment",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -282,7 +282,7 @@
         }
       },
       {
-        "label": "Virtual Machine: Select a WinPE build and create a Hyper-V VM",
+        "label": "WinPE Builds: Create a Hyper-V VM",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -299,7 +299,24 @@
         }
       },
       {
-        "label": "USB Drive: Select a WinPE build and create a bootable USB Drive",
+        "label": "WinPE Builds: Rebuild an ISO",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Update-OSDWorkspaceISO'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "WinPE Builds: Create a bootable USB Drive",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -316,7 +333,7 @@
         }
       },
       {
-        "label": "USB Drive: Select a WinPE build and update a bootable USB Drive",
+        "label": "WinPE Builds: Update a bootable USB Drive",
         "type": "shell",
         "command": "Start-Process",
         "args": [
