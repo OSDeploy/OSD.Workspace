@@ -995,7 +995,7 @@ The WinRE images extracted are used as source images for creating custom WinPE b
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>1440x900</dev:defaultValue>
+          <dev:defaultValue>1600x900</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
           <maml:name>StartVM</maml:name>
@@ -1118,7 +1118,7 @@ The WinRE images extracted are used as source images for creating custom WinPE b
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>1440x900</dev:defaultValue>
+        <dev:defaultValue>1600x900</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
         <maml:name>StartVM</maml:name>
@@ -1438,6 +1438,74 @@ The platyPS module is used to generate the help documentation. This function may
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Update-OSDWorkspaceISO</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>OSDWorkspaceISO</command:noun>
+      <maml:description>
+        <maml:para>Updates or creates a bootable OSD Workspace ISO using the Windows ADK and available WinPE builds.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This function prepares and updates a bootable ISO for the OSD Workspace environment. It checks for required prerequisites, verifies and manages the Windows ADK installation or cache, and allows selection of the appropriate ADK version if multiple are available. The function also enables selection of a WinPE build, sets up build variables, and initiates the ISO creation process. It is intended for use on Windows 10 or higher, requires PowerShell 5.0 or above, and must be run as Administrator.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-OSDWorkspaceISO</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+          <maml:name>ProgressAction</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+          <dev:type>
+            <maml:name>ActionPreference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="proga">
+        <maml:name>ProgressAction</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ProgressAction Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ActionPreference</command:parameterValue>
+        <dev:type>
+          <maml:name>ActionPreference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: David Segura Version: 1.0 Date: May 2025</maml:para>
+        <maml:para>Prerequisites:   - PowerShell 5.0 or higher   - Windows 10 or higher   - Run as Administrator</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-OSDWorkspaceISO
+Runs the function to update or create the OSD Workspace ISO using the available ADK and WinPE builds.</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Update-OSDWorkspaceSubmodule</command:name>
       <command:verb>Update</command:verb>
       <command:noun>OSDWorkspaceSubmodule</command:noun>
@@ -1540,7 +1608,12 @@ The platyPS module is used to generate the help documentation. This function may
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -1684,6 +1757,11 @@ The platyPS module is used to generate the help documentation. This function may
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
 </helpItems>
