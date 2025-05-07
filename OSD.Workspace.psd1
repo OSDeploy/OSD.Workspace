@@ -33,7 +33,7 @@ Copyright = '(c) 2025 David Segura @ osdeploy.com. All rights reserved.'
 Description = 'OSD.Workspace PowerShell Module for OSDWorkspace'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.5'
+PowerShellVersion = '7.4'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
