@@ -1,0 +1,25 @@
+name: Publish Module to PSGallery
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: OSDeploy/OSD.Workspace
+          path: osd.workspace
+          ref: main
+
+      - name: Publish to PowerShell Gallery
+        run: |
+          pwsh -Command "Publish-Module -Path ${{ github.workspace }}\OSD.Workspace -Verbose -Repository PSGallery -NuGetApiKey $env:PSGALLERY_API_KEY"
+        env:
+          PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}

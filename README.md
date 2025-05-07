@@ -6,17 +6,6 @@ This software is provided "as-is," without any express or implied warranty. In n
 
 ---
 
-## OSDWorkspace Scripts Repository
-
-Scripts for use in OSDWorkspace will additionally be uploaded to the OSDWorkspace Scripts Repository. These scripts are designed to be used with the OSD.Workspace PowerShell Module and for example purposes.
-To use the OSDWorkspace Script Repository, run the following command in PowerShell:
-
-```powershell
-iex "& { $(irm scripts.osdcloud.com) } -Owner OSDeploy -Repo OSDWorkspace.scripts"
-```
-
----
-
 ## Requirements
 
 ### Windows 11 amd64 24H2
