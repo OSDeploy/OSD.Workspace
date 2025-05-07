@@ -11,7 +11,6 @@ This software is provided "as-is," without any express or implied warranty. In n
 ### Windows 11 amd64 24H2
 OSD.Workspace was developed for use on Windows 11 amd64 24H2. Other operating systems are untested and unsupported, including Insiders versions, arm64, and Server operating systems.
 
-
 ### PowerShell 7.5
 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
 
@@ -23,6 +22,18 @@ winget install -e --id Microsoft.PowerShell --scope user --override '/Passive AD
 ```
 
 Additionally since most DISM functions require Admin Rights to run properly, you will need to run PowerShell as an Administrator for most OSD.Workspace functions.
+
+
+### PowerShell Modules
+In PowerShell 7.5, install the following modules from the PowerShell Gallery.
+
+```powershell
+Install-Module -Name platyPS -SkipPublisherCheck
+Install-Module -Name OSD -SkipPublisherCheck
+
+# Optional after the OSDCloud module has been updated
+Install-Module -Name OSDCloud -SkipPublisherCheck
+```
 
 
 ### Git for Windows
