@@ -1,7 +1,7 @@
 ---
 external help file: OSD.Workspace-help.xml
 Module Name: OSD.Workspace
-online version:
+online version: https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install
 schema: 2.0.0
 ---
 

@@ -170,7 +170,7 @@ Aliases:
 
 Required: False
 Position: 6
-Default value: 1440x900
+Default value: 1600x900
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
