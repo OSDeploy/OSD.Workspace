@@ -76,7 +76,9 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     # Is PackageManagement in the Cache?
     $PackageName = 'packagemanagement.1.4.8.1.nupkg'
     $PSRepositoryModule = Join-Path $CachePSRepository $PackageName
-    $PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1/$PackageName"
+    # https://psg-prod-eastus.azureedge.net/packages/packagemanagement.1.4.8.1.nupkg
+    #$PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1/$PackageName"
+    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PackageManagement/1.4.8.1/#manualdownload'
     $PSModuleDestination = "$MountedPSModulesPath\PackageManagement\1.4.8.1"
 
     if (-not (Test-Path $PSRepositoryModule)) {
@@ -104,7 +106,9 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     # Is PowerShellGet in the Cache?
     $PackageName = 'powershellget.2.2.5.nupkg'
     $PSRepositoryModule = Join-Path $CachePSRepository $PackageName
-    $PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5/$PackageName"
+    #'https://psg-prod-eastus.azureedge.net/packages/powershellget.2.2.5.nupkg'
+    # $PSModuleUrl = "https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5/$PackageName"
+    $PSModuleUrl = 'https://www.powershellgallery.com/api/v2/package/PowerShellGet/2.2.5/#manualdownload'
     $PSModuleDestination = "$MountedPSModulesPath\PowerShellGet\2.2.5"
 
     if (-not (Test-Path $PSRepositoryModule)) {
