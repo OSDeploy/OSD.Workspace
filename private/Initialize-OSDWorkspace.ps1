@@ -28,7 +28,7 @@ function Initialize-OSDWorkspace {
     #=================================================
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     #=================================================
-    # Test Win32_OperatingSystem ProductType
+    # Make sure we are running in a Windows Client OS
     $osInfo = Get-CimInstance Win32_OperatingSystem
     if ($osInfo.ProductType -eq 1) {
         Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS"
@@ -40,7 +40,7 @@ function Initialize-OSDWorkspace {
         break
     }
     #=================================================
-    # Test Win32_OperatingSystem BuildNumber
+    # Make sure we are running in a Windows Client OS with BuildNumber 26100 or higher
     $osInfo = Get-CimInstance Win32_OperatingSystem
     if ($osInfo.BuildNumber -ge 26100) {
         Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS with BuildNumber $($osInfo.BuildNumber)"
@@ -56,11 +56,14 @@ function Initialize-OSDWorkspace {
     if (Get-Command 'code' -ErrorAction SilentlyContinue) {
         Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is installed"
     }
+    elseif (Get-Command 'code-insiders' -ErrorAction SilentlyContinue) {
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code Insiders is installed"
+    }
     else {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install VS Code using the following command (saved to clipboard):"
-        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
+        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --scope user --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
         $InstallMessage | Set-Clipboard
         Write-Host -ForegroundColor DarkGray $InstallMessage
         break
@@ -88,7 +91,9 @@ function Initialize-OSDWorkspace {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
-        Write-Host 'winget install -e --id Git.Git'
+        $InstallMessage = 'winget install -e --id Git.Git --scope user'
+        $InstallMessage | Set-Clipboard
+        Write-Host -ForegroundColor DarkGray $InstallMessage
         break
     }
     #=================================================
@@ -118,14 +123,36 @@ function Initialize-OSDWorkspace {
     else {
         Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace does not exist at $OSDWorkspacePath"
         if (-not $IsAdmin ) {
-            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace first run requires Administrator rights"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace first run requires Administrator rights (elevated)"
             Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Restart in PowerShell with Administrator rights"
+            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Restart in PowerShell with Administrator rights (elevated)"
             Break
         }
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath"
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] git init $OSDWorkspacePath"
         $null = git init "$OSDWorkspacePath"
+    }
+    #=================================================
+    # Make sure platyPS is installed
+    $platyPS = Get-Module -Name platyPS -ListAvailable
+
+    if (-not $platyPS) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Installing PowerShell Module platyPS"
+        Install-Module -Name platyPS -AllowClobber -SkipPublisherCheck
+    }
+    else {
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell Module platyPS is already installed"
+    }
+    #=================================================
+    # Make sure OSD is installed
+    $OSD = Get-Module -Name OSD -ListAvailable
+
+    if (-not $OSD) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Installing PowerShell Module OSD"
+        Install-Module -Name OSD -AllowClobber -SkipPublisherCheck
+    }
+    else {
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell Module OSD is already installed"
     }
     #=================================================
     # Add Registry Key for OSDWorkspace
@@ -161,7 +188,7 @@ function Initialize-OSDWorkspace {
     }
     #=================================================
     # Add .gitattributes
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitattributes" -Raw
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitattributes.txt" -Raw
     $Path = "$OSDWorkspacePath\.gitattributes"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
@@ -176,7 +203,7 @@ function Initialize-OSDWorkspace {
     }
     #=================================================
     # Add .gitignore
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\.gitignore" -Raw
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitignore.txt" -Raw
     $Path = "$OSDWorkspacePath\.gitignore"
     if (-not (Test-Path -Path $Path)) {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
