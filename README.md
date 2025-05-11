@@ -61,11 +61,11 @@ winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetask
 ```
 ```powershell
 # Visual Studio Code Insiders
-winget install -e --id Microsoft.VisualStudioCodeInsiders
+winget install -e --id Microsoft.VisualStudioCode.Insiders
 ```
 ```powershell
 # Visual Studio Code Insiders (with recommended options)
-winget install -e --id Microsoft.VisualStudioCodeInsiders --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath"'
+winget install -e --id Microsoft.VisualStudioCode.Insiders --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath"'
 ```
 
 ### Microsoft Windows ADK
