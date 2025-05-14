@@ -40,7 +40,6 @@ function Get-OSDWorkspace {
         This function calls Initialize-OSDWorkspace internally to set up the environment.
     #>
 
-    
     [CmdletBinding()]
     param ()
     #=================================================
@@ -52,8 +51,6 @@ function Get-OSDWorkspace {
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
     $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
-
-    Initialize-OSDWorkspace
     #=================================================
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Team'
     Write-Host -ForegroundColor DarkGray "David Segura $($OSDWorkspace.links.david)"
@@ -80,19 +77,21 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on Discord'
     Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.discord)
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Versions'
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Components'
+    Write-Host -ForegroundColor DarkGray "dism      $((Get-Command dism -ErrorAction Ignore).version.ToString())"
+    if (Get-Command git.exe -ErrorAction Ignore) {
+    Write-Host -ForegroundColor DarkGray "git       $((Get-Command git.exe -ErrorAction Ignore).version.ToString())"
+    }
+    Write-Host -ForegroundColor DarkGray "pwsh      $((Get-Command pwsh -ErrorAction Ignore).version.ToString())"
+    Write-Host -ForegroundColor DarkGray "Module    $ModuleVersion"
     $RegKey = 'HKCU:\Software\OSDWorkspace'
-    $RegName = 'copilot-instructions.md'
-    Write-Host -ForegroundColor DarkGray "Copilot       $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    Write-Host -ForegroundColor DarkGray "dism.exe      $((Get-Command dism -ErrorAction Ignore).version.ToString())"
-    Write-Host -ForegroundColor DarkGray "git.exe       $((Get-Command git.exe -ErrorAction Ignore).version.ToString())"
-    $RegName = '.gitignore'
-    Write-Host -ForegroundColor DarkGray "Gitignore     $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    $RegName = 'Update-OSDWorkspaceHelp'
-    Write-Host -ForegroundColor DarkGray "Help          $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    $RegName = 'Initialize-OSDWorkspace'
-    Write-Host -ForegroundColor DarkGray "Initialize    $((Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName)"
-    Write-Host -ForegroundColor DarkGray "Module        $ModuleVersion"
+    $RegName = 'Content'
+    $RegValue = (Get-ItemProperty $RegKey -Name $RegName -ErrorAction Ignore).$RegName
+
+    Write-Host -ForegroundColor DarkGray "Content   $RegValue"
+    if ($ModuleVersion -ne $RegValue) {
+        Write-Host -ForegroundColor DarkCyan 'Install-OSDWorkspace should be run'
+    }
     #=================================================
     # Read the value from the registry
     # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName

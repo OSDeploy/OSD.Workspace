@@ -12,7 +12,7 @@
 RootModule = 'OSD.Workspace.psm1'
 
 # Version number of this module.
-ModuleVersion = '25.5.8.2'
+ModuleVersion = '25.5.13.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -73,11 +73,11 @@ FunctionsToExport = 'Add-OSDWorkspaceSubmodule',
                 'Build-OSDWorkspaceWinPE',
                 'Get-OSDWorkspace',
                 'Import-OSDWorkspaceWinOS',
+                'Install-OSDWorkspace',
                 'New-OSDWorkspaceUSB',
                 'New-OSDWorkspaceVM',
                 'Remove-OSDWorkspaceSubmodule',
-                'Update-OSDWorkspaceHelp',
-                'Update-OSDWorkspaceSubmodule',,
+                'Update-OSDWorkspaceSubmodule',
                 'Update-OSDWorkspaceISO',
                 'Update-OSDWorkspaceUSB'
 

@@ -19,83 +19,10 @@ function Initialize-OSDWorkspace {
     #=================================================
     $Error.Clear()
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Start"
-    $ModuleName = $($MyInvocation.MyCommand.Module.Name)
-    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleName: $ModuleName"
-    $ModuleBase = $($MyInvocation.MyCommand.Module.ModuleBase)
-    Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleBase: $ModuleBase"
     $ModuleVersion = $($MyInvocation.MyCommand.Module.Version)
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] ModuleVersion: $ModuleVersion"
     #=================================================
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    #=================================================
-    # Make sure we are running in a Windows Client OS
-    $osInfo = Get-CimInstance Win32_OperatingSystem
-    if ($osInfo.ProductType -eq 1) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS"
-    }
-    else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is not running on a Windows Client OS"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
-        break
-    }
-    #=================================================
-    # Make sure we are running in a Windows Client OS with BuildNumber 26100 or higher
-    $osInfo = Get-CimInstance Win32_OperatingSystem
-    if ($osInfo.BuildNumber -ge 26100) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS with BuildNumber $($osInfo.BuildNumber)"
-    }
-    else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires a Windows Client OS with BuildNumber 26100 or higher"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
-        break
-    }
-    #=================================================
-    # VS Code
-    if (Get-Command 'code' -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is installed"
-    }
-    elseif (Get-Command 'code-insiders' -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code Insiders is installed"
-    }
-    else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft VS Code is not installed"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install VS Code using the following command (saved to clipboard):"
-        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --scope user --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
-        break
-    }
-    #=================================================
-    # Git for Windows - Reload environment
-    if (-not (Get-Command 'git' -ErrorAction SilentlyContinue)) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Updating environment variables"
-        $RegPath = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'HKCU:\Environment'
-        $RegPath | ForEach-Object {   
-            $k = Get-Item $_
-            $k.GetValueNames() | ForEach-Object {
-                $name = $_
-                $value = $k.GetValue($_)
-                Set-Item -Path Env:\$name -Value $value
-            }
-        }
-    }
-    #=================================================
-    # Git for Windows
-    if (Get-Command 'git' -ErrorAction SilentlyContinue) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is installed"
-    }
-    else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
-        $InstallMessage = 'winget install -e --id Git.Git --scope user'
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
-        break
-    }
     #=================================================
     # Make sure we can get the path from the Global Variable
     $OSDWorkspacePath = $OSDWorkspace.path
@@ -108,51 +35,10 @@ function Initialize-OSDWorkspace {
         break
     }
     #=================================================
-    # Test if OSDWorkspace exists without Git
-    if ((Test-Path -Path $OSDWorkspacePath) -and (-not (Test-Path -Path "$OSDWorkspacePath\.git"))) {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace exists but is not git initialized"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Remove $OSDWorkspacePath to continue"
-        break
-    }
-    #=================================================
-    # Create OSDWorkspace if it does not exist
-    if (Test-Path -Path $OSDWorkspacePath) {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace exists at $OSDWorkspacePath"
-    }
-    else {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace does not exist at $OSDWorkspacePath"
-        if (-not $IsAdmin ) {
-            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace first run requires Administrator rights (elevated)"
-            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-            Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Restart in PowerShell with Administrator rights (elevated)"
-            Break
-        }
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath"
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] git init $OSDWorkspacePath"
-        $null = git init "$OSDWorkspacePath"
-    }
-    #=================================================
-    # Make sure platyPS is installed
-    $platyPS = Get-Module -Name platyPS -ListAvailable
-
-    if (-not $platyPS) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Installing PowerShell Module platyPS"
-        Install-Module -Name platyPS -AllowClobber -SkipPublisherCheck
-    }
-    else {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell Module platyPS is already installed"
-    }
-    #=================================================
-    # Make sure OSD is installed
-    $OSD = Get-Module -Name OSD -ListAvailable
-
-    if (-not $OSD) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Installing PowerShell Module OSD"
-        Install-Module -Name OSD -AllowClobber -SkipPublisherCheck
-    }
-    else {
-        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell Module OSD is already installed"
+    # Does OSDWorkspace exist?
+    if (-not (Test-Path $(Get-OSDWorkspacePath))) {
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace does not exist"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Run Install-OSDWorkspace to resolve this issue"
     }
     #=================================================
     # Add Registry Key for OSDWorkspace
@@ -162,106 +48,8 @@ function Initialize-OSDWorkspace {
 
     # Test if RegKey exists
     if (-not (Test-Path $RegKey -ErrorAction SilentlyContinue)) {
-        try {New-Item 'HKCU:\Software' -Name 'OSDWorkspace' -Force | Out-Null}
-        catch {}
-    }
-
-    # Set the value in the registry
-    if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-        try {New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null}
-        catch {}
-    }
-
-    # Read the value from the registry
-    # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
-    #=================================================
-    # Add .github
-    if (-not (Test-Path "$OSDWorkspacePath\.github")) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
-        New-Item -Path "$OSDWorkspacePath\.github" -ItemType Directory -Force | Out-Null
-    }
-    #=================================================
-    # Add .vscode
-    if (-not (Test-Path "$OSDWorkspacePath\.vscode")) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $OSDWorkspacePath\.github"
-        New-Item -Path "$OSDWorkspacePath\.vscode" -ItemType Directory -Force | Out-Null
-    }
-    #=================================================
-    # Add .gitattributes
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitattributes.txt" -Raw
-    $Path = "$OSDWorkspacePath\.gitattributes"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = '.gitattributes'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
-    }
-    #=================================================
-    # Add .gitignore
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitignore.txt" -Raw
-    $Path = "$OSDWorkspacePath\.gitignore"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = '.gitignore'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
-    }
-    #=================================================
-    # Add copilot-instructions.md
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\copilot-instructions.md" -Raw
-    $Path = "$OSDWorkspacePath\.github\copilot-instructions.md"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = 'copilot-instructions.md'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
-    }
-    #=================================================
-    # Add tasks.json
-    <#
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
-    $Path = "$OSDWorkspacePath\.vscode\tasks.json"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = 'tasks.json'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
-    }
-    #>
-    #=================================================
-    # Add OSD.code-workspace
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\OSD.code-workspace" -Raw
-    $Path = "$OSDWorkspacePath\OSD.code-workspace"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = 'OSD.code-workspace'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is not configured properly"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Run Install-OSDWorkspace to resolve this issue"
     }
     #=================================================
     # Update Default Library
@@ -282,52 +70,5 @@ function Initialize-OSDWorkspace {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-mediascript"
         New-Item -Path "$LibraryDefaultPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
     }
-    #=================================================
-    # Make sure the OSDWorkspace machine has Nuget installed
-    if ($(Get-PackageProvider).Name -notcontains "NuGet") {
-        Install-PackageProvider -Name NuGet -Force
-    }
-    #=================================================
-    # Is PackageManagement installed?
-    $InstalledModule = Get-Module -Name PackageManagement -ListAvailable | Where-Object { $_.Version -ge '1.4.8.1' }
-    if (-not ($InstalledModule)) {
-        Install-Module -Name PackageManagement -Force -Scope AllUsers -AllowClobber -SkipPublisherCheck
-    }
-    #=================================================
-    # Is PowerShellGet installed?
-    $InstalledModule = Get-Module -Name PowerShellGet -ListAvailable | Where-Object { $_.Version -ge '2.2.5'}
-    if (-not ($InstalledModule)) {
-        Install-Module -Name PowerShellGet -Force -Scope AllUsers -AllowClobber -SkipPublisherCheck
-    }
-    #=================================================
-    # CachePowerShellModules
-    <#
-        $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
-        if (-not (Test-Path -Path $CachePowerShellModules)) {
-            New-Item -Path $CachePowerShellModules -ItemType Directory -Force | Out-Null
-            Save-Module -Name PackageManagement -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
-            Save-Module -Name PowerShellGet -Path $CachePowerShellModules -Repository PSGallery -Force -ErrorAction SilentlyContinue
-        }
-    #>
-    #=================================================
-    # CachePSRepository
-    <#
-        $CachePSRepository = $OSDWorkspace.paths.psrepository
-        if (-not (Test-Path -Path $CachePSRepository)) {
-            New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
-
-            if (-not (Get-PSRepository -Name OSDWorkspace -ErrorAction Ignore)) {
-                Register-PSRepository -Name OSDWorkspace -SourceLocation $CachePSRepository -PublishLocation $CachePSRepository -InstallationPolicy Trusted
-                Set-PSRepository -Name OSDWorkspace -InstallationPolicy Trusted
-            }
-            $ModuleBase = Get-Module -Name PackageManagement -ListAvailable | Where-Object { $_.Version -ge '1.4.8.1'} | Select-Object -First 1 -ExpandProperty ModuleBase
-            Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
-
-            $ModuleBase = Get-Module -Name PowerShellGet -ListAvailable | Where-Object { $_.Version -ge '2.2.5'} | Select-Object -First 1 -ExpandProperty ModuleBase
-            Publish-Module -Path $ModuleBase -Repository OSDWorkspace -NuGetApiKey x -Force -Verbose
-
-            Unregister-PSRepository -Name OSDWorkspace -ErrorAction SilentlyContinue
-        }
-    #>
     #=================================================
 }

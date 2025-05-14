@@ -61,7 +61,7 @@ if (-not ($InstalledModule)) {
 
 [PowerShell Installation Guide](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5)
 
-OSD.Workspace was developed for use with PowerShell 7.5. Other versions of PowerShell are untested and unsupported.
+OSD.Workspace was developed for use with PowerShell 7.5. Other versions of PowerShell are untested and unsupported. Since PowerShell 7.5 is required, the OSD.Workspace module will not even load on PowerShell 5.1.
 
 ```powershell
 # Install PowerShell 7.5
@@ -69,6 +69,26 @@ winget install -e --id Microsoft.PowerShell --override '/Passive ADD_EXPLORER_CO
 ```
 
 Additionally since most DISM functions require Admin Rights to run properly, you will need to run PowerShell as an Administrator for most OSD.Workspace functions.
+
+### Install OSD.Workspace PowerShell Module
+
+In PowerShell 7.5, install the OSD.Workspace PowerShell Module from the PowerShell Gallery.
+
+```powershell
+Install-Module -Name OSD.Workspace -SkipPublisherCheck
+``` 
+
+Once the module is installed, you can import it into your session using the following command.
+
+```powershell
+Import-Module OSD.Workspace
+```
+
+Additionally, you can use the following OSD.Workspace function to complete the setup of OSDWorkspace, although you will need to sort out the installation of the Windows ADK.
+
+```powershell
+Install-OSDWorkspace
+```
 
 ### Git for Windows
 
@@ -111,7 +131,6 @@ winget install -e --id Microsoft.VisualStudioCode.Insiders --override '/SILENT /
 In PowerShell 7.5, install the following modules from the PowerShell Gallery.
 
 ```powershell
-Install-Module -Name OSD.Workspace -SkipPublisherCheck
 Install-Module -Name platyPS -SkipPublisherCheck
 Install-Module -Name OSD -SkipPublisherCheck
 Install-Module -Name OSDCloud -SkipPublisherCheck
