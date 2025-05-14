@@ -167,29 +167,9 @@
         }
       },
       {
-        "label": "docs: Update PowerShell Help for Dism (requires platyPS)",
-        "type": "shell",
-        "command": "Update-Help -Module 'Dism' -Force; New-MarkdownHelp -Module 'Dism' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\Dism' -Force",
-        "problemMatcher": [],
-        "presentation": {
-          "reveal": "never",
-          "panel": "new"
-        }
-      },
-      {
-        "label": "docs: Update PowerShell Help for OSD (requires platyPS)",
+        "label": "docs: Add PowerShell Help for OSD (requires platyPS)",
         "type": "shell",
         "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
-        "problemMatcher": [],
-        "presentation": {
-          "reveal": "never",
-          "panel": "new"
-        }
-      },
-      {
-        "label": "docs: Update PowerShell Help for OSD.Workspace (requires platyPS)",
-        "type": "shell",
-        "command": "New-MarkdownHelp -Module 'OSD.Workspace' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD.Workspace' -Force",
         "problemMatcher": [],
         "presentation": {
           "reveal": "never",
