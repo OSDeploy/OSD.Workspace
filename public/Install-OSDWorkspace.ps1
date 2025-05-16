@@ -124,7 +124,7 @@ function Install-OSDWorkspace {
     else {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows using the following command (saved to clipboard):"
         $InstallMessage = 'winget install -e --id Git.Git'
         $InstallMessage | Set-Clipboard
         Write-Host -ForegroundColor DarkGray $InstallMessage
