@@ -97,7 +97,7 @@ function Install-OSDWorkspace {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft Visual Studio Code is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Microsoft Visual Studio Code using the following command (saved to clipboard):"
-        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --scope user --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
+        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
         $InstallMessage | Set-Clipboard
         Write-Host -ForegroundColor DarkGray $InstallMessage
         return
@@ -125,7 +125,7 @@ function Install-OSDWorkspace {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows:"
-        $InstallMessage = 'winget install -e --id Git.Git --scope user'
+        $InstallMessage = 'winget install -e --id Git.Git'
         $InstallMessage | Set-Clipboard
         Write-Host -ForegroundColor DarkGray $InstallMessage
         return
