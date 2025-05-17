@@ -96,10 +96,10 @@ function Install-OSDWorkspace {
     else {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft Visual Studio Code is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Microsoft Visual Studio Code using the following command (saved to clipboard):"
-        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] See the below Wiki for instructions on how to install Visual Studio Code (Url copied to clipboard):"
+        $WikiUrl = "https://github.com/OSDeploy/OSD.Workspace/wiki/Microsoft-Visual-Studio-Code"
+        $WikiUrl | Set-Clipboard
+        Write-Host -ForegroundColor DarkGray $WikiUrl
         return
     }
     #=================================================
@@ -124,10 +124,10 @@ function Install-OSDWorkspace {
     else {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows using the following command (saved to clipboard):"
-        $InstallMessage = 'winget install -e --id Git.Git'
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] See the below Wiki for instructions on how to install Git for Windows (Url copied to clipboard):"
+        $WikiUrl = "https://github.com/OSDeploy/OSD.Workspace/wiki/Git-for-Windows"
+        $WikiUrl | Set-Clipboard
+        Write-Host -ForegroundColor DarkGray $WikiUrl
         return
     }
     #=================================================
