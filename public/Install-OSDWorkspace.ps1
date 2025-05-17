@@ -68,22 +68,28 @@ function Install-OSDWorkspace {
     #=================================================
     # Make sure the OSDWorkspace machine has Nuget installed
     if ($(Get-PackageProvider).Name -notcontains "NuGet") {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Installing NuGet PackageProvider"
-        Install-PackageProvider -Name NuGet -Force
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires the NuGet package provider to be installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Refer to the OSD.Workspace Wiki for instructions on how to install it"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://github.com/OSDeploy/OSD.Workspace/wiki"
+        return
     }
     #=================================================
     # Is PackageManagement installed?
     $InstalledModule = Get-Module -Name PackageManagement -ListAvailable | Where-Object { $_.Version -ge '1.4.8.1' }
     if (-not ($InstalledModule)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Updating PackageManagement to 1.4.8.1"
-        Install-Module -Name PackageManagement -Force -Scope AllUsers -AllowClobber -SkipPublisherCheck
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires PackageManagement 1.4.8.1 or greater to be installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Refer to the OSD.Workspace Wiki for instructions on how to install it"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://github.com/OSDeploy/OSD.Workspace/wiki"
+        return
     }
     #=================================================
     # Is PowerShellGet installed?
     $InstalledModule = Get-Module -Name PowerShellGet -ListAvailable | Where-Object { $_.Version -ge '2.2.5'}
     if (-not ($InstalledModule)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Updating PowerShellGet to 2.2.5"
-        Install-Module -Name PowerShellGet -Force -Scope AllUsers -AllowClobber -SkipPublisherCheck
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires PowerShellGet 2.2.5 or greater to be installed"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Refer to the OSD.Workspace Wiki for instructions on how to install it"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://github.com/OSDeploy/OSD.Workspace/wiki"
+        return
     }
     #=================================================
     # VS Code
@@ -94,12 +100,9 @@ function Install-OSDWorkspace {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft Visual Studio Code Insiders is installed"
     }
     else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Microsoft Visual Studio Code is not installed"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Microsoft Visual Studio Code using the following command (saved to clipboard):"
-        $InstallMessage = "winget install -e --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks=`"!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath`"'"
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires Microsoft Visual Studio Code"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Refer to the OSD.Workspace Wiki for instructions on how to install it"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://github.com/OSDeploy/OSD.Workspace/wiki"
         return
     }
     #=================================================
@@ -118,16 +121,10 @@ function Install-OSDWorkspace {
     }
     #=================================================
     # Git for Windows
-    if (Get-Command 'git.exe' -ErrorAction SilentlyContinue) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is installed"
-    }
-    else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Git for Windows is not installed"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Use WinGet to install Git for Windows using the following command (saved to clipboard):"
-        $InstallMessage = 'winget install -e --id Git.Git'
-        $InstallMessage | Set-Clipboard
-        Write-Host -ForegroundColor DarkGray $InstallMessage
+    if (-not (Get-Command 'git.exe' -ErrorAction SilentlyContinue)) {
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires Git for Windows"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Refer to the OSD.Workspace Wiki for instructions on how to install it"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] https://github.com/OSDeploy/OSD.Workspace/wiki"
         return
     }
     #=================================================
