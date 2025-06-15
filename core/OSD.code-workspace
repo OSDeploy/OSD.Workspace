@@ -103,7 +103,7 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Build: Select an imported WinRE and create a WinPE build",
+        "label": "Build: Select an imported WinRE and build WinPE (en-US)",
         "command": "pwsh",
         "type": "shell",
         "windows": {

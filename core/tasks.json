@@ -1,0 +1,77 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build: Select an imported WinRE and build WinPE (de-DE)",
+      "command": "pwsh",
+      "type": "shell",
+      "windows": {
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Build-OSDWorkspaceWinPE -Languages de-de -SetAllIntl de-de -SetInputLocale de-de'"
+        ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: Select an imported WinRE and build WinPE (en-GB)",
+      "command": "pwsh",
+      "type": "shell",
+      "windows": {
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Build-OSDWorkspaceWinPE -Languages en-gb -SetAllIntl en-gb -SetInputLocale en-GB'"
+        ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: Select an imported WinRE and build WinPE (fr-FR)",
+      "command": "pwsh",
+      "type": "shell",
+      "windows": {
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Build-OSDWorkspaceWinPE -Languages fr-fr -SetAllIntl fr-fr -SetInputLocale fr-fr'"
+        ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
