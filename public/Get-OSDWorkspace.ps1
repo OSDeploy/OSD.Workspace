@@ -92,6 +92,26 @@ function Get-OSDWorkspace {
     if ($ModuleVersion -ne $RegValue) {
         Write-Host -ForegroundColor DarkCyan 'Install-OSDWorkspace should be run'
     }
+    else {
+        #=================================================
+        # Update Default Library
+        $LibraryDefaultPath = $OSDWorkspace.paths.library_default
+        if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\amd64")) {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-driver"
+            New-Item -Path "$LibraryDefaultPath\winpe-driver\amd64" -ItemType Directory -Force | Out-Null
+        }
+        if (-not (Test-Path "$LibraryDefaultPath\winpe-driver\arm64")) {
+            New-Item -Path "$LibraryDefaultPath\winpe-driver\arm64" -ItemType Directory -Force | Out-Null
+        }
+        if (-not (Test-Path "$LibraryDefaultPath\winpe-script")) {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-script"
+            New-Item -Path "$LibraryDefaultPath\winpe-script" -ItemType Directory -Force | Out-Null
+        }
+        if (-not (Test-Path "$LibraryDefaultPath\winpe-mediascript")) {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $LibraryDefaultPath\winpe-mediascript"
+            New-Item -Path "$LibraryDefaultPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
+        }
+    }
     #=================================================
     # Read the value from the registry
     # $GetValue = (Get-ItemProperty $RegKey -Name $RegName).$RegName
