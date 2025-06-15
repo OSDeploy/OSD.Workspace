@@ -221,19 +221,19 @@ function Install-OSDWorkspace {
     # Add .gitattributes
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitattributes.txt" -Raw
     $Path = "$OSDWorkspacePath\.gitattributes"
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $Path"
     Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
     #=================================================
     # Add .gitignore
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\gitignore.txt" -Raw
     $Path = "$OSDWorkspacePath\.gitignore"
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $Path"
     Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
     #=================================================
     # Add or update copilot-instructions.md
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\copilot-instructions.md" -Raw
     $Path = "$OSDWorkspacePath\.github\copilot-instructions.md"
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $Path"
     Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
     #=================================================
     # Update Content in the registry
@@ -243,23 +243,6 @@ function Install-OSDWorkspace {
     #=================================================
     # Add or update Update-OSDWorkspaceHelp.ps1
     Update-OSDWorkspaceHelp -Force
-    #=================================================
-    # Add tasks.json
-    <#
-    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
-    $Path = "$OSDWorkspacePath\.vscode\tasks.json"
-    if (-not (Test-Path -Path $Path)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
-        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
-        
-        # Set the value in the registry
-        $RegName = 'tasks.json'
-        if (-not (Get-ItemProperty $RegKey -Name $RegName -ErrorAction SilentlyContinue)) {
-            try { New-ItemProperty -Path $RegKey -Name $RegName -Value $RegValue -Force | Out-Null }
-            catch {}
-        }
-    }
-    #>
     #=================================================
     # Update Default Library
     $LibraryDefaultPath = $OSDWorkspace.paths.library_default
@@ -280,10 +263,18 @@ function Install-OSDWorkspace {
         New-Item -Path "$LibraryDefaultPath\winpe-mediascript" -ItemType Directory -Force | Out-Null
     }
     #=================================================
+    # Add tasks.json
+    $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\tasks.json" -Raw
+    $Path = "$OSDWorkspacePath\.vscode\tasks.json"
+    if (-not (Test-Path -Path $Path)) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $Path"
+        Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
+    }
+    #=================================================
     # Add OSD.code-workspace
     $Content = Get-Content -Path "$($MyInvocation.MyCommand.Module.ModuleBase)\core\OSD.code-workspace" -Raw
     $Path = "$OSDWorkspacePath\OSD.code-workspace"
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding $Path"
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $Path"
     Set-Content -Path $Path -Value $Content -Encoding UTF8 -Force
     Write-Host -ForegroundColor Cyan "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] In Windows Explorer, open the file C:\OSDWorkspace\OSD.code-workspace"
     #=================================================
