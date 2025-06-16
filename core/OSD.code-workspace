@@ -113,7 +113,7 @@
             "-Verb",
             "RunAs",
             "-ArgumentList",
-            "'-NoExit -Command Build-OSDWorkspaceWinPE'"
+            "'-NoExit -Command Build-OSDWorkspaceWinPE -Languages en-us -SetAllIntl en-us -SetInputLocale en-us'"
           ]
         },
         "group": {
@@ -245,7 +245,7 @@
         }
       },
       {
-        "label": "Windows Sources: Import a Windows 11 Operating System and Recovery Environment",
+        "label": "Windows Sources: Import a Windows 11 OS and WinRE",
         "type": "shell",
         "command": "Start-Process",
         "args": [

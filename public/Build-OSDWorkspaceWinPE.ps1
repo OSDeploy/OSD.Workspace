@@ -81,10 +81,10 @@ function Build-OSDWorkspaceWinPE {
         [System.String]
         $Architecture,
 
-        # Windows ADK Languages to add to the BootImage. Default is en-US.
+        # Windows ADK Languages to add to the BootImage. Default is en-us.
         [ValidateSet (
             '*','ar-sa','bg-bg','cs-cz','da-dk','de-de','el-gr',
-            'en-gb','es-es','es-mx','et-ee','fi-fi',
+            'en-gb','en-us','es-es','es-mx','et-ee','fi-fi',
             'fr-ca','fr-fr','he-il','hr-hr','hu-hu','it-it',
             'ja-jp','ko-kr','lt-lt','lv-lv','nb-no','nl-nl',
             'pl-pl','pt-br','pt-pt','ro-ro','ru-ru','sk-sk',
@@ -92,15 +92,15 @@ function Build-OSDWorkspaceWinPE {
             'uk-ua','zh-cn','zh-tw'
         )]
         [System.String[]]
-        $Languages = 'en-US',
+        $Languages = 'en-us',
 
         # Sets all International settings in WinPE to the specified language. Default is en-US.
         [System.String]
-        $SetAllIntl = 'en-US',
+        $SetAllIntl = 'en-us',
 
         # Sets the default InputLocale in WinPE to the specified Input Locale. Default is en-US.
         [System.String]
-        $SetInputLocale = 'en-US',
+        $SetInputLocale = 'en-us',
 
         # Set the WinPE SetTimeZone. Default is the current SetTimeZone.
         [ValidateScript( {
