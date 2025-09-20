@@ -97,13 +97,13 @@
       "**/*.iso": true,
       "cache/**": true
     },
-    "powershell.cwd": "{{workspaceFolder}}"
+    "powershell.cwd": "c:\\osdworkspace"
   },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Build: Select an imported WinRE and build WinPE (en-US)",
+        "label": "[Build] Create a new WinPE from an imported WinRE (en-US)",
         "command": "pwsh",
         "type": "shell",
         "windows": {
@@ -127,7 +127,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Run: Get-OSDWorkspace",
+        "label": "[PS Command] Run Get-OSDWorkspace",
         "type": "shell",
         "command": "Get-OSDWorkspace",
         "problemMatcher": [],
@@ -137,7 +137,7 @@
         }
       },
       {
-        "label": "Open: GitHub OSD.Workspace (repo, issues, pull requests)",
+        "label": "[github.com] Open GitHub to OSD.Workspace (repo, issues, pull requests)",
         "type": "shell",
         "command": "start 'https://github.com/OSDeploy/OSD.Workspace'",
         "problemMatcher": [],
@@ -147,7 +147,7 @@
         }
       },
       {
-        "label": "Open: GitHub Library Submodules",
+        "label": "[github.com] Find GitHub Library Submodules",
         "type": "shell",
         "command": "start 'https://github.com/search?q=OSDWorkspace+Library&type=repositories'",
         "problemMatcher": [],
@@ -157,7 +157,7 @@
         }
       },
       {
-        "label": "Run: Update the OSD.Workspace PowerShell Module",
+        "label": "[PS Command] Update the OSD.Workspace PowerShell Module",
         "type": "shell",
         "command": "Update-Module -Name OSD.Workspace -Verbose",
         "problemMatcher": [],
@@ -167,7 +167,7 @@
         }
       },
       {
-        "label": "docs: Add PowerShell Help for OSD (requires platyPS)",
+        "label": "[Docs] Add OSD PowerShell Help (requires platyPS)",
         "type": "shell",
         "command": "New-MarkdownHelp -Module 'OSD' -OutputFolder '${workspaceFolder}\\docs\\powershell-help\\OSD' -Force",
         "problemMatcher": [],
@@ -177,7 +177,7 @@
         }
       },
       {
-        "label": "Library Submodules: Add a Library Submodule by URL",
+        "label": "[Library Submodule] Add submodule from a GitHub Repository URL",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -194,7 +194,7 @@
         }
       },
       {
-        "label": "Library Submodules: Add the OSDWorkspace Gallery",
+        "label": "[Library Submodule] Add the OSDWorkspace Gallery (GitHub)",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -211,7 +211,7 @@
         }
       },
       {
-        "label": "Library Submodules: Remove a Library Submodule",
+        "label": "[Library Submodule] Remove an installed submodule",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -228,7 +228,7 @@
         }
       },
       {
-        "label": "Library Submodules: Update a Library Submodule",
+        "label": "[Library Submodule] Update an installed submodule",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -245,7 +245,7 @@
         }
       },
       {
-        "label": "Windows Sources: Import a Windows 11 OS and WinRE",
+        "label": "[Mounted ISO] Import a Windows 11 Operating System",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -262,7 +262,7 @@
         }
       },
       {
-        "label": "WinPE Builds: Create a Hyper-V VM",
+        "label": "[Hyper-V] Create a Virtual Machine",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -279,7 +279,7 @@
         }
       },
       {
-        "label": "WinPE Builds: Rebuild an ISO",
+        "label": "[ISO Media] Rebuild a WinPE ISO",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -296,7 +296,7 @@
         }
       },
       {
-        "label": "WinPE Builds: Create a bootable USB Drive",
+        "label": "[USB Media] Build a bootable USB Drive (32GB+)",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -313,7 +313,7 @@
         }
       },
       {
-        "label": "WinPE Builds: Update a bootable USB Drive",
+        "label": "[USB Media] Update a bootable USB Drive (32GB+)",
         "type": "shell",
         "command": "Start-Process",
         "args": [
@@ -332,3 +332,4 @@
     ]
   }
 }
+

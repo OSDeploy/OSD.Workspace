@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build: Select an imported WinRE and build WinPE (de-DE)",
+      "label": "[Build] Create a new WinPE from an imported WinRE (de-DE)",
       "command": "pwsh",
       "type": "shell",
       "windows": {
@@ -26,7 +26,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Build: Select an imported WinRE and build WinPE (en-GB)",
+      "label": "[Build] Create a new WinPE from an imported WinRE (en-GB)",
       "command": "pwsh",
       "type": "shell",
       "windows": {
@@ -50,7 +50,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Build: Select an imported WinRE and build WinPE (fr-FR)",
+      "label": "[Build] Create a new WinPE from an imported WinRE (fr-FR)",
       "command": "pwsh",
       "type": "shell",
       "windows": {
@@ -75,3 +75,4 @@
     }
   ]
 }
+
