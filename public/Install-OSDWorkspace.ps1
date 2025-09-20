@@ -42,27 +42,27 @@ function Install-OSDWorkspace {
     #=================================================
     $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     #=================================================
-    # Make sure we are running in a Windows Client OS
+    # Make sure we are running on a supported OS (Windows Client or Server)
     $osInfo = Get-CimInstance Win32_OperatingSystem
-    if ($osInfo.ProductType -eq 1) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS"
+    if ($osInfo.ProductType -eq 1 -or $osInfo.ProductType -eq 3) {
+        $osType = if ($osInfo.ProductType -eq 1) { "Windows Client OS" } else { "Windows Server OS" }
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a $osType"
     }
     else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is not running on a Windows Client OS"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is not running on a supported OS"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer or Windows Server 2025"
         return
     }
     #=================================================
-    # Make sure we are running in a Windows Client OS with BuildNumber 26100 or higher
-    $osInfo = Get-CimInstance Win32_OperatingSystem
+    # Make sure we are running on a supported OS with BuildNumber 26100 or higher
     if ($osInfo.BuildNumber -ge 26100) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a Windows Client OS with BuildNumber $($osInfo.BuildNumber)"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is running on a $osType with BuildNumber $($osInfo.BuildNumber)"
     }
     else {
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires a Windows Client OS with BuildNumber 26100 or higher"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace requires BuildNumber 26100 or higher"
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] This configuration is not supported and initialization will not continue"
-        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer"
+        Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OSDWorkspace is only supported on Windows 11 24H2 and newer or Windows Server 2025"
         return
     }
     #=================================================
