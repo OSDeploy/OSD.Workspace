@@ -236,7 +236,7 @@
           "-Verb",
           "RunAs",
           "-ArgumentList",
-          "'-NoExit -Command Update-OSDWorkspaceSubmodule'"
+          "'-NoExit -Command Update-OSDWorkspaceSubmodule -Force'"
         ],
         "problemMatcher": [],
         "presentation": {
