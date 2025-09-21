@@ -56,20 +56,14 @@ function Get-OSDWorkspace {
     Write-Host -ForegroundColor DarkGray "David Segura $($OSDWorkspace.links.david)"
     Write-Host -ForegroundColor DarkGray "Michael Escamilla $($OSDWorkspace.links.michael)"
     Write-Host
-    Write-Host -ForegroundColor DarkCyan 'NWSCUG: OSD 2025 Preview'
-    Write-Host -ForegroundColor DarkGray "March 28 2025 $($OSDWorkspace.links.nwscug)"
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'MMSMOA: OSDWorkspace and OSDCloud'
-    Write-Host -ForegroundColor DarkGray "May 5-8 2025 $($OSDWorkspace.links.mmsmoa)"
-    Write-Host
-    Write-Host -ForegroundColor DarkCyan 'WPNinjasUK: OSDWorkspace and OSDCloud'
-    Write-Host -ForegroundColor DarkGray "June 16-17 2025 $($OSDWorkspace.links.wpninjasuk)"
-    Write-Host
     Write-Host -ForegroundColor DarkCyan 'WPNinjas: OSDWorkspace and OSDCloud'
     Write-Host -ForegroundColor DarkGray "September 22-25, 2025 | $($OSDWorkspace.links.wpninjasch)"
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on GitHub'
     Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.github)
+    Write-Host
+    Write-Host -ForegroundColor DarkCyan 'OSDWorkspace Wiki'
+    Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.wiki)
     Write-Host
     Write-Host -ForegroundColor DarkCyan 'OSDWorkspace on PowerShell Gallery'
     Write-Host -ForegroundColor DarkGray $($OSDWorkspace.links.powershellgallery)
