@@ -45,6 +45,12 @@ function Build-OSDWorkspaceWinPE {
         
         Creates a new WinPE build with detailed verbose output showing each step of the process.
 
+    .EXAMPLE
+        Build-OSDWorkspaceWinPE -Name 'MultiLangBootMedia'
+        
+        Creates a new WinPE build and prompts for interactive language selection. User can choose 
+        multiple languages from the available Windows ADK language packs through a selection dialog.
+
     .OUTPUTS
         None. This function does not generate any output objects.
 
