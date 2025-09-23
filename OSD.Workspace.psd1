@@ -77,6 +77,7 @@ FunctionsToExport = 'Add-OSDWorkspaceSubmodule',
                 'New-OSDWorkspaceUSB',
                 'New-OSDWorkspaceVM',
                 'Remove-OSDWorkspaceSubmodule',
+                'Remove-OSDWorkspaceWinPEBuild',
                 'Update-OSDWorkspaceSubmodule',
                 'Update-OSDWorkspaceISO',
                 'Update-OSDWorkspaceUSB'
