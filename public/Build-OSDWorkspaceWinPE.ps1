@@ -405,6 +405,15 @@ function Build-OSDWorkspaceWinPE {
     }
     #endregion
     #=================================================
+    #region Select-OSDWSWinPELanguage
+    if (-not $MyBuildProfile) {
+        $SelectedLanguages = Select-OSDWSWinPELanguage
+        if ($SelectedLanguages) {
+            $Languages = $SelectedLanguages
+        }
+    }
+    #endregion
+    #=================================================
     #region MyBuildProfile
     if ($MyBuildProfile) {
         $global:BuildProfile = $null
