@@ -337,6 +337,34 @@ function Build-OSDWorkspaceWinPE {
 
     $WindowsAdkPaths = Get-WindowsAdkPaths -Architecture $Architecture -AdkRoot $WindowsAdkRootPath -WarningAction SilentlyContinue
 
+    <#
+    [ADMIN]:PS C:\Users\david> Get-WindowsAdkPaths -Architecture amd64
+
+    AdkRoot             : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit
+    PathBCDBoot         : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\BCDBoot
+    PathDeploymentTools : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64
+    PathDISM            : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM
+    PathOscdimg         : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg
+    PathUsmt            : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\User State Migration Tool\amd64
+    PathWinPE           : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64
+    PathWinPEMedia      : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\Media
+    PathWinSetup        : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Setup\amd64
+    WinPEOCs            : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs
+    WinPERoot           : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment
+    WimSourcePath       : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\en-us\winpe.wim
+    bcdbootexe          : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\BCDBoot\bcdboot.exe
+    bcdeditexe          : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\BCDBoot\bcdedit.exe
+    bootsectexe         : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\BCDBoot\bootsect.exe
+    dismexe             : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM\dism.exe
+    efisysbin           : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\efisys.bin
+    efisysnopromptbin   : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\efisys_noprompt.bin
+    etfsbootcom         : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\etfsboot.com
+    imagexexe           : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM\imagex.exe
+    oa3toolexe          : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Licensing\OA30\oa3tool.exe
+    oscdimgexe          : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe
+    pkgmgrexe           : C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM\pkgmgr.exe
+    #>
+
     if (-not $WindowsAdkPaths) {
         Write-Warning "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Something is wrong you should not be here"
         return
@@ -450,8 +478,9 @@ function Build-OSDWorkspaceWinPE {
     $global:BuildMedia = [ordered]@{
         AdkInstallPath          = $WindowsAdkInstallPath
         AdkInstallVersion       = $WindowsAdkInstallVersion
-        AdkSkipOcPackages         = $AdkSkipOcPackages
+        AdkPaths                = $WindowsAdkPaths
         AdkRootPath             = $WindowsAdkRootPath
+        AdkSkipOcPackages       = $AdkSkipOcPackages
         Architecture            = [System.String]$Architecture
         BuildProfile            = $MyBuildProfilePath
         ContentStartnet         = [System.String]$ContentStartnet
@@ -822,8 +851,6 @@ function Build-OSDWorkspaceWinPE {
     Step-BuildMediaUpdateUSB
     #=================================================
     #region Complete
-    # Add the final ADKPaths information to the bootmedia object
-    $global:BuildMedia.AdkPaths = $WindowsAdkPaths
 
     # Add the final WinPE information to the bootmedia object
     $global:BuildMedia.PEInfo = $GetWindowsImage
