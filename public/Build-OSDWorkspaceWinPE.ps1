@@ -380,6 +380,15 @@ function Build-OSDWorkspaceWinPE {
     $MyBuildProfile = Select-OSDWSWinPEBuildProfile
     #endregion
     #=================================================
+    #region Select-OSDWSWinPELanguage
+    if (-not $MyBuildProfile) {
+        $SelectedLanguages = Select-OSDWSWinPELanguage
+        if ($SelectedLanguages) {
+            $Languages = $SelectedLanguages
+        }
+    }
+    #endregion
+    #=================================================
     #region Select-OSDWSWinPEBuildDriver
     $WinPEDriver = $null
     if (-not $MyBuildProfile) {
@@ -407,15 +416,6 @@ function Build-OSDWorkspaceWinPE {
         }
         if ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' }) {
             $WinPEMediaScript = ($OSDWorkspaceWinPEScript | Where-Object { $_.Type -eq 'winpe-mediascript' } | Select-Object -ExpandProperty FullName)
-        }
-    }
-    #endregion
-    #=================================================
-    #region Select-OSDWSWinPELanguage
-    if (-not $MyBuildProfile) {
-        $SelectedLanguages = Select-OSDWSWinPELanguage
-        if ($SelectedLanguages) {
-            $Languages = $SelectedLanguages
         }
     }
     #endregion
