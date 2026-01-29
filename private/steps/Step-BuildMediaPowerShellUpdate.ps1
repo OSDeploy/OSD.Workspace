@@ -16,62 +16,41 @@ function Step-BuildMediaPowerShellUpdate {
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WSCachePath: $WSCachePath"
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WimSourceType: $WimSourceType"
     #=================================================
-$InfEnvironment = @'
-[Version]
-Signature   = "$WINDOWS NT$"
-Class       = System
-ClassGuid   = {4D36E97d-E325-11CE-BFC1-08002BE10318}
-Provider    = OSDeploy
-DriverVer   = 03/08/2021,2021.03.08.0
-
-[DefaultInstall] 
-AddReg      = AddReg 
-
-[AddReg]
-;rootkey,[subkey],[value],[flags],[data]
-;0x00000    REG_SZ
-;0x00001    REG_BINARY
-;0x10000    REG_MULTI_SZ
-;0x20000    REG_EXPAND_SZ
-;0x10001    REG_DWORD
-;0x20001    REG_NONE
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",APPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Roaming"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEDRIVE,0x00000,"X:"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEPATH,0x00000,"\Windows\System32\Config\SystemProfile"
-HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Local"
-'@
-    #=================================================
-    # Create these folders in the System Profile
-    <#
-    Desktop
-    Documents
-    Downloads
-    Favorites
-    Links
-    Music
-    Pictures
-    Saved Games
-    Videos
-    #>
-    #=================================================
     # Copy User Folders to the System Profile
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Copy User Folders to the System Profile"
     $null = robocopy.exe "$MountPath\Users\Default" "$MountPath\Windows\System32\Config\SystemProfile" *.* /e /b /ndl /nfl /np /ts /r:0 /w:0 /xj /xf NTUSER.*
     #=================================================
-    # Get the Paths for this function
-    $WinPEPSRepository = "$MountPath\Windows\Temp\psrepository"
-    $CachePSRepository = $OSDWorkspace.paths.psrepository
-    $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
-    $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
-    #=================================================
-    # Create WinPE PSRepository folder
-    if (-not (Test-Path -Path $WinPEPSRepository)) {
-        New-Item -Path $WinPEPSRepository -ItemType Directory -Force | Out-Null
+    # Create Required Folders
+    $requiredFolders = @(
+        "$MountPath\Program Files\WindowsPowerShell\Modules",
+        "$MountPath\Program Files\WindowsPowerShell\Scripts",
+        "$MountPath\Users\Default\AppData\Local",
+        "$MountPath\Users\Default\AppData\Roaming",
+        "$MountPath\Users\Default\Desktop",
+        "$MountPath\Users\Default\Documents\WindowsPowerShell",
+        "$MountPath\Windows\System32\WindowsPowerShell\v1.0\Modules",
+        "$MountPath\Windows\System32\WindowsPowerShell\v1.0\Scripts"
+    )
+    foreach ($item in $requiredFolders) {
+        if (-not (Test-Path -Path $item)) {
+            Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $item"
+            New-Item -Path $item -ItemType Directory -Force | Out-Null
+        }
     }
     #=================================================
-    # Create CachePSRepository folder
+    # WinPE PSRepository
+    $CachePSRepository = $OSDWorkspace.paths.psrepository
     if (-not (Test-Path -Path $CachePSRepository)) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $CachePSRepository"
         New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
     }
+    $WinPEPSRepository = "$MountPath\Windows\Temp\psrepository"
+    if (-not (Test-Path -Path $WinPEPSRepository)) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $WinPEPSRepository"
+        New-Item -Path $WinPEPSRepository -ItemType Directory -Force | Out-Null
+    }
+    $MountedPSModulesPath = "$MountPath\Program Files\WindowsPowerShell\Modules"
+    # $CachePowerShellModules = $OSDWorkspace.paths.powershell_modules
     #=================================================
     # Is PackageManagement in the Cache?
     $PackageName = 'packagemanagement.1.4.8.1.nupkg'
@@ -169,15 +148,65 @@ HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x0
     & reg UNLOAD HKLM\Mount
     Start-Sleep -Seconds 3
     #=================================================
-    # Add Environment Variable INF
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Add Environment Variables"
+    # Set WinPE Environment Variables
+$InfEnvironment = @'
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System
+ClassGuid   = {4D36E97d-E325-11CE-BFC1-08002BE10318}
+Provider    = OSDeploy
+DriverVer   = 01/29/2026,2026.01.29.0
+
+[DefaultInstall] 
+AddReg      = AddReg 
+
+[AddReg]
+;rootkey,[subkey],[value],[flags],[data]
+;0x00000    REG_SZ
+;0x00001    REG_BINARY
+;0x10000    REG_MULTI_SZ
+;0x20000    REG_EXPAND_SZ
+;0x10001    REG_DWORD
+;0x20001    REG_NONE
+HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",APPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Roaming"
+HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEDRIVE,0x00000,"X:"
+HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",HOMEPATH,0x00000,"\Windows\System32\Config\SystemProfile"
+HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",LOCALAPPDATA,0x00000,"X:\Windows\System32\Config\SystemProfile\AppData\Local"
+HKLM,"SYSTEM\ControlSet001\Control\Session Manager\Environment",USERDATA,0x00000,"X:\Windows\System32\Config\SystemProfile"
+'@
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE Environment Variables"
     $InfFile = "$env:Temp\Set-WinPEEnvironment.inf"
     New-Item -Path $InfFile -Force | Out-Null
     Set-Content -Path $InfFile -Value $InfEnvironment -Encoding Unicode -Force
     $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
+    #=================================================
+    # Set WinPE PowerShell Execution Policy
+$InfExecutionPolicy = @'
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System
+ClassGuid   = {4D36E97d-E325-11CE-BFC1-08002BE10318}
+Provider    = OSDeploy
+DriverVer   = 01/29/2026,2026.01.29.0
 
-    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE ExecutionPolicy to Bypass"
-    Set-WindowsImageExecutionPolicy -Path $MountPath -ExecutionPolicy Bypass | Out-Null
+[DefaultInstall]
+AddReg      = AddReg
+
+[AddReg]
+;rootkey,[subkey],[value],[flags],[data]
+;0x00000    REG_SZ
+;0x00001    REG_BINARY
+;0x10000    REG_MULTI_SZ
+;0x20000    REG_EXPAND_SZ
+;0x10001    REG_DWORD
+;0x20001    REG_NONE
+HKLM,SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell,ExecutionPolicy,0x00000,"Bypass"
+'@
+    Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] PowerShell: Set WinPE PowerShell Execution Policy"
+    $InfFile = "$env:Temp\Set-WinPEExecutionPolicy.inf"
+    New-Item -Path $InfFile -Force | Out-Null
+    Set-Content -Path $InfFile -Value $InfExecutionPolicy -Encoding Unicode -Force
+    $null = Add-WindowsDriver -Path $MountPath -Driver $InfFile -ForceUnsigned
     #=================================================
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] End"
     #=================================================

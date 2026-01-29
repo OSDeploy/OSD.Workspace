@@ -12,7 +12,7 @@
 RootModule = 'OSD.Workspace.psm1'
 
 # Version number of this module.
-ModuleVersion = '25.9.23.1'
+ModuleVersion = '26.1.29.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -27,7 +27,7 @@ Author = 'David Segura, Michael Escamilla'
 CompanyName = 'osdeploy.com'
 
 # Copyright statement for this module
-Copyright = '(c) 2025 David Segura @ osdeploy.com. All rights reserved.'
+Copyright = '(c) 2026 David Segura @ osdeploy.com. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'OSD.Workspace PowerShell Module for OSDWorkspace'
