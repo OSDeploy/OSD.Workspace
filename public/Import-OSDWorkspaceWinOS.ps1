@@ -240,6 +240,7 @@ function Import-OSDWorkspaceWinOS {
                 'npmproxy*.*' # 2Pint OSD Toolkit
                 'nslookup.*'
                 'osk*.*' # On Screen Keyboard
+                'PCPKsp.dll*' # Microsoft Platform Key Storage Provider for Platform Crypto Provider
                 'pdh.dll*' # RDP
                 'PeerDist*.*' # 2Pint OSD Toolkit
                 'perfmon*.*'
