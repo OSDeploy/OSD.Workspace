@@ -12,7 +12,7 @@
 RootModule = 'OSD.Workspace.psm1'
 
 # Version number of this module.
-ModuleVersion = '26.2.3.1'
+ModuleVersion = '26.2.12.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -24,13 +24,13 @@ GUID = '083be276-ac05-4da6-b72b-15a53e68c0c4'
 Author = 'David Segura, Michael Escamilla'
 
 # Company or vendor of this module
-CompanyName = 'osdeploy.com'
+CompanyName = 'Recast Software'
 
 # Copyright statement for this module
-Copyright = '(c) 2025 David Segura @ osdeploy.com. All rights reserved.'
+Copyright = '(c) 2026 David Segura @ osdeploy.com. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'OSD.Workspace PowerShell Module for OSDWorkspace'
+Description = 'OSD.Workspace PowerShell Module for OSDWorkspace in VS Code'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '7.4'
@@ -105,7 +105,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'OSDeploy','OSD','OSDWorkspace'
+        Tags = 'OSDeploy','OSD','OSDCloud','OSDWorkspace','Recast'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/OSDeploy/OSD.Workspace/blob/main/LICENSE'
