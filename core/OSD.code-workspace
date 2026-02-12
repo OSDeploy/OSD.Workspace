@@ -127,6 +127,23 @@
         "problemMatcher": []
       },
       {
+        "label": "[Build] Remove WinPE build",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "pwsh",
+          "-Verb",
+          "RunAs",
+          "-ArgumentList",
+          "'-NoExit -Command Remove-OSDWorkspaceWinPEBuild -Force'"
+        ],
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "never",
+          "panel": "new"
+        }
+      },
+      {
         "label": "[PS Command] Run Get-OSDWorkspace",
         "type": "shell",
         "command": "Get-OSDWorkspace",
