@@ -65,8 +65,9 @@
             "arm64": "https://aka.ms/downloadazcopy-v10-windows-arm64"
         },
         "sevenzip": {
-            "extra": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-extra.7z",
-            "standalone": "https://github.com/ip7z/7zip/releases/download/24.09/7zr.exe"
+            "extra": "https://github.com/ip7z/7zip/releases/download/26.00/7z2600-extra.7z",
+            "standalone": "https://github.com/ip7z/7zip/releases/download/26.00/7zr.exe",
+            "version": "26.00"
         }
     },
     // Download URLs for Microsoft AzCopy10

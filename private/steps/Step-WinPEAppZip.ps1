@@ -19,13 +19,23 @@ function Step-WinPEAppZip {
     Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] WinPEAppsPath: $WinPEAppsPath"
     #=================================================
     # Thanks Gary Blok
-    $CacheZip = Join-Path $WinPEAppsPath "7zip"
-    if (-not (Test-Path -Path $CacheZip)) {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $CacheZip"
-        New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null
+    $zipVersion = $global:OSDWorkspace.winpeapps.sevenzip.version
+    $CacheZipRoot = Join-Path $WinPEAppsPath "7zip"
+    $CacheZip = Join-Path $CacheZipRoot $zipVersion
+
+    # Cleanup any old versions of the app in the cache
+    if (Test-Path -Path $CacheZipRoot) {
+        Get-ChildItem -Path $CacheZipRoot -File | Remove-Item -Force
+        Get-ChildItem -Path $CacheZipRoot -Directory | Where-Object { $_.Name -ne $zipVersion } | Remove-Item -Recurse -Force
+    }
+
+    # Ensure the cache directory for this version exists, if not create it
+    if (Test-Path -Path $CacheZip) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using cache content $CacheZip"
     }
     else {
-        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Using cache content $CacheZip"
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding cache content $CacheZip"
+        New-Item -Path $CacheZip -ItemType Directory -Force | Out-Null
     }
 
     if (-not (Test-Path -Path "$CacheZip\7zr.exe")) {
