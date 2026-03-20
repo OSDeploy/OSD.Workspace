@@ -163,22 +163,21 @@ function Import-OSDWorkspaceWinOS {
             # Export WinSE and WinPE
             $BootWim = "$($SourceWindowsImage.MediaRoot)sources\boot.wim"
             if (Test-Path $BootWim) {
-                $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinSE.log"
-                $ExportWinSE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 1 -DestinationImagePath "$DestinationWim\winse.wim" -LogPath "$CurrentLog" | Out-Null
-                $WinseImage = Get-WindowsImage -ImagePath "$DestinationWim\winse.wim" -Index 1
-                $WinseImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winse-windowsimage.json" -Encoding utf8 -Force
-                $WinseImage | Export-Clixml -Path "$DestinationCore\winse-windowsimage.xml"
-                $WinseImageContent = Get-WindowsImageContent -ImagePath "$DestinationWim\winse.wim" -Index 1
-                $WinseImageContent | Out-File "$DestinationCore\winse-windowsimagecontent.txt" -Encoding ascii -Force
-
-
                 $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinPE.log"
-                $ExportWinPE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 2 -DestinationImagePath "$DestinationWim\winpe.wim" -LogPath "$CurrentLog" | Out-Null
+                $ExportWinPE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 1 -DestinationImagePath "$DestinationWim\winpe.wim" -LogPath "$CurrentLog" | Out-Null
                 $WinpeImage = Get-WindowsImage -ImagePath "$DestinationWim\winpe.wim" -Index 1
                 $WinpeImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winpe-windowsimage.json" -Encoding utf8 -Force
                 $WinpeImage | Export-Clixml -Path "$DestinationCore\winpe-windowsimage.xml"
                 $WinpeImageContent = Get-WindowsImageContent -ImagePath "$DestinationWim\winpe.wim" -Index 1
                 $WinpeImageContent | Out-File "$DestinationCore\winpe-windowsimagecontent.txt" -Encoding ascii -Force
+
+                $CurrentLog = "$DestinationLogs\$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Export-WinSE.log"
+                $ExportWinSE = Export-WindowsImage -SourceImagePath $BootWim -SourceIndex 2 -DestinationImagePath "$DestinationWim\winse.wim" -LogPath "$CurrentLog" | Out-Null
+                $WinseImage = Get-WindowsImage -ImagePath "$DestinationWim\winse.wim" -Index 1
+                $WinseImage | ConvertTo-Json -Depth 5 | Out-File "$DestinationCore\winse-windowsimage.json" -Encoding utf8 -Force
+                $WinseImage | Export-Clixml -Path "$DestinationCore\winse-windowsimage.xml"
+                $WinseImageContent = Get-WindowsImageContent -ImagePath "$DestinationWim\winse.wim" -Index 1
+                $WinseImageContent | Out-File "$DestinationCore\winse-windowsimagecontent.txt" -Encoding ascii -Force
             }
 
             # Backup OSFiles
@@ -255,6 +254,7 @@ function Import-OSDWorkspaceWinOS {
                 'systeminfo.*'
                 'tar.exe'
                 'tskill.*'
+                'w32tm*.*'
                 'winver.*'
                 'WSDApi*.*' # 2Pint OSD Toolkit
             )

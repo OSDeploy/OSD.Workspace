@@ -190,6 +190,7 @@ function Import-OSDWorkspaceImageRE {
                 'systeminfo.*'
                 'tar.exe'
                 'tskill.*'
+                'w32tm*.*'
                 'winver.*'
                 'WSDApi*.*' # 2Pint OSD Toolkit
             )
