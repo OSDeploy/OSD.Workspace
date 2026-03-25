@@ -135,7 +135,7 @@ Accept wildcard characters: False
 
 ### -Languages
 Windows ADK Languages to add to the BootImage.
-Default is en-US.
+Default is en-us.
 
 ```yaml
 Type: String[]
@@ -144,7 +144,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: En-US
+Default value: En-us
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -160,7 +160,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: En-US
+Default value: En-us
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -176,7 +176,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: En-US
+Default value: En-us
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
