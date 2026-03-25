@@ -44,7 +44,7 @@ function Step-BuildMediaPowerShellUpdate {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $CachePSRepository"
         New-Item -Path $CachePSRepository -ItemType Directory -Force | Out-Null
     }
-    $WinPEPSRepository = "$MountPath\Windows\Temp\psrepository"
+    $WinPEPSRepository = "$MountPath\PSRepository"
     if (-not (Test-Path -Path $WinPEPSRepository)) {
         Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Creating $WinPEPSRepository"
         New-Item -Path $WinPEPSRepository -ItemType Directory -Force | Out-Null
