@@ -685,6 +685,17 @@ function Build-OSDWorkspaceWinPE {
     }
     #endregion
     #=================================================
+    #region Adding OA3Tool
+    $OA3ToolPath = $global:BuildMedia.AdkPaths.oa3toolexe
+    if (Test-Path $OA3ToolPath) {
+        Write-Host -ForegroundColor DarkGray "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] Adding OA3Tool from $OA3ToolPath"
+        Copy-Item -Path $OA3ToolPath -Destination "$MountPath\Windows\System32\oa3tool.exe" -Force -ErrorAction SilentlyContinue | Out-Null
+    }
+    else {
+        Write-Verbose "[$(Get-Date -format G)] [$($MyInvocation.MyCommand.Name)] OA3Tool not found at $OA3ToolPath"
+    }
+    #endregion
+    #=================================================
     #region Add ADK WinPE OCs
     if ($AdkSkipOcPackages -eq $false) {
         $WinPEOCs = $WindowsAdkPaths.WinPEOCs
