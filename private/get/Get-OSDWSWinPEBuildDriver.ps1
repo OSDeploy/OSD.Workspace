@@ -46,6 +46,13 @@ function Get-OSDWSWinPEBuildDriver {
             Name, @{Name = 'Architecture'; Expression = { ($_.Parent | Split-Path -Leaf) } }, FullName, LastWriteTime
     }
 
+    # Get the RecastOSD Library Subfolders
+    $RecastOSDLibrary = "$env:ProgramData\RecastOSD\library"
+    $LibraryItems += Get-ChildItem -Path @("$RecastOSDLibrary\*\winpe-driver\*\*") -ErrorAction SilentlyContinue | `
+            Where-Object { $_.PSIsContainer -eq $true } | `
+            Select-Object @{Name = 'Type'; Expression = { 'winpe-driver' } },
+            Name, @{Name = 'Architecture'; Expression = { ($_.Parent | Split-Path -Leaf) } }, FullName, LastWriteTime
+
     # Ensure the Driver Repository uses the proper Architecture folder structure
     $LibraryItems = $LibraryItems | Where-Object { ($_.Architecture -match 'amd64') -or ($_.Architecture -match 'arm64') } | Sort-Object -Property Architecture, FullName
 
